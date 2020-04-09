@@ -1,0 +1,65 @@
+<table mat-table [dataSource]="validityLists" class="mat-elevation-z8" width="100%">
+    <ng-container matColumnDef="UHID">
+        <th mat-header-cell *matHeaderCellDef>UHID</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.uhid}}</td>
+    </ng-container>
+    <ng-container matColumnDef="ULID">
+        <th mat-header-cell *matHeaderCellDef>ULID</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.ulid}}</td>
+    </ng-container>
+    <ng-container matColumnDef="SampleId">
+        <th mat-header-cell *matHeaderCellDef>SAMPLEID</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.sampleId}}</td>
+    </ng-container>
+    <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef>NAME</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.firstName+" "+validityList.sample.master.patientDemographicDetail.lastName}}</td>
+    </ng-container>
+    <ng-container matColumnDef="Age">
+        <th mat-header-cell *matHeaderCellDef>AGE</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.age}}</td>
+    </ng-container>
+    <ng-container matColumnDef="Sex">
+        <th mat-header-cell *matHeaderCellDef>SEX</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.sex}}</td>
+    </ng-container>
+    <ng-container matColumnDef="isValid">
+        <th mat-header-cell *matHeaderCellDef>ISVALID</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.isValid == 'Y' ? 'Yes' : (validityList.isValid == 'N' ? 'No' : 'Partially')}}</td>
+    </ng-container>
+    <ng-container matColumnDef="Remark">
+        <th mat-header-cell *matHeaderCellDef>REMARK</th>
+        <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.remark}}</td>
+    </ng-container>
+    <ng-container matColumnDef="Test">
+        <th mat-header-cell *matHeaderCellDef>TEST</th>
+        <td mat-cell *matCellDef="let validityList">
+            <div *ngIf="validityList.sample.master.ana == 'REPORTED' || validityList.sample.master.ana == 'SEPARATED' ">ANA : Y</div>
+            <div *ngIf="validityList.sample.master.ana == 'INVALID'">ANA : N</div>
+            <div *ngIf="validityList.sample.master.anca == 'REPORTED' || validityList.sample.master.anca == 'SEPARATED' ">ANCA : Y</div>
+            <div *ngIf="validityList.sample.master.anca == 'INVALID' ">ANCA : N</div>
+            <div *ngIf="validityList.sample.master.mog == 'REPORTED' || validityList.sample.master.mog == 'SEPARATED' ">MOG : Y</div>
+            <div *ngIf="validityList.sample.master.mog == 'INVALID' ">MOG : N</div>
+            <div *ngIf="validityList.sample.master.nmda == 'REPORTED' || validityList.sample.master.nmda == 'SEPARATED' ">NMDA : Y</div>
+            <div *ngIf="validityList.sample.master.nmda == 'INVALID' ">NMDA : N</div>
+            <div *ngIf="validityList.sample.master.pana == 'REPORTED' || validityList.sample.master.pana == 'SEPARATED' ">PANA : Y</div>
+            <div *ngIf="validityList.sample.master.pana == 'INVALID' ">PANA : N</div>
+            <div *ngIf="validityList.sample.master.myu == 'REPORTED' || validityList.sample.master.myu == 'SEPARATED' ">MYU : Y</div>
+            <div *ngIf="validityList.sample.master.myu == 'INVALID' ">MYU : N</div>
+            <div *ngIf="validityList.sample.master.gangigg == 'REPORTED' || validityList.sample.master.gangigg == 'SEPARATED' ">GANGIGG : Y</div>
+            <div *ngIf="validityList.sample.master.gangigg == 'INVALID' ">GANGIGG : N</div>
+            <div *ngIf="validityList.sample.master.gangigm == 'REPORTED' || validityList.sample.master.gangigm == 'SEPARATED' ">GANGIGM : Y</div>
+            <div *ngIf="validityList.sample.master.gangigm == 'INVALID' ">GANGIGM : N</div>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Validate">
+        <th mat-header-cell *matHeaderCellDef>VALIDATE</th>
+        <td mat-cell *matCellDef="let validityList"> 
+            <button mat-stroked-button color="primary" (click)="alertRemove(validityList)">Validate</button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+</table>

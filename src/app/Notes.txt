@@ -1,0 +1,4 @@
+Remaining:
+- Stepper to show current location on top;
+- If possible, generate common component for listing with method calling from parent
+- SampleId condition in validityList table for external and internal
