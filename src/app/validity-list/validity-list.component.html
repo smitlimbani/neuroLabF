@@ -1,38 +1,43 @@
-<table mat-table [dataSource]="validityLists" class="mat-elevation-z8" width="100%">
-    <ng-container matColumnDef="UHID">
-        <th mat-header-cell *matHeaderCellDef>UHID</th>
+<mat-form-field >
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. abc">
+</mat-form-field>
+<div class="mat-elevation-z8">
+<table mat-table #table matSort [dataSource]="validityLists"  width="100%">
+    <ng-container  matColumnDef="sample.master.patientDemographicDetail.uhid">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>UHID</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.uhid}}</td>
     </ng-container>
-    <ng-container matColumnDef="ULID">
-        <th mat-header-cell *matHeaderCellDef>ULID</th>
+    <ng-container  matColumnDef="sample.master.ulid">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ULID</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.ulid}}</td>
     </ng-container>
-    <ng-container matColumnDef="SampleId">
-        <th mat-header-cell *matHeaderCellDef>SAMPLEID</th>
+    <ng-container  matColumnDef="sample.sampleId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >SAMPLEID</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.sampleId}}</td>
     </ng-container>
-    <ng-container matColumnDef="Name">
-        <th mat-header-cell *matHeaderCellDef>NAME</th>
+    <ng-container  matColumnDef="sample.master.patientDemographicDetail.firstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >NAME</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.firstName+" "+validityList.sample.master.patientDemographicDetail.lastName}}</td>
     </ng-container>
-    <ng-container matColumnDef="Age">
-        <th mat-header-cell *matHeaderCellDef>AGE</th>
+    <ng-container  matColumnDef="sample.master.patientDemographicDetail.age">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >AGE</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.age}}</td>
     </ng-container>
-    <ng-container matColumnDef="Sex">
-        <th mat-header-cell *matHeaderCellDef>SEX</th>
+    <ng-container  matColumnDef="sample.master.patientDemographicDetail.sex">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >SEX</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.sex}}</td>
     </ng-container>
-    <ng-container matColumnDef="isValid">
-        <th mat-header-cell *matHeaderCellDef>ISVALID</th>
+    <ng-container  matColumnDef="sample.master.isValid">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >ISVALID</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.isValid == 'Y' ? 'Yes' : (validityList.isValid == 'N' ? 'No' : 'Partially')}}</td>
     </ng-container>
-    <ng-container matColumnDef="Remark">
-        <th mat-header-cell *matHeaderCellDef>REMARK</th>
+    <ng-container  matColumnDef="sample.master.remark">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >REMARK</th>
         <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.remark}}</td>
     </ng-container>
     <ng-container matColumnDef="Test">
-        <th mat-header-cell *matHeaderCellDef>TEST</th>
+        <th mat-header-cell *matHeaderCellDef >TEST</th>
         <td mat-cell *matCellDef="let validityList">
             <div *ngIf="validityList.sample.master.ana == 'REPORTED' || validityList.sample.master.ana == 'SEPARATED' ">ANA : Y</div>
             <div *ngIf="validityList.sample.master.ana == 'INVALID'">ANA : N</div>
@@ -60,6 +65,8 @@
         </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky:true"></tr>
+    <tr mat-row *matRowDef="let validityList; columns: columnsToDisplay;"></tr>
 </table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

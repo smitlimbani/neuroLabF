@@ -15,12 +15,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule} from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
   declarations: [
     AppComponent,
     ReceivingStationComponent,
     ValidityListComponent,
-    ConfirmationDialog
+    ConfirmationDialog,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +40,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDialogModule,
     MatDividerModule,
     MatSnackBarModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

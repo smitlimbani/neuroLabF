@@ -12,8 +12,8 @@ export class ValidityListService {
   constructor( private httpClient : HttpClient) { }
   
   getValidityLists(){
-    return this.httpClient.get(this.serverUrl+"validityList/getAllOrderByULID");
-    // return ELEMENTS;
+    // return this.httpClient.get(this.serverUrl+"validityList/getAllOrderByULID");
+    return ELEMENTS;
   }
 
   deleteValidityList(id){
