@@ -19,6 +19,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ReceivingFormComponent } from './receiving-form/receiving-form.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
     ReceivingStationComponent,
     ValidityListComponent,
     ConfirmationDialog,
+    ReceivingFormComponent,
   ],
   imports: [
     BrowserModule,
