@@ -20,6 +20,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReceivingFormComponent } from './receiving-form/receiving-form.component';
+import {MatSelectModule} from "@angular/material/select";
+import {MatIconModule} from "@angular/material/icon";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
 
 @NgModule({
   declarations: [
@@ -46,6 +52,13 @@ import { ReceivingFormComponent } from './receiving-form/receiving-form.componen
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
+    MatIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatButtonToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

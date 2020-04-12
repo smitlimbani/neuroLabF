@@ -1,0 +1,18 @@
+.form {
+  position: relative;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 90%;
+}
+
+.single {
+  width: 90%;
+}
+
+.double{
+  width: 50%;
+}
+
+.cb {
+  left:10% ;
+}

@@ -14,31 +14,31 @@ import { MatPaginator } from '@angular/material/paginator';
 export class ValidityListComponent implements OnInit {
 
   validityLists;
-  columnsToDisplay= [
-    "sample.master.patientDemographicDetail.uhid",
-    "sample.master.ulid",
-    "sample.sampleId",
-    "sample.master.patientDemographicDetail.firstName",
-    "sample.master.patientDemographicDetail.age",
-    "sample.master.patientDemographicDetail.sex",
-    "sample.master.isValid",
-    "sample.master.remark",
-    "Test",
-    "Validate"];
+  columnsToDisplay = [
+    'sample.master.patientDemographicDetail.uhid',
+    'sample.master.ulid',
+    'sample.sampleId',
+    'sample.master.patientDemographicDetail.firstName',
+    'sample.master.patientDemographicDetail.age',
+    'sample.master.patientDemographicDetail.sex',
+    'sample.master.isValid',
+    'sample.master.remark',
+    'Test',
+    'Validate'];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
 
   constructor(
-    private validityListService:ValidityListService,
-    private dialog : MatDialog,
-    private snackBar : MatSnackBar,
+    private validityListService: ValidityListService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     ) {}
-    
+
   ngOnInit(): void {
     this.getValidityLists();
   }
-  ngAfterViewInit (){
+  ngAfterViewInit(){
     this.validityLists.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {
       const propPath = sortHeaderId.split('.');
@@ -47,25 +47,25 @@ export class ValidityListComponent implements OnInit {
       return !isNaN(value) ? Number(value) : value;
     };
     this.validityLists.filterPredicate = (data, filter) => {
-      let dataStr='';
+      let dataStr = '';
       let keys;
-      for(const column of this.columnsToDisplay){
+      for (const column of this.columnsToDisplay){
         keys = column.split('.');
-        dataStr+=this.nestedFilter(data,keys);
+        dataStr += this.nestedFilter(data, keys);
       }
       dataStr = dataStr.trim().toLowerCase();
-      return dataStr.indexOf(filter) != -1; ;
-    }
+      return dataStr.indexOf(filter) != -1;
+    };
     this.validityLists.sort = this.sort;
     this.validityLists.paginator = this.paginator;
   }
-  nestedFilter(data,keys){
-    for(let key of keys){
-        data = data[key]
+  nestedFilter(data, keys){
+    for (const key of keys){
+        data = data[key];
       }
     return data || '';
   }
-  applyFilter(filterString : string){
+  applyFilter(filterString: string){
     this.validityLists.filter = filterString.trim().toLowerCase();
   }
 
@@ -81,17 +81,17 @@ export class ValidityListComponent implements OnInit {
     // );
     this.validityLists = new MatTableDataSource(this.validityListService.getValidityLists());
     console.log(this.validityLists);
-    
+
   }
 
-  alertRemove(validityList:any){
-    let dialogRef = this.dialog.open(ConfirmationDialog,{
+  alertRemove(validityList: any){
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
       data : validityList,
-      width:"300px",
+      width: '300px',
     });
-    dialogRef.afterClosed().subscribe(result=>{
-      if(result){
-        alert("yes!");
+    dialogRef.afterClosed().subscribe(result => {
+      if (result){
+        alert('yes!');
         // this.validityListService.deleteValidityList(validityList.id).subscribe(retVal=>{
         //   if(retVal){
         //     this.snackBar.open("Validated successfully!","",{
@@ -110,8 +110,8 @@ export class ValidityListComponent implements OnInit {
         //   console.log(error.error);
         // });
       }
-      else if(!result){
-        console.log("Operation terminated!");
+      else if (!result){
+        console.log('Operation terminated!');
       }
     });
   }
@@ -119,15 +119,16 @@ export class ValidityListComponent implements OnInit {
 }
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'confirmation-dialog',
   templateUrl: 'confirmation-dialog.html',
 })
 export class ConfirmationDialog {
   // @Output() confirmRemove:EventEmitter<any> = new EventEmitter();
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data:any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     ) {}
   ngOnInit(): void {
-    
+
   }
 }
