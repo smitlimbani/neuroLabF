@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-// import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Master} from '../pojo/Master';
 import {PatientDemographicDetail} from "../pojo/PatientDemographicDetail";
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
 import {ReceivingFormService} from "../services/receiving-form.service";
+
 
 export interface Test {
   test: string;
@@ -12,11 +13,12 @@ export interface Test {
 }
 
 @Component({
-  selector: 'app-receiving-form',
-  templateUrl: './receiving-form.component.html',
-  styleUrls: ['./receiving-form.component.css']
+  selector: 'app-test',
+  templateUrl: './test.component.html',
+  styleUrls: ['./test.component.css']
 })
-export class ReceivingFormComponent implements OnInit {
+
+export class TestComponent implements OnInit {
 
   regType='INTERNAL';
 
@@ -44,8 +46,7 @@ export class ReceivingFormComponent implements OnInit {
   constructor(
     private receivingFormService: ReceivingFormService,
   ) { }
-  
-    
+
   ngOnInit(): void {
     this.master= new Master(null,'','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S','','',);
     // this.master= new Master(null,'','','','','','','','','','',null, null, null,'','','S','','',);

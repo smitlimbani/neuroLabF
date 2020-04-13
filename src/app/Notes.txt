@@ -1,7 +1,14 @@
 Remaining:
 - Stepper to show current location on top;
 - If possible, generate common component for listing with method calling from parent
-- SampleId condition in validityList table for external and internal
+- SampleId condition in validityList table for external and internal(or remove)
+- Make available test table dynamic from TEST table!
+
+
+condition:
+Merging :
+    uhid needs to be same;
+    sampleType needs to be same;
 
 for deserializaytion of objects:
 https://nehalist.io/working-with-models-in-angular/

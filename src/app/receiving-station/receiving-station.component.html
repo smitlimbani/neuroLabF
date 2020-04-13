@@ -1,7 +1,32 @@
-<mat-tab-group mat-stretch-tabs backgroundColor="primary" dynamicHeight color="primary" class="mat-elevation-z4" [selectedIndex]="2">
-    <mat-tab label="Pre Receiving"> Content 1 </mat-tab>
-    <mat-tab label="Internal"> Content 2 </mat-tab>
-    <mat-tab label="External"> <app-receiving-form></app-receiving-form> </mat-tab>
-    <mat-tab label="Validation"> <app-validity-list></app-validity-list> </mat-tab>
-    <mat-tab label="Association"> Content 3 </mat-tab>
-  </mat-tab-group>
+<mat-tab-group mat-stretch-tabs backgroundColor="primary" dynamicHeight color="primary" class="mat-elevation-z4" [selectedIndex]="3">
+    
+  <mat-tab label="Pre Receiving">
+    <ng-template matTabContent>
+      Content 1
+    </ng-template>
+  </mat-tab>
+  
+  <mat-tab label="Internal">
+    <ng-template matTabContent>
+      Content 2
+    </ng-template>
+  </mat-tab>
+  
+  <mat-tab label="External">
+    <ng-template matTabContent>
+      <app-receiving-form></app-receiving-form>
+    </ng-template>
+  </mat-tab>
+  
+  <mat-tab label="Validation"> 
+    <ng-template matTabContent>
+      <app-validity-list></app-validity-list> 
+    </ng-template>
+  </mat-tab>
+  
+  <mat-tab label="Association">
+    <ng-template matTabContent>
+      <app-map-sample></app-map-sample> 
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

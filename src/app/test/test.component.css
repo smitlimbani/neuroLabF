@@ -1,0 +1,24 @@
+/* .form {
+  position: relative;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 90%;
+} */
+
+.single {
+width: 100%;
+}
+
+/* .double{
+width: 50%;
+}
+
+.cb {
+left:10% ;
+} */
+
+.example-card {
+max-width: 80%;
+margin-left: 10%;
+margin-right: 10%;
+}
