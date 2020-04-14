@@ -17,4 +17,20 @@ export class ReceivingFormService {
   getNextXULID(sampleType){
     return this.httpClient.get(this.serverUrl + 'rec/getNextXULID?sampleType=' + sampleType);
   }
+
+  getLinkingULIDList(UHID, sampleType){
+    return this.httpClient.get(this.serverUrl + 'rec/getLinkingULIDList?UHID=' + UHID+ '&sampleType='+ sampleType);
+  }
+
+  getPDDDetailByUHID(UHID){
+    return this.httpClient.get(this.serverUrl + 'rec/getPDDDetailByUHID?UHID=' + UHID);
+  }
+
+  getPDDDetailBySampleId(SampleId){
+    return this.httpClient.get(this.serverUrl + 'rec/getPDDDetailByUHID?UHID=' + SampleId);
+  }
+  
+  doesULIDExist(ULID){
+    return this.httpClient.get(this.serverUrl + 'rec/doesULIDExist?ULID=' + ULID);
+  }
 }

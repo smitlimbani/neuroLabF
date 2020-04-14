@@ -1,7 +1,8 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-let ELEMENTS =   
+let ELEMENTS =
 [
   {
       "id": 1,
@@ -338,7 +339,7 @@ export class MapSampleService {
 //   getMasters():Promise<any>{
 //     return this.httpClient.get(this.serverUrl+"rec/getUnprocessedSampleList").toPromise();
 //   }
-  
+
   //STATIC
   getMasters(){
     return ELEMENTS;
