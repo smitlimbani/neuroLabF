@@ -170,8 +170,10 @@
               <span matPrefix>{{master.ULID.substr(0, 6)}} </span>
               <input #ulid="ngModel" maxlength="5" [(ngModel)]="postfixULID" [class.is-invalid]="ulid.invalid && ulid.touched" (input)="isULIDVerified=false" matInput name="Ulid" placeholder="ULID" required type="text">
               <!-- <mat-error >Enter hospital name</mat-error> verifyULID()-->
-                <mat-icon matSuffix color="primary" *ngIf="isULIDVerified" >check</mat-icon>
-                <mat-icon color="warn" matSuffix *ngIf="!isULIDVerified">clear</mat-icon>
+                <mat-icon matSuffix color="primary" *ngIf="isULIDVerified;else abc;" >check</mat-icon>
+                <ng-template #abc>
+                  <mat-icon color="warn" matSuffix>clear</mat-icon>
+                </ng-template>
               <button matSuffix (click)="verifyULID();" [disabled]=" isULIDVerified! " color="accent" mat-raised-button>Verify
                 <!--              this.master.ULID.substr(0,6)+postfixULID===this.master.ULID||-->
               </button>
