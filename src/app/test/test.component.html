@@ -97,7 +97,7 @@
       <mat-divider ></mat-divider>
       <br>
 
-      <table >
+      <table class="single" >
         <tr >
           <td >
             <mat-button-toggle-group name="sampleType" #sampleType="ngModel" [(ngModel)]="master.sampleType" [vertical]="true" (change)="sampleTypeChanged()" [class.is-invalid]="name.invalid && name.touched " required type="text" >

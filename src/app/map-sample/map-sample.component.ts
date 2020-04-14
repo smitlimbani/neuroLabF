@@ -17,6 +17,7 @@ export class MapSampleComponent implements OnInit {
 
   masters:any;
   columnsToDisplay = [
+    "index",
     "patientDemographicDetail.uhid",
     "ulid",
     "nNo",
@@ -43,7 +44,7 @@ export class MapSampleComponent implements OnInit {
     "reqDate",
     "sampleType"
   ];
-  
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -58,7 +59,7 @@ export class MapSampleComponent implements OnInit {
   ngOnInit(): void {
     // console.log("started onInit()");
     this.populateTable();
-    // console.log("exit onInit()");  
+    // console.log("exit onInit()");
   }
 
   async populateTable(){
@@ -78,7 +79,7 @@ export class MapSampleComponent implements OnInit {
 
   // ngAfterViewInit (){
   appendFeatures(){
-    // console.log("ngAfterViewInit started!");    
+    // console.log("ngAfterViewInit started!");
     this.masters.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {
       const propPath = sortHeaderId.split('.');
@@ -95,7 +96,7 @@ export class MapSampleComponent implements OnInit {
         dataStr+=this.nestedFilter(data,keys);
       }
       dataStr = dataStr.trim().toLowerCase();
-      
+
       return dataStr.indexOf(filter) != -1; ;
     }
 
@@ -109,7 +110,7 @@ export class MapSampleComponent implements OnInit {
         data = data[key]
       }
       console.log(data);
-      
+
     return data || '';
   }
 
@@ -139,50 +140,62 @@ export class MapSampleComponent implements OnInit {
 
   rowClicked(data){
     console.log(data.selected);
-    
+
   }
 
   applyFilter(filterString : string){
     this.masters.filter = filterString.trim().toLowerCase();
   }
 
-  
+
 
   firstSelection = null;
 
   alertLink(master){
     console.log("alertLink"+master);
+
   }
+
   alertMerge(master){
     this.firstSelection = master;
-    console.log("alertMerge"+master);
+    console.log("alertMerge");
     this.columnsToDisplay.unshift("select");
     this.mergeActive = !this.mergeActive;
   }
-  
+
   abortMerge(){
     this.columnsToDisplay.shift();
     this.selection.clear();
     this.mergeActive = !this.mergeActive;
   }
-  
+
   mergeMe(master){
     if(this.selection.selected.length != 1){
       this.snackBar.open("Select something you moron!","",{
         duration:1000,
       });
-      return;      
+      return;
     }
     console.log("Merged : ");
     console.log(master);
-    console.log(this.selection.selected[0]);
-    this.snackBar.open("Merged SuccessFullly","",{
-      duration:1000,
-    });
-    this.abortMerge();
-    this.loadData();
+    console.log(this.selection.selected[0]['id']);
+    this.mapSampleService.mergeSamples(master.id,this.selection.selected[0]['id']).subscribe(
+      data=>{
+        this.snackBar.open("Merged SuccessFullly","",{
+          duration:1000,
+        });
+        this.abortMerge();
+        this.loadData();
+      },
+      error=>{
+        console.error(error.error);
+        this.snackBar.open("Error! Contact developer.","",{
+          duration:1000,
+        });
+      }
+    );
   }
-  
+
   alertConfNR(master){
     console.log("alertConfNR"+master);
     let dialogRef = this.dialog.open(ConfirmationDialogComponent,{

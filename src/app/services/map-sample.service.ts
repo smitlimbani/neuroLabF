@@ -346,6 +346,10 @@ export class MapSampleService {
   }
 
   confirmSampleNotReceived(id:number){
-      return this.httpClient.post(this.serverUrl+"rec/confirmSampleNotReceived",{mId:id});
+    return this.httpClient.post(this.serverUrl+"rec/confirmSampleNotReceived",{mId:id});
+  }
+
+  mergeSamples(id1:number,id2:number){
+    return this.httpClient.post(this.serverUrl+"test/test",{mId1 : id1,mId2 : id2});
   }
 }

@@ -7,12 +7,15 @@
   <br>
   <mat-card-content>
     <form #Form="ngForm" class="form">
-      <mat-button-toggle-group #registrationType="ngModel" [(ngModel)]="regType" aria-label="Font Style" name="RegistrationType"
-                               required>
+      <div align="center" >
+
+        <mat-button-toggle-group #registrationType="ngModel" [(ngModel)]="regType" aria-label="Font Style" name="RegistrationType"
+        required>
         <mat-button-toggle value="INTERNAL">Internal</mat-button-toggle>
         <mat-button-toggle (click)="externalSelected()" value="EXTERNAL">External</mat-button-toggle>
         <!--    {{registrationType.value | json}}-->
       </mat-button-toggle-group>
+    </div>
       <!--<div *ngIf="registrationType.value=== 'INTERNAL'||registrationType.value==='EXTERNAL'">hello</div>-->
       <br>
       <br>
@@ -32,8 +35,8 @@
           </td>
         </tr>
         <tr>
-          <td>
-            <button  class="submit" layout-align="center" color="accent" (click)="autofill()"mat-raised-button>Go
+          <td colspan="2" align="center">
+            <button  class="submit" color="accent" (click)="autofill()" mat-raised-button>Go
             </button>
           </td>
         </tr>
@@ -129,37 +132,7 @@
       <mat-divider></mat-divider>
       <br>
 
-      <table class="single">
-        <tr>
-          <td>
-            <mat-button-toggle-group #sampleType="ngModel" (change)="sampleTypeChanged()" [(ngModel)]="master.sampleType" [class.is-invalid]="name.invalid && name.touched " [vertical]="true" name="sampleType" required type="text">
-              <mat-button-toggle value="S">SERUM</mat-button-toggle>
-              <mat-button-toggle value="C">CSF</mat-button-toggle>
-              <!--    <mat-error *ngIf="sampleType.errors && (sampleType.invalid || sampleType.touched)">Select sample type</mat-error>-->
-            </mat-button-toggle-group>
-          </td>
-          <td>
-            <br>
-            <mat-form-field class="single">
-              <mat-label>ULID</mat-label>
-              <span matPrefix>{{master.ULID.substr(0, 6)}} </span>
-              <input #ulid="ngModel" maxlength="5" [(ngModel)]="postfixULID" [class.is-invalid]="ulid.invalid && ulid.touched" (input)="isULIDVerified=false" matInput name="Ulid" placeholder="ULID" required type="text">
-              <!-- <mat-error >Enter hospital name</mat-error> verifyULID()-->
-            </mat-form-field>
-          </td>
-          <td>
-            <button (click)="verifyULID()" [disabled]=" isULIDVerified! " color="accent" mat-raised-button>Verify
-<!--              this.master.ULID.substr(0,6)+postfixULID===this.master.ULID||-->
-            </button>
-          </td>
-          <td>
-            <mat-icon color="accent" aria-hidden="true">check</mat-icon>
-          </td>
-          <td>
-            <mat-icon color="warn" aria-hidden="true">clear</mat-icon>
-          </td>
-        </tr>
-        <br>
+        <table class="single">
         <tr>
           <td>
             <mat-form-field appearance="outline" class="single">
@@ -174,9 +147,40 @@
             </mat-form-field>
           </td>
         </tr>
-
       </table>
 
+      <table width="50%" >
+        <!-- <colgroup>
+          <col style="width:50%">
+          <col style="width:50%">
+        </colgroup>   -->
+        <tbody>
+        <tr >
+          <td >
+            <mat-button-toggle-group #sampleType="ngModel" (change)="sampleTypeChanged()" [(ngModel)]="master.sampleType" [class.is-invalid]="name.invalid && name.touched " [vertical]="true" name="sampleType" required type="text">
+              <mat-button-toggle value="S">SERUM</mat-button-toggle>
+              <mat-button-toggle value="C">CSF</mat-button-toggle>
+              <!--    <mat-error *ngIf="sampleType.errors && (sampleType.invalid || sampleType.touched)">Select sample type</mat-error>-->
+            </mat-button-toggle-group>
+          </td>
+          <td  >
+            <br>
+            <mat-form-field >
+              <mat-label>ULID</mat-label>
+              <span matPrefix>{{master.ULID.substr(0, 6)}} </span>
+              <input #ulid="ngModel" maxlength="5" [(ngModel)]="postfixULID" [class.is-invalid]="ulid.invalid && ulid.touched" (input)="isULIDVerified=false" matInput name="Ulid" placeholder="ULID" required type="text">
+              <!-- <mat-error >Enter hospital name</mat-error> verifyULID()-->
+                <mat-icon matSuffix color="primary" *ngIf="isULIDVerified" >check</mat-icon>
+                <mat-icon color="warn" matSuffix *ngIf="!isULIDVerified">clear</mat-icon>
+              <button matSuffix (click)="verifyULID();" [disabled]=" isULIDVerified! " color="accent" mat-raised-button>Verify
+                <!--              this.master.ULID.substr(0,6)+postfixULID===this.master.ULID||-->
+              </button>
+            </mat-form-field>
+            
+          </td>
+        </tr>
+        </tbody>
+      </table>
 
       <table [dataSource]="dataSource" class="single" mat-table>
 
@@ -225,9 +229,10 @@
       <br>
       <mat-divider></mat-divider>
       <br>
-
-      <button  class="submit" layout-align="center" [disabled]= "Form.invalid|| !isULIDVerified || this.selection.isEmpty()" color="accent" mat-raised-button>Submit
-      </button>
+      <div align="center">
+        <button  class="submit" layout-align="center" [disabled]= "Form.invalid|| !isULIDVerified || this.selection.isEmpty()" color="accent" mat-raised-button>Submit
+        </button>
+      </div>
 
 
       <br>form<br>{{Form.value | json}}<br>
