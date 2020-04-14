@@ -46,7 +46,7 @@ export class ReceivingFormComponent implements OnInit {
   isULIDVerified;
   ULIDCounter;
   linkingULIDList:string[];
-  enableLink;
+  isLinkEnabled;
   uSampleId;
   uUHID;
 
@@ -65,21 +65,12 @@ export class ReceivingFormComponent implements OnInit {
       this.master.sampleType='S';
       this.getULID();
     }
-
-    this.dataSource = this.testInfo[this.master.sampleType];
-    let selectedTest = [];
-    this.dataSource.forEach(row => {
-      if(this.master[row.code] == "RAISED"){
-        selectedTest.push(row);
-      }
-    });
-    this.selection = new SelectionModel(true, selectedTest);// what is this.
-    this.dataSource = new MatTableDataSource(this.dataSource);
+    this.initializeTests();
     // console.log(this.dataSource);
     this.isULIDVerified= true;
     this.ULIDCounter=parseInt(this.master.ULID.substr(6,5),10);
     this.postfixULID= this.master.ULID.substr(6,5);
-    this.enableLink=false;
+    this.isLinkEnabled=false;
   }
 
   autofill(){
@@ -105,9 +96,22 @@ export class ReceivingFormComponent implements OnInit {
     // }
     this.sampleId=this.uSampleId;
     this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
-    this.master= new Master(null,'SAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S','','',);
+    this.master= new Master(null,'CAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','C','','',);
     this.ULIDCounter=parseInt(this.master.ULID.substr(6,5),10);
     this.postfixULID= this.master.ULID.substr(6,5);
+    this.initializeTests();
+  }
+
+  initializeTests(){
+    this.dataSource = this.testInfo[this.master.sampleType];
+    let selectedTest = [];
+    this.dataSource.forEach(row => {
+      if(this.master[row.code] == "RAISED"){
+        selectedTest.push(row);
+      }
+    });
+    this.selection = new SelectionModel(true, selectedTest);// what is this.
+    this.dataSource = new MatTableDataSource(this.dataSource);
   }
 
   externalSelected(){
@@ -127,33 +131,33 @@ export class ReceivingFormComponent implements OnInit {
   }
 
   verifyULID(){
-    if (parseInt(this.postfixULID,10)>=this.ULIDCounter)
-      this.isULIDVerified=true;
-    else{
-      this.receivingFormService.doesULIDExist(this.master.ULID.substr(0,6)+this.postfixULID).subscribe(
-        data => {
-          this.isULIDVerified = !(<boolean>data);
-        },
-        error => {
-          console.error("Error in fetching linked ULIDs counters");
-        });
+    // if (parseInt(this.postfixULID,10)>=this.ULIDCounter)
+    //   this.isULIDVerified=true;
+    // else {
+    //   this.receivingFormService.doesULIDExist(this.master.ULID.substr(0, 6) + this.postfixULID).subscribe(
+    //     data => {
+    //       this.isULIDVerified = !(<boolean>data);
+    //     },
+    //     error => {
+    //       console.error("Error in fetching linked ULIDs counters");
+    //     });
+    // }
       // console.log(this.master.ULID.substr(0,6)+this.postfixULID);
-      this.isULIDVerified=false
-    }
+      this.isULIDVerified=true;
   }
 
-  onLinkChange(e) { // here e is a boolean, true if checked, otherwise false
+  enableLinking(e) { // here e is a boolean, true if checked, otherwise false
     if(e){
-      this.enableLinking();
-      this.enableLink=true;
+      this.getLinkingULIDList();
+      this.isLinkEnabled=true;
     }
     else{
       this.master.linked='';
-      this.enableLink=false;
+      this.isLinkEnabled=false;
     }
   }
 
-  enableLinking(){
+  getLinkingULIDList(){
     // this.receivingFormService.getLinkingULIDList(this.pdd.UHID, this.master.sampleType).subscribe(
     //   data => {
     //     this.linkingULIDList = <string[]>data;
