@@ -30,6 +30,8 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import { TestComponent } from './test/test.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { PreReceivingComponent } from './pre-receiving/pre-receiving.component';
+import { SegregationStationComponent } from './segregation-station/segregation-station.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     MapSampleComponent,
     TestComponent,
     ConfirmationDialogComponent,
+    PreReceivingComponent,
+    SegregationStationComponent,
   ],
   imports: [
     BrowserModule,

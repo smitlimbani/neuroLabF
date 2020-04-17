@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { MapSampleService } from '../services/map-sample.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -47,6 +47,7 @@ export class MapSampleComponent implements OnInit {
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @Output() alertLink:EventEmitter<any> = new EventEmitter();
 
   mergeActive=false;
 
@@ -150,11 +151,6 @@ export class MapSampleComponent implements OnInit {
 
 
   firstSelection = null;
-
-  alertLink(master){
-    console.log("alertLink"+master);
-
-  }
 
   alertMerge(master){
     this.firstSelection = master;

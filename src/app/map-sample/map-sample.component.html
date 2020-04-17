@@ -101,7 +101,7 @@
               <th mat-header-cell *matHeaderCellDef>Action</th>
               <td mat-cell *matCellDef="let master">
                 <div *ngIf="!mergeActive">
-                  <button mat-raised-button color="primary" (click)="alertLink(master)">Link</button>
+                  <button mat-raised-button color="primary" (click)="alertLink.emit(master)">Link</button>
                   <button mat-raised-button color="primary" (click)="alertMerge(master)">Merge</button>
                   <button mat-raised-button color="primary" (click)="alertConfNR(master)">ConfNR</button>
                 </div>

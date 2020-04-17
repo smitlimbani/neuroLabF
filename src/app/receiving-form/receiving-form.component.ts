@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 // import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Master} from '../pojo/Master';
 import {PatientDemographicDetail} from "../pojo/PatientDemographicDetail";
@@ -50,12 +50,17 @@ export class ReceivingFormComponent implements OnInit {
   uSampleId;
   uUHID;
 
+  @Input() tmaster?:any;
+
   constructor(
     private receivingFormService: ReceivingFormService,
   ) { }
 
 
   ngOnInit(): void {
+    console.log("from redirection!");
+    console.log(this.tmaster);
+    
     // this.master= new Master(null,'SAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S','','',);
     this.master= new Master(null,'','N0054896','','','','','','','','',null, null, null,'','','','','',);
     // this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');

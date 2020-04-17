@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-receiving-station',
@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReceivingStationComponent implements OnInit {
 
+  selectedIndex=0;
+  master;
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  linkMe(master:any){
+    console.log("from parent!");
+    
+    console.log(master);
+    this.master = master;
+    this.selectedIndex = 2;
   }
 
 }
