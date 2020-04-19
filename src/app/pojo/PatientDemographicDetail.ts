@@ -3,7 +3,7 @@ import {Master} from './Master';
 export class PatientDemographicDetail {
 constructor(
   public id: number,
-  public UHID: string,
+  public uhid: string,
   public name: string,
   public address: string,
   public age: number,
@@ -11,6 +11,5 @@ constructor(
   public emailId: string,
   public contactNo: string,
   public hospitalName: string,
-  public drName: string,
 ){}
 }

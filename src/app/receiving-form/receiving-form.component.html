@@ -9,7 +9,7 @@
     <form #Form="ngForm" class="form">
       <div align="center" >
 
-        <mat-button-toggle-group #registrationType="ngModel" [(ngModel)]="regType" aria-label="Font Style" name="RegistrationType"
+        <mat-button-toggle-group #registrationType="ngModel" (ngModelChange)="initializeNewForm()" [(ngModel)]="regType" aria-label="Font Style" name="RegistrationType"
         required>
         <mat-button-toggle value="INTERNAL">Internal</mat-button-toggle>
         <mat-button-toggle (click)="externalSelected()" value="EXTERNAL">External</mat-button-toggle>
@@ -24,19 +24,19 @@
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Sample Id.</mat-label>
-              <input #upperSampleId="ngModel" [(ngModel)]="uSampleId" matInput (input)="uUHID=null" name="upperSampleId" placeholder="Enter Sample Id" type="text" >
+              <input #upperSampleId="ngModel" [disabled]="isMasterReadOnly" [(ngModel)]="uSampleId" matInput (input)="uUHID=null" name="upperSampleId" placeholder="Enter Sample Id" type="text" >
             </mat-form-field>
           </td>
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>UHID</mat-label>
-              <input #upperUHID="ngModel"  [(ngModel)]="uUHID" matInput (input)="uSampleId=null" name="upperUHID" placeholder="Enter UHID" type="text">
+              <input #upperUHID="ngModel" [disabled]="regType=='INTERNAL'||isMasterReadOnly"  [(ngModel)]="uUHID" matInput (input)="uSampleId=null" name="upperUHID" placeholder="Enter UHID" type="text">
             </mat-form-field>
           </td>
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <button  class="submit" color="accent" (click)="autofill()" mat-raised-button>Go
+            <button  class="submit" color="accent" [disabled]="isMasterReadOnly" (click)="autofill()" mat-raised-button>Go
             </button>
           </td>
         </tr>
@@ -54,7 +54,7 @@
           <td colspan="2">
             <mat-form-field appearance="outline" class="single">
               <mat-label>Patient name</mat-label>
-              <input #name="ngModel" [(ngModel)]="pdd.name" [class.is-invalid]="name.invalid && name.touched " matInput name="PatientName" placeholder="Enter name" required type="text">
+              <input #name="ngModel" [(ngModel)]="pdd.name" [disabled]="isPddReadOnly" [class.is-invalid]="name.invalid && name.touched " matInput name="PatientName" placeholder="Enter name" required type="text">
               <mat-error *ngIf="name.errors && (name.invalid || name.touched)">Enter name</mat-error>
             </mat-form-field>
           </td>
@@ -63,14 +63,14 @@
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Age</mat-label>
-              <input #age="ngModel" [(ngModel)]="pdd.age" [class.is-invalid]="age.invalid && age.touched" matInput name="age" pattern="[0-9]+" placeholder="Enter age" required type="number">
+              <input #age="ngModel" [(ngModel)]="pdd.age" [disabled]="isPddReadOnly" [class.is-invalid]="age.invalid && age.touched" matInput name="age" pattern="[0-9]+" placeholder="Enter age" required type="number">
               <mat-error *ngIf="age.errors && (age.invalid || age.touched)">Enter age</mat-error>
             </mat-form-field>
           </td>
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Sex</mat-label>
-              <mat-select #sex="ngModel" [(ngModel)]="pdd.sex" [(value)]="pdd.sex" [class.is-invalid]="sex.invalid && sex.touched" matInput name="sex"
+              <mat-select #sex="ngModel" [(ngModel)]="pdd.sex" [disabled]="isPddReadOnly" [(value)]="pdd.sex" [class.is-invalid]="sex.invalid && sex.touched" matInput name="sex"
                           required type="string" type="text">
                 <mat-option value="MALE">Male</mat-option>
                 <mat-option value="FEMALE">Female</mat-option>
@@ -84,7 +84,7 @@
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Contact Number</mat-label>
-              <input #contactNo="ngModel" [(ngModel)]="pdd.contactNo" [class.is-invalid]="contactNo.invalid && contactNo.touched" matInput maxlength="10" minlength="10" name="contactNo" pattern="[0-9]+" placeholder="Enter contact number." required type="text">
+              <input #contactNo="ngModel" [(ngModel)]="pdd.contactNo" [disabled]="isPddReadOnly" [class.is-invalid]="contactNo.invalid && contactNo.touched" matInput maxlength="10" minlength="10" name="contactNo" pattern="[0-9]+" placeholder="Enter contact number." required type="text">
               <mat-error
                 *ngIf="contactNo.errors && (contactNo.invalid || contactNo.touched) && contactNo.errors.required">Enter contact number. </mat-error>
               <mat-error
@@ -94,7 +94,7 @@
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Email</mat-label>
-              <input #email="ngModel" [(ngModel)]="pdd.emailId" [class.is-invalid]="email.invalid && email.touched" matInput name="email" pattern="[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Enter email" required type="email">
+              <input #email="ngModel" [(ngModel)]="pdd.emailId"  [disabled]="isPddReadOnly" [class.is-invalid]="email.invalid && email.touched" matInput name="email" pattern="[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Enter email" required type="email">
               <mat-error *ngIf="email.errors && (email.invalid || email.touched) && email.errors.required">Enter email</mat-error>
               <mat-error *ngIf="email.errors && (email.invalid || email.touched) && email.errors.pattern">Enter valid email</mat-error>
             </mat-form-field>
@@ -104,7 +104,7 @@
           <td colspan="2">
             <mat-form-field appearance="outline" class="single">
               <mat-label>Address</mat-label>
-              <input #address="ngModel" [(ngModel)]="pdd.address" [class.is-invalid]="address.invalid && address.touched" matInput name="address" placeholder="Enter address" required type="text">
+              <input #address="ngModel" [(ngModel)]="pdd.address" [disabled]="isPddReadOnly" [class.is-invalid]="address.invalid && address.touched" matInput name="address" placeholder="Enter address" required type="text">
               <mat-error *ngIf="address.errors && (address.invalid || address.touched)">Enter address</mat-error>
             </mat-form-field>
           </td>
@@ -114,14 +114,14 @@
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Doctor Name</mat-label>
-              <input #drName="ngModel" [(ngModel)]="pdd.drName" [class.is-invalid]="drName.invalid && drName.touched" matInput name="drName" placeholder="Enter doctor name" required type="text">
+              <input #drName="ngModel" [(ngModel)]="master.drName" [disabled]="isMasterReadOnly" [class.is-invalid]="drName.invalid && drName.touched" matInput name="drName" placeholder="Enter doctor name" required type="text">
               <mat-error *ngIf="drName.errors && (drName.invalid || drName.touched)">Enter doctor name</mat-error>
             </mat-form-field>
           </td>
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Hospital Name</mat-label>
-              <input #hospitalName="ngModel" [(ngModel)]="pdd.hospitalName" [class.is-invalid]="hospitalName.invalid && hospitalName.touched" matInput name="hospitalName" placeholder="Enter hospital name" required type="text">
+              <input #hospitalName="ngModel" [(ngModel)]="pdd.hospitalName" [disabled]="isMasterReadOnly" [class.is-invalid]="hospitalName.invalid && hospitalName.touched" matInput name="hospitalName" placeholder="Enter hospital name" required type="text">
               <mat-error *ngIf="hospitalName.errors && (hospitalName.invalid || hospitalName.touched)">Enter hospital name </mat-error>
             </mat-form-field>
           </td>
@@ -142,7 +142,7 @@
           </td>
           <td>
             <mat-form-field appearance="outline" class="single">
-              <mat-label>NMA No</mat-label>
+              <mat-label>N.No</mat-label>
               <input [(ngModel)]="master.nNo" disabled=true matInput name="nmaNo" required type="text">
             </mat-form-field>
           </td>
@@ -157,7 +157,7 @@
         <tbody>
         <tr >
           <td >
-            <mat-button-toggle-group #sampleType="ngModel" (change)="sampleTypeChanged()" [(ngModel)]="master.sampleType" [class.is-invalid]="name.invalid && name.touched " [vertical]="true" name="sampleType" required type="text">
+            <mat-button-toggle-group #sampleType="ngModel" [disabled]="isMasterReadOnly" (change)="sampleTypeChanged()" [(ngModel)]="master.sampleType" [class.is-invalid]="name.invalid && name.touched " [vertical]="true" name="sampleType" required type="text">
               <mat-button-toggle value="S">SERUM</mat-button-toggle>
               <mat-button-toggle value="C">CSF</mat-button-toggle>
               <!--    <mat-error *ngIf="sampleType.errors && (sampleType.invalid || sampleType.touched)">Select sample type</mat-error>-->
@@ -167,18 +167,18 @@
             <br>
             <mat-form-field >
               <mat-label>ULID</mat-label>
-              <span matPrefix>{{master.ULID.substr(0, 6)}} </span>
+              <span matPrefix>{{master.ulid!=null?master.ulid.substr(0, 6):""}} </span>
               <input #ulid="ngModel" maxlength="5" [(ngModel)]="postfixULID" [class.is-invalid]="ulid.invalid && ulid.touched" (input)="isULIDVerified=false" matInput name="Ulid" placeholder="ULID" required type="text">
               <!-- <mat-error >Enter hospital name</mat-error> verifyULID()-->
                 <mat-icon matSuffix color="primary" *ngIf="isULIDVerified;else abc;" >check</mat-icon>
                 <ng-template #abc>
                   <mat-icon color="warn" matSuffix>clear</mat-icon>
                 </ng-template>
-              <button matSuffix (click)="verifyULID();" [disabled]=" isULIDVerified! " color="accent" mat-raised-button>Verify
-                <!--              this.master.ULID.substr(0,6)+postfixULID===this.master.ULID||-->
+              <button matSuffix (click)="verifyULID();" [disabled]=" isULIDVerified!" color="accent" mat-raised-button>Verify
+<!--                              this.master.ULID.substr(0,6)+postfixULID===this.master.ULID||-->
               </button>
             </mat-form-field>
-            
+
           </td>
         </tr>
         </tbody>
@@ -190,11 +190,14 @@
           <th mat-header-cell *matHeaderCellDef>
           </th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox name="test"
+            <mat-checkbox name="test" [required]
+                          [disabled]="isMasterReadOnly"
                           (click)="$event.stopPropagation()"
-                          (change)="$event ? selection.toggle(row) : null;master[row.code]=master[row.code] == 'RAISED'?'NOT_RAISED':'RAISED'"
+                          (change)="$event ? selection.toggle(row) : null;master[row.code]=master[row.code] == 'RAISED'?'NOT_RAISED':'RAISED';isPanelExpanded=false"
                           [checked]="selection.isSelected(row)"
-                          [aria-label]="checkboxLabel(row)">
+                          [aria-label]="checkboxLabel(row)"
+
+                          >
             </mat-checkbox>
           </td>
         </ng-container>
@@ -212,27 +215,64 @@
       <table class="single" >
         <tr>
           <td>
-            <mat-checkbox appearance="outline" class="single" name="enableLink" #enLink ngModel (ngModelChange)="enableLinking($event) ">Link sample to previous ULID</mat-checkbox>
+            <mat-checkbox appearance="outline" class="single" name="enableLink" #enLink="ngModel" [(ngModel)]="isLinkEnabled" (ngModelChange)="enableLinking($event) ">Link sample to previous ULID</mat-checkbox>
           </td>
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Link ULID</mat-label>
-              <mat-select [disabled]="!isLinkEnabled" #link="ngModel" [(ngModel)]="master.linked" [class.is-invalid]="link.invalid" matInput name="link" required type="text">
+              <mat-select [disabled]="!isLinkEnabled" #link="ngModel"  required [(ngModel)]="master.linked" [class.is-invalid]="link.invalid" matInput name="link"type="text">
                 <mat-option *ngFor="let ulidListElement of linkingULIDList" [value]="ulidListElement">{{ulidListElement}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="link.errors &&(link.valid || link.untouched )">Select ULID to enable linking</mat-error>
+              <mat-error *ngIf="link.errors &&(link.valid || link.untouched)">Select ULID to enable linking</mat-error>
             </mat-form-field>
           </td>
         </tr>
       </table>
 
+      <mat-accordion *ngIf="regType=='EXTERNAL'" >
+        <mat-expansion-panel #payment name="payment" [expanded]=isPanelExpanded (opened)="calcTotalAmount()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Payment Details
+            </mat-panel-title>
+            <mat-panel-description>
+              Enter your payment details
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <table class="single">
+            <tr>
+              <td>
+                <mat-form-field appearance="outline" class="single">
+                  <mat-label>Total Amount</mat-label>
+                  <input #totalAmt="ngModel" required  [(ngModel)]="master.totalAmount"  [class.is-invalid]="totalAmt.invalid && totalAmt.touched" matInput name="totalAmt" pattern="[0-9]+" placeholder="Enter total amount" type="number">
+                  <mat-error *ngIf="totalAmt.errors && (totalAmt.invalid || totalAmt.touched)">Enter total amount</mat-error>
+                </mat-form-field>
+              </td>
+              <td>
+                <mat-form-field appearance="outline" class="single">
+                  <mat-label>Remaining Amount</mat-label>
+                  <input #remainingAmt="ngModel" required  [(ngModel)]="master.remainingAmount"  [class.is-invalid]="remainingAmt.invalid && remainingAmt.touched" matInput name="remainingAmt" pattern="[0-9]+" placeholder="Enter remaining amount" type="number">
+                  <mat-error *ngIf="remainingAmt.errors && (remainingAmt.invalid || remainingAmt.touched)">Enter remaining amount</mat-error>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <div align="center">
+                <button  class="submit" layout-align="center" [disabled]="remainingAmt.invalid||totalAmt.invalid" color="accent" mat-raised-button>Add transaction
+                </button>
+              </div>
+            </tr>
+
+          </table>
+        </mat-expansion-panel>
+      </mat-accordion>
 
       <br>
       <mat-divider></mat-divider>
       <br>
       <div align="center">
-        <button  class="submit" layout-align="center" [disabled]= "Form.invalid|| !isULIDVerified || this.selection.isEmpty()" color="accent" mat-raised-button>Submit
+        <button  class="submit" layout-align="center" [disabled]="Form.invalid|| !isULIDVerified || this.selection.isEmpty()" color="accent" mat-raised-button>Submit
         </button>
       </div>
 

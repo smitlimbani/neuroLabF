@@ -3,17 +3,17 @@ import {PatientDemographicDetail} from './PatientDemographicDetail';
 export class Master {
   constructor(
     public id: number,
-    public ULID: string,
+    public ulid: string,
     public nNo: string,
 
-    public ANCA: string ,
-    public MOG: string ,
-    public NMDA: string ,
-    public ANA: string ,
-    public PANA: string ,
-    public MYU: string ,
-    public GANGIGG: string ,
-    public GANGIGM: string ,
+    public anca: string ,
+    public mog: string ,
+    public nmda: string ,
+    public ana: string ,
+    public pana: string ,
+    public myu: string ,
+    public gangigg: string ,
+    public gangigm: string ,
 
     public totalAmount: number,
     public remainingAmount: number,

@@ -28,10 +28,10 @@ import {MatIconModule} from "@angular/material/icon";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import { TestComponent } from './test/test.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { PreReceivingComponent } from './pre-receiving/pre-receiving.component';
 import { SegregationStationComponent } from './segregation-station/segregation-station.component';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -40,7 +40,6 @@ import { SegregationStationComponent } from './segregation-station/segregation-s
     ValidityListComponent,
     ReceivingFormComponent,
     MapSampleComponent,
-    TestComponent,
     ConfirmationDialogComponent,
     PreReceivingComponent,
     SegregationStationComponent,
@@ -69,6 +68,7 @@ import { SegregationStationComponent } from './segregation-station/segregation-s
     MatRadioModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

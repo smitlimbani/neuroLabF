@@ -5,7 +5,9 @@ import {PatientDemographicDetail} from "../pojo/PatientDemographicDetail";
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatTableDataSource} from '@angular/material/table';
 import {ReceivingFormService} from "../services/receiving-form.service";
+
 import {MatIconRegistry} from '@angular/material/icon';
+import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 
 export interface Test {
   test: string;
@@ -24,16 +26,18 @@ export class ReceivingFormComponent implements OnInit {
   displayedColumns:string[]=['select','test'];
   testInfo=
   {"S" :[
-    {test:'ANA profile(immunoblot)', code:"ANA"},
-    {test:'ANCA (panca/canca)', code:"ANCA"},
-    {test: 'MOG NMOSD',  code:"MOG"},
-    {test:'Autoimmune Encephalitis mosaic', code: "NMDA"},
+      {test:'ANA profile(immunoblot)', code:"ana"},
+      {test:'ANCA (panca/canca)', code:"anca"},
+      {test: 'MOG NMOSD',  code:"mog"},
+      {test:'Autoimmune Encephalitis mosaic', code: "nmda"},
+      {test:'Paraneoplastic neural antibodies',  code:"pana"},
+      {test: 'Myositis Profile(immunoblot)', code: "myu"},
+      {test:"Anti-Ganglioside Profile (IgG)",  code:"gangigg"},
+      {test: "Anti-Ganglioside Profile (IgM)",  code:"gangigm"},
   ],
   "C":[
-    {test:'Paraneoplastic neural antibodies',  code:"PANA"},
-    {test: 'Myositis Profile(immunoblot)', code: "MYU"},
-    {test:"Anti-Ganglioside Profile (IgG)",  code:"GANGIGG"},
-    {test: "Anti-Ganglioside Profile (IgM)",  code:"GANGIGM"},
+      {test: 'MOG NMOSD',  code:"mog"},
+      {test:'Autoimmune Encephalitis mosaic', code: "nmda"},
   ]};
 
   master;
@@ -45,10 +49,14 @@ export class ReceivingFormComponent implements OnInit {
   postfixULID;
   isULIDVerified;
   ULIDCounter;
-  linkingULIDList:string[];
   isLinkEnabled;
+  linkingULIDList:string[];
   uSampleId;
   uUHID;
+  isPddReadOnly;
+  isMasterReadOnly;
+  isPanelExpanded;
+  tests;
 
   @Input() tmaster?:any;
 
@@ -58,53 +66,128 @@ export class ReceivingFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log("from redirection!");
+    // this.tmaster='11251';
     console.log(this.tmaster);
-    
-    // this.master= new Master(null,'SAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S','','',);
-    this.master= new Master(null,'','N0054896','','','','','','','','',null, null, null,'','','','','',);
-    // this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
-    this.pdd= new PatientDemographicDetail(null,null,null,null,null,null,null,null,null, null);
-
-    if(this.master.ULID==null|| this.master.ULID==''){
-      this.master.sampleType='S';
-      this.getULID();
+    console.log(this.tmaster==undefined && this.tmaster==null);
+    if(!(this.tmaster==undefined && this.tmaster==null)) {
+     console.log('linking and autofill');
+      this.autofillAndSetupLinking();
     }
+    else {
+      console.log('new form altogether');
+      this.initializeNewForm();
+    }
+  }
+
+  autofillAndSetupLinking(){
+    // this.master= this.tmaster;
+    // this.pdd= this.tmaster.patientDemographicDetail;
+    this.master= new Master(null,'SAU20/00020','N012345','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S',null,'Dr.Anita');
+    this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS');
+    this.isPddReadOnly= true;
+    this.isMasterReadOnly=true;
+    this.isLinkEnabled=true;
     this.initializeTests();
-    // console.log(this.dataSource);
-    this.isULIDVerified= true;
-    this.ULIDCounter=parseInt(this.master.ULID.substr(6,5),10);
-    this.postfixULID= this.master.ULID.substr(6,5);
+    this.setULIDVariables()
+    this.enableLinking(true);
+  }
+
+  initializeNewForm(){
+    // this.master= new Master(null,'SAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S','','',);
+    this.master= new Master(null,null,null,'NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, true,'Y','RECEIVED','S',null,null);
+    // this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
+    this.pdd= new PatientDemographicDetail(null,null,null,null,null,null,null,null,null);
+    // this.getULID();
     this.isLinkEnabled=false;
+    this.isPddReadOnly= false;
+    this.isMasterReadOnly=false;
+    this.initializeTests();
+    this.getULID();
+    this.setULIDVariables();
   }
 
   autofill(){
-    // if(this.uSampleId==null) {
-    //   this.sampleId=this.uSampleId;
-    //   this.receivingFormService.getPDDDetailByUHID(this.pdd.UHID).subscribe(
-    //     data => {
-    //       this.master = data.master;
-    //       this.pdd = data.pdd;
-    //     },
-    //     error => {
-    //       console.error("Error in fetching linked ULIDs counters");
-    //     })
-    // }
-    // else {
-    //   this.receivingFormService.getPDDDetailBySampleId(this.sampleId).subscribe(
-    //     data => {
-    //       this.pdd= data.pdd;
-    //     },
-    //     error => {
-    //       console.error("Error in fetching linked ULIDs counters");
-    //     })
-    // }
-    this.sampleId=this.uSampleId;
-    this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
-    this.master= new Master(null,'CAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','C','','',);
-    this.ULIDCounter=parseInt(this.master.ULID.substr(6,5),10);
-    this.postfixULID= this.master.ULID.substr(6,5);
+    if(this.uSampleId==null) {
+      console.log("UHID selected");
+      this.receivingFormService.getPDDDetailByUHID(this.uUHID).subscribe(
+        data => {
+          console.log(data);
+          this.pdd= data['pdd'];
+          console.log(this.pdd);
+        },
+        error => {
+          console.error("Error in fetching Patient Demographic Details through UHID");
+        }
+      )
+      this.isPddReadOnly= true;
+      this.isMasterReadOnly=false;
+      // this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
+    }
+    else {
+      console.log("SampleId selected");
+      this.receivingFormService.getPDDDetailBySampleId(this.uSampleId).subscribe(
+        data => {
+          console.log(data);
+          this.master= data['master'];
+          this.pdd = this.master['patientDemographicDetail'];
+          console.log(this.master);
+          console.log(this.pdd);
+          console.log(this.pdd.name);
+        },
+        error => {
+          console.error("Error in fetching Patient Demographic Details through sampleId");
+        })
+      this.sampleId=this.uSampleId;
+      this.isPddReadOnly= true;
+      this.isMasterReadOnly=true;
+      // this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
+      // this.master= new Master(null,'CAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','C','','',);
+    }
+    this.isLinkEnabled=false;
     this.initializeTests();
+    // this.getULID();
+    this.setULIDVariables();
+  }
+
+  getULID(){
+    console.log('Getting ulid');
+    if(this.regType=='INTERNAL') {//I/E flag)
+      // console.log(this.regType);
+      // console.log(this.master.sampleType);
+      // this.receivingFormService.getNextIULID(this.master.sampleType).subscribe(
+      //   data => {
+      //     // console.log(data);
+      //     this.master.ulid = data;
+      //     console.log(this.master.ulid);
+      //   },
+      //   error => {
+      //     console.log(error);
+      //     console.error("Error in fetching IULID");
+      //   })
+      if(this.master.sampleType=='S')
+        this.master.ulid='SAU20/00050';
+      else
+        this.master.ulid='CAU20/00040';
+    }
+    else {
+      // this.receivingFormService.getNextXULID(this.master.sampleType).subscribe(
+      //   data => {
+      //     // console.log(data);
+      //     this.master.ulid = data;
+      //     console.log(this.master.ulid);
+      //   },
+      //   error => {
+      //     console.error("Error in fetching XULID counters");
+      //   })
+      this.master.ulid='SXU20/00050'
+    }
+  }
+
+  setULIDVariables(){
+    this.getULID();
+    this.ULIDCounter=parseInt(this.master.ulid.substr(6,5),10);
+    this.postfixULID= this.master.ulid.substr(6,5);
+    this.isULIDVerified= true;
   }
 
   initializeTests(){
@@ -115,39 +198,47 @@ export class ReceivingFormComponent implements OnInit {
         selectedTest.push(row);
       }
     });
-    this.selection = new SelectionModel(true, selectedTest);// what is this.
+    this.selection = new SelectionModel(true, selectedTest);// what is this. //I don't know.
     this.dataSource = new MatTableDataSource(this.dataSource);
   }
 
   externalSelected(){
-    this.getULID();
-    this.ULIDCounter=parseInt(this.master.ULID.substr(6,5),10);
-    this.postfixULID= this.master.ULID.substr(6,5);
-    this.sampleId= this.master.ULID+":1";
+    this.setULIDVariables();
+    this.sampleId= this.master.ulid+":1";
     this.master.nNo=null;
+    // this.receivingFormService.getAllTest().subscribe(
+    //   data => {
+    //     this.tests= data;
+    //     console.log(data);
+    //   },
+    //   error => {
+    //     console.error("Error in getting tests");
+    //   }
+    // )
   }
 
   sampleTypeChanged(){
     this.dataSource = new MatTableDataSource(this.testInfo[this.master.sampleType]);
     this.clearTestSelection();
-    this.getULID();
-    this.ULIDCounter=parseInt(this.master.ULID.substr(6,5),10);
-    this.postfixULID= this.master.ULID.substr(6,5);
+    this.setULIDVariables();
   }
 
   verifyULID(){
     // if (parseInt(this.postfixULID,10)>=this.ULIDCounter)
     //   this.isULIDVerified=true;
     // else {
-    //   this.receivingFormService.doesULIDExist(this.master.ULID.substr(0, 6) + this.postfixULID).subscribe(
+    //   console.log("uhid:"+this.master.ulid.substr(0, 6) + this.postfixULID);
+    //   this.receivingFormService.doesULIDExist(this.master.ulid.substr(0, 6) + this.postfixULID).subscribe(
     //     data => {
+    //       console.log(data)
     //       this.isULIDVerified = !(<boolean>data);
+    //       console.log(this.isULIDVerified);
     //     },
     //     error => {
-    //       console.error("Error in fetching linked ULIDs counters");
+    //       console.error("Error in verifying Ulid");
     //     });
     // }
-      // console.log(this.master.ULID.substr(0,6)+this.postfixULID);
+      console.log(this.master.ulid.substr(0,6)+this.postfixULID);
       this.isULIDVerified=true;
   }
 
@@ -203,34 +294,26 @@ export class ReceivingFormComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.test}`;
   }
 
-  //Crosscheck the below value assignment-------------------------------------------------------------------------
-  getULID():void{
-    if(this.regType==='INTERNAL') {//I/E flag)
-      // this.receivingFormService.getNextIULID(this.master.sampleType).subscribe(
-      //   data => {
-      //     this.master.ULID = <string>data;
-      //   },
-      //   error => {
-      //     console.error("Error in fetching IULID");
-      //   })
-      if(this.master.sampleType=='S')
-        this.master.ULID='SAU20/00050';
-      else
-        this.master.ULID='CAU20/00040';
+  calcTotalAmount(){
+    let sum :number=0;
+    for (let test of this.tests){
+      if (this.master[test.name.toLowerCase()]=='RAISED'){
+        sum=sum + test.rate;
+        console.log(this.master[test.name.toLowerCase()]);
+      }
     }
-    else {
-      // this.receivingFormService.getNextXULID(this.master.sampleType).subscribe(
-      //   data => {
-      //     this.master.ULID = <string>data;
-      //   },
-      //   error => {
-      //     console.error("Error in fetching XULID counters");
-      //   })
-      this.master.ULID='SXU20/00050'
-    }
+    this.master.totalAmount=sum;
   }
 
+  invalidateSample(){
+    if(this.regType=='INTERNAL')
+      this.receivingFormService.confirmInvalidReceiving(this.sampleId,"",this.master.ulid);//proper ulid has to be sent
+    else
+      this.receivingFormService.confirmInvalidReceivingX(this.master, this.pdd,this.sampleId,"");
+  }
 
+  submit(){
 
+  }
 
 }

@@ -4,7 +4,7 @@ import {ReceivingStationComponent} from './receiving-station/receiving-station.c
 import { SegregationStationComponent } from './segregation-station/segregation-station.component';
 
 const routes: Routes = [
-  {path:"",redirectTo:"/segregation",pathMatch:"full"},
+  {path:"",redirectTo:"/receive",pathMatch:"full"},
   {path:"receive",component : ReceivingStationComponent},
   {path:"segregation",component : SegregationStationComponent},
 ];
