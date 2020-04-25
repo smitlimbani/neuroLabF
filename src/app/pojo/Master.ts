@@ -18,12 +18,15 @@ export class Master {
     public totalAmount: number,
     public remainingAmount: number,
 
-    public isActive: boolean,
+    // public isActive: boolean,
     public isValid: string,
     public status: string,
     public sampleType: string,
     public linked: string,
     public drName: string,
+    public remark: string,
+    public drContactNo: string,
+    public drEmailId: string,
 ){}
 }
 

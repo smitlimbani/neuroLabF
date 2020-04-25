@@ -16,10 +16,10 @@ export class ReceivingStationComponent implements OnInit {
 
   linkMe(master:any){
     console.log("from parent!");
-    
+
     console.log(master);
     this.master = master;
-    this.selectedIndex = 2;
+    this.selectedIndex = 1;
   }
 
 }

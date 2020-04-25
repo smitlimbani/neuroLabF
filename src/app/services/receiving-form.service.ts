@@ -26,7 +26,7 @@ export class ReceivingFormService {
     return this.httpClient.get(this.serverUrl + 'rec/getNextXULID?sampleType=' + sampleType, {responseType:'text'});
   }
 
-
+  //working
   getLinkingULIDList(uhid, sampleType) {
     return this.httpClient.get(this.serverUrl + 'rec/getLinkingULIDList?uhid=' + uhid + '&sampleType=' + sampleType);
   }
@@ -36,6 +36,7 @@ export class ReceivingFormService {
     return this.httpClient.get(this.serverUrl + 'rec/getPatientDetailByUHID?uhid='+ uhid);
   }
 
+ //working
   getPDDDetailBySampleId(SampleId) {
     return this.httpClient.get(this.serverUrl + 'rec/getPatientDetail?sampleId=' + SampleId);
   }
@@ -46,21 +47,25 @@ export class ReceivingFormService {
   }
 
   //working
-  getAllTest(){
+  getLabTestDetails(){
     return this.httpClient.get(this.serverUrl+ 'test/getAll');
   }
 
-
-
-  confirmInvalidReceiving(sampleId, remark, ulid ) {
-    // return this.httpClient.post(this.serverUrl + 'rec/confirmInvalidReceiving' );
-    //  correct calling request:        "sampleId":scanned sampleId of invalid sample
-  //                     "remark" : remark why it is marked inValid
-  //                     "ulid":ulid that to be set for the sample
+  //working
+  getDoctors(){
+    return this.httpClient.get(this.serverUrl+ 'doctor/getAll');
   }
 
-  confirmInvalidReceivingX(master,pdd, sampleId, remark ) {
+  //working
+  storeXPatientDetail(master, pdd, sampleId, payments){
+    let sample={sampleId: sampleId};
+    return this.httpClient.post(this.serverUrl+ 'rec/storeXPatientDetail',{master: master, patientDemographicDetail:pdd, sample: sample,payments: payments, paymentCategoryCode:'XP100'}, {responseType:'text'});
+  }
 
+  //working
+  receiving(sampleId, ulid, remark, linked, payments){
+    console.log(this.serverUrl+ 'rec/receiving', {sampleId:sampleId, payments:payments, ulid:ulid, remark:remark, linked:linked});
+    return this.httpClient.post(this.serverUrl+ 'rec/receiving', {sampleId:sampleId, payments:payments, ulid:ulid, remark:remark, linked:linked}, {responseType:'text'});
   }
 
 }

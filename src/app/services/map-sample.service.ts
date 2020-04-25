@@ -6,12 +6,12 @@ let ELEMENTS =
 [
   {
       "id": 1,
-      "drName" : "Dr.Anita Here",
+      "drName" : "Dr.Anita",
       "patientDemographicDetail": {
           "id": 6,
           "name": "Vaibhav Dodiya",
           "age": 25,
-          "sex": "MALE",
+          "sex": "OTHER",
           "emailId": null,
           "contactNo": null,
           "hospitalName": "NIMHANS",
@@ -100,7 +100,7 @@ let ELEMENTS =
       "sampleType": "S",
       "linked": "0",
       "reqDate": "2020-04-02",
-      "ulid": "ULID1",
+      "ulid": null,
       "active": true,
       "ana": "RAISED",
       "anca": "SEPARATED",
@@ -121,7 +121,7 @@ let ELEMENTS =
         "sex": "FEMALE",
         "emailId": null,
         "contactNo": null,
-        "hospitalName": "KIRAN",
+        "hospitalName": "NIMHANS",
         "uhid": "UHID2",
     },
     "paymentCategory": {
