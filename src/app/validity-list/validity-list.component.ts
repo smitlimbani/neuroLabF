@@ -16,10 +16,10 @@ export class ValidityListComponent implements OnInit {
 
   validityLists;
   columnsToDisplay= [
-    "index",
-    "sample.master.patientDemographicDetail.uhid",
+    // "index",
     "sample.master.ulid",
     "sample.sampleId",
+    "sample.master.patientDemographicDetail.uhid",
     "sample.master.patientDemographicDetail.name",
     "sample.master.patientDemographicDetail.age",
     "sample.master.patientDemographicDetail.sex",
@@ -29,14 +29,14 @@ export class ValidityListComponent implements OnInit {
     "Validate"
   ];
   columnsToFilter= [
-      "sample.master.patientDemographicDetail.uhid",
-      "sample.master.ulid",
-      // "sample.sampleId",
-      "sample.master.patientDemographicDetail.name",
-      "sample.master.patientDemographicDetail.age",
-      "sample.master.patientDemographicDetail.sex",
-      "sample.master.isValid",
-      "sample.master.remark",
+    "sample.master.ulid",
+    "sample.sampleId",
+    "sample.master.patientDemographicDetail.uhid",
+    "sample.master.patientDemographicDetail.name",
+    "sample.master.patientDemographicDetail.age",
+    // "sample.master.patientDemographicDetail.sex",
+    "sample.master.isValid",
+    "sample.master.remark",
   ];
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -51,7 +51,7 @@ export class ValidityListComponent implements OnInit {
   ngOnInit(): void {
     this.populateTable();
   }
-  
+
   async populateTable(){
     await this.loadData();
     this.appendFeatures();
@@ -67,13 +67,13 @@ export class ValidityListComponent implements OnInit {
     // this.validityLists = new MatTableDataSource(data);
     // // console.log(this.validityLists);
     // // console.log("exit loadData()");
-    
+
     //STATIC
     this.validityLists = new MatTableDataSource(this.validityListService.getValidityLists());
     console.log(this.validityLists);
 
   }
-  
+
   appendFeatures (){
     this.validityLists.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {

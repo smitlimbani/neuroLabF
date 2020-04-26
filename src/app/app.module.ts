@@ -31,7 +31,10 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { PreReceivingComponent } from './pre-receiving/pre-receiving.component';
 import { SegregationStationComponent } from './segregation-station/segregation-station.component';
+import { ListGenerationComponent } from './list-generation/list-generation.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import {MatExpansionModule} from "@angular/material/expansion";
+import { VialConfirmationDialogComponent } from './vial-confirmation-dialog/vial-confirmation-dialog.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 
 @NgModule({
@@ -45,6 +48,9 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
     PreReceivingComponent,
     SegregationStationComponent,
     WelcomePageComponent,
+    ListGenerationComponent,
+    PageNotFoundComponent,
+    VialConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,

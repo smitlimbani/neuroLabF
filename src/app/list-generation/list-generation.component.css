@@ -1,0 +1,17 @@
+mat-card{
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.single{
+  width: 100%;
+}
+
+.half{
+  width: 50%;
+}
+
+.solidified{
+    background-color: lightsteelblue;
+}

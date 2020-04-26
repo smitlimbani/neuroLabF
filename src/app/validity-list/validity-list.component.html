@@ -22,12 +22,18 @@
               <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.patientDemographicDetail.uhid}}</td>
           </ng-container>
           <ng-container  matColumnDef="sample.master.ulid">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>ULID</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>AU NO.</th>
               <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.ulid}}</td>
           </ng-container>
           <ng-container  matColumnDef="sample.sampleId">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header >SAMPLEID</th>
-              <td mat-cell *matCellDef="let validityList">{{validityList.sample.sampleId}}</td>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header >SAMPLE ID</th>
+              <td mat-cell *matCellDef="let validityList">
+                {{validityList.sample.sampleId}}
+                <div *ngIf="validityList.sample.master.ulid.substring(2,4).toLowerCase() == 'xu'">
+                  <!-- here! -->
+                  {{validityList.sample.master.externalSample.externalSampleId}}
+                </div>
+              </td>
           </ng-container>
           <ng-container  matColumnDef="sample.master.patientDemographicDetail.name">
               <th mat-header-cell *matHeaderCellDef mat-sort-header >NAME</th>
@@ -43,7 +49,7 @@
           </ng-container>
           <ng-container  matColumnDef="sample.master.isValid">
               <th mat-header-cell *matHeaderCellDef mat-sort-header >ISVALID</th>
-              <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.isValid == 'Y' ? 'Yes' : (validityList.sample.master.isValid == 'N' ? 'No' : 'Partially')}}</td>
+              <td mat-cell *matCellDef="let validityList">{{validityList.sample.master.isValid == 'Y' ? 'Valid' : (validityList.sample.master.isValid == 'N' ? 'Invalid' : 'Partially')}}</td>
           </ng-container>
           <ng-container  matColumnDef="sample.master.remark">
               <th mat-header-cell *matHeaderCellDef mat-sort-header >REMARK</th>
@@ -74,12 +80,16 @@
           <ng-container matColumnDef="Validate">
               <th mat-header-cell *matHeaderCellDef>VALIDATE</th>
               <td mat-cell *matCellDef="let validityList">
-                  <button mat-stroked-button color="primary" (click)="alertRemove(validityList)">Validate</button>
+                  <button mat-raised-button color="primary" (click)="alertRemove(validityList)"
+                  [class.partially]="validityList.sample.master.isValid == 'P'"
+                  [class.invalid]="validityList.sample.master.isValid == 'N'">Validate</button>
               </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky:true"></tr>
-          <tr mat-row *matRowDef="let validityList; columns: columnsToDisplay;"></tr>
+          <tr mat-row *matRowDef="let validityList; columns: columnsToDisplay;"
+
+                 ></tr>
       </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
