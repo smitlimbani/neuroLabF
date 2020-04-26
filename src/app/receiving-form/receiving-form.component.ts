@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-// import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Master} from '../pojo/Master';
 import {PatientDemographicDetail} from "../pojo/PatientDemographicDetail";
 import {SelectionModel} from '@angular/cdk/collections';
@@ -564,5 +563,5 @@ export class ReceivingFormComponent implements OnInit {
 // form is getting submitted with no external transactions. Do we allow that?
 // date of transaction is not compatible.
 // transaction row is not responsive to screen size
-
+// no different color to CSF and SERUM.
 

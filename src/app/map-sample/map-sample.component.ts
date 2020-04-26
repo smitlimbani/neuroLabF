@@ -13,6 +13,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
   templateUrl: './map-sample.component.html',
   styleUrls: ['./map-sample.component.css']
 })
+
 export class MapSampleComponent implements OnInit {
 
   masters:any;

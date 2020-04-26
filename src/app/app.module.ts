@@ -32,6 +32,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
 import { PreReceivingComponent } from './pre-receiving/pre-receiving.component';
 import { SegregationStationComponent } from './segregation-station/segregation-station.component';
 import {MatExpansionModule} from "@angular/material/expansion";
+import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
     ConfirmationDialogComponent,
     PreReceivingComponent,
     SegregationStationComponent,
+    WelcomePageComponent,
   ],
   imports: [
     BrowserModule,

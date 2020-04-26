@@ -1,0 +1,29 @@
+<br>
+<br>
+<mat-card style="width: 60%;margin-left: 20%;">
+  <mat-card-header >
+    <mat-card-title>Welcome to NeuroLab</mat-card-title>
+  </mat-card-header>
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <mat-grid-list gutterSize="5%" cols="2" rowHeight="2:1">
+
+    <mat-grid-tile routerLink="/receive">
+      <button mat-raised-button  color="primary">Receiving Station</button>
+<!--        <mat-card-title >Receiving Station</mat-card-title>-->
+    </mat-grid-tile>
+    <mat-grid-tile routerLink="/separation">
+      <button  mat-raised-button  color="primary">Separation Station</button>
+    </mat-grid-tile>
+    <mat-grid-tile routerLink="/segregation">
+      <button  mat-raised-button  color="primary">Segregation Station</button>
+    </mat-grid-tile>
+    <mat-grid-tile routerLink="/dashboard">
+      <button  mat-raised-button  color="primary">Dashboard</button>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+</mat-card>

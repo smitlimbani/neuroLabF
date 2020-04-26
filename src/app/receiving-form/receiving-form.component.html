@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <button  class="submit" color="accent" [disabled]="isPddReadOnly" (click)="autofill()" mat-raised-button>Go
+            <button  class="submit" color="primary" [disabled]="isPddReadOnly" (click)="autofill()" mat-raised-button>Go
             </button>
           </td>
         </tr>
@@ -190,8 +190,8 @@
         <tr >
           <td >
             <mat-button-toggle-group  #sampleType="ngModel"  [disabled]="isMasterReadOnly||regType=='INTERNAL'" (change)="sampleTypeChanged()" [(ngModel)]="master.sampleType" [class.is-invalid]="name.invalid && name.touched " [vertical]="true" name="sampleType" required type="text">
-              <mat-button-toggle mat-color="primary" value="S">SERUM</mat-button-toggle>
-              <mat-button-toggle mat-color="accent" value="C">CSF</mat-button-toggle>
+              <mat-button-toggle value="S">SERUM</mat-button-toggle>
+              <mat-button-toggle value="C">CSF</mat-button-toggle>
               <!--    <mat-error *ngIf="sampleType.errors && (sampleType.invalid || sampleType.touched)">Select sample type</mat-error>-->
             </mat-button-toggle-group>
           </td>
@@ -207,7 +207,7 @@
                 <ng-template #abc>
                   <mat-icon color="warn" matSuffix>clear</mat-icon>
                 </ng-template>
-              <button matSuffix (click)="verifyULID();" [disabled]=" isULIDVerified!" color="accent" mat-raised-button>Verify
+              <button matSuffix (click)="verifyULID();" [disabled]=" isULIDVerified!" color="primary" mat-raised-button>Verify
 <!--                              this.master.ULID.substr(0,6)+postfixULID===this.master.ULID||-->
               </button>
             </mat-form-field>
@@ -330,10 +330,10 @@
                     </mat-form-field>
                   </td>
                   <td>
-                    <button  class="submit" layout-align="center" (click)="addTransaction(null,null,null)" [disabled]="master.remainingAmount<0||totalAmt.invalid|| regType=='INTERNAL'" color="accent" mat-raised-button>Add new transaction</button>
+                    <button  class="submit" layout-align="center" (click)="addTransaction(null,null,null)" [disabled]="master.remainingAmount<0||totalAmt.invalid|| regType=='INTERNAL'" color="primary" mat-raised-button>Add new transaction</button>
                   </td>
                   <td>
-                    <button  class="submit" layout-align="center"  (click)="deleteTransaction(i)" [disabled]="master.remainingAmount<0||totalAmt.invalid || regType=='INTERNAL'" color="accent" mat-raised-button>Delete current transaction</button>
+                    <button  class="submit" layout-align="center"  (click)="deleteTransaction(i)" [disabled]="master.remainingAmount<0||totalAmt.invalid || regType=='INTERNAL'" color="primary" mat-raised-button>Delete current transaction</button>
                   </td>
                  </div>
               </div>
@@ -345,7 +345,7 @@
       <mat-divider></mat-divider>
       <br>
         <div align="center">
-          <button  class="submit" layout-align="center" [disabled]="Form.invalid|| master.remainingAmount<0||!isULIDVerified || this.selection.isEmpty()" (click)="onSubmit()" color="accent" mat-raised-button>Submit
+          <button  class="submit" layout-align="center" [disabled]="Form.invalid|| master.remainingAmount<0||!isULIDVerified || this.selection.isEmpty()" (click)="onSubmit()" color="primary" mat-raised-button>Submit
           </button>
         </div>
       <br>form<br>{{Form.value | json}}
