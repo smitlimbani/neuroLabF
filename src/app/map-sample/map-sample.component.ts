@@ -19,9 +19,9 @@ export class MapSampleComponent implements OnInit {
   masters:any;
   columnsToDisplay = [
     "index",
-    "patientDemographicDetail.uhid",
     "ulid",
-    "nNo",
+    "sampleId",
+    "patientDemographicDetail.uhid",
     "patientDemographicDetail.name",
     "patientDemographicDetail.age",
     "patientDemographicDetail.sex",
@@ -33,12 +33,12 @@ export class MapSampleComponent implements OnInit {
     "Action"
   ];
   columnsToFilter = [
-    "patientDemographicDetail.uhid",
     "ulid",
-    "nNo",
+    "samples",
+    "patientDemographicDetail.uhid",
     "patientDemographicDetail.name",
     "patientDemographicDetail.age",
-    "patientDemographicDetail.sex",
+    // "patientDemographicDetail.sex",
     "patientDemographicDetail.hospitalName",
     "drName",
     "status",
@@ -66,7 +66,7 @@ export class MapSampleComponent implements OnInit {
 
   async populateTable(){
     await this.loadData();
-    this.appendFeatures();
+    // this.appendFeatures();
   }
 
   async loadData(){
@@ -77,10 +77,10 @@ export class MapSampleComponent implements OnInit {
     this.masters = new MatTableDataSource(data);
     console.log(this.masters);
     // console.log("exit loadData()");
-  }
+  // }
 
-  // ngAfterViewInit (){
-  appendFeatures(){
+  // // ngAfterViewInit (){
+  // appendFeatures(){
     // console.log("ngAfterViewInit started!");
     this.masters.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {
@@ -108,12 +108,19 @@ export class MapSampleComponent implements OnInit {
   }
 
   nestedFilter(data,keys){
+    let dataStr="";
     for(let key of keys){
         data = data[key]
+    }
+    dataStr = data;
+    // console.log(dataStr);
+    if(typeof data == "object"){
+      for(let sample of data){
+        dataStr += sample["sampleId"];
       }
-      console.log(data);
-
-    return data || '';
+    }
+    // console.log(dataStr);
+    return dataStr || '';
   }
 
   selection = new SelectionModel<Object>(false,[]);

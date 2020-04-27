@@ -1,0 +1,21 @@
+table,tr,td{
+  padding: 8px;
+  border-collapse: collapse;
+  color: darkslategrey;
+}
+.tag{
+  font-weight: 550;
+}
+.value{
+  /* font-weight: 500; */
+  /* font-size: medium; */
+}
+mat-form-field.mat-form-field {
+  font-size: 20px;
+}
+td{
+  border-bottom: 1px solid darkgrey;
+  border-spacing: px;
+  font-size: large;
+  color: currentColor;
+}

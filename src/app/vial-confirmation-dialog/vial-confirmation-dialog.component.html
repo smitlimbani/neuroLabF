@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Vial Data</h2>
+<mat-dialog-content  class="mat-typography">
+  <mat-card >
+    <br>
+    <mat-card-content>
+      <div align="center">
+        <span style="font-size: 30px;margin-right: 20px;">Serial No</span>
+        <mat-form-field appearance="outline" class="half" >
+          <mat-label>Serial No</mat-label>
+          <input matInput [(ngModel)]="indexNo" (input)="isIndexNoValid = false;" [min]="1+data.lockedCounter" [max]="data.indexNo" type="number">
+        </mat-form-field>
+      </div>
+      <table width="100%">
+        <tr>
+          <td class="tag">NAME</td>
+          <td>:</td>
+          <td class="value">{{data.vialData.master.patientDemographicDetail.name}}</td>
+          <td class="tag">AGE/SEX</td>
+          <td>:</td>
+          <td class="value">{{data.vialData.master.patientDemographicDetail.age}}/{{data.vialData.master.patientDemographicDetail.sex}}</td>
+        </tr>
+        <tr>
+          <td class="tag">Dr. Name</td>
+          <td>:</td>
+          <td class="value">{{data.vialData.master.drName}}</td>
+          <td class="tag">Hospital Name</td>
+          <td>:</td>
+          <td class="value">{{data.vialData.master.patientDemographicDetail.hospitalName}}</td>
+        </tr>
+        <tr>
+          <td  class="tag">Sample Type</td>
+          <td >:</td>
+          <td  class="value">{{data.vialData.master.sampleType=="S" ? "SERUM":"CSF"}}</td>
+          <td  class="tag">Test</td>
+          <td >:</td>
+          <td  class="value">{{data.vialData.test.name}}</td>
+        </tr>
+        <tr>
+          <td  class="tag">VLID</td>
+          <td >:</td>
+          <td  class="value">{{data.vialData.vlid}}</td>
+          <td  class="tag">Creation Date</td>
+          <td >:</td>
+          <td  class="value">{{data.vialData.creationDate}}</td>
+        </tr>
+      </table>
+
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+  <button mat-button [mat-dialog-close]="indexNo" cdkFocusInitial>ADD</button>
+</mat-dialog-actions>

@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ReceivingStationComponent implements OnInit {
 
-  selectedIndex=0;
+  selectedIndex=2;
   master;
   constructor() { }
 
