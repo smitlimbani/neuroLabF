@@ -306,6 +306,12 @@
           </table>
           <table class="single" [formGroup]="paymentForm">
             <tr>
+              <td>
+                <button  class="submit" layout-align="center" (click)="addTransaction(null,null,null)" [disabled]="master.remainingAmount<=0||totalAmt.invalid|| regType=='INTERNAL'" color="primary" mat-raised-button>Add Transaction</button>
+              </td>
+            </tr>
+            <br>
+            <tr>
               <div formArrayName="transactions" *ngFor="let transaction of Transactions.controls; let i= index">
                 <div [formGroupName]="i">
                   <td>
@@ -329,11 +335,8 @@
                       <!--                    <mat-error *ngIf="amount.errors && (amount.invalid || amount.touched)">Enter transaction amount</mat-error>-->
                     </mat-form-field>
                   </td>
-                  <td>
-                    <button  class="submit" layout-align="center" (click)="addTransaction(null,null,null)" [disabled]="master.remainingAmount<0||totalAmt.invalid|| regType=='INTERNAL'" color="primary" mat-raised-button>Add new transaction</button>
-                  </td>
-                  <td>
-                    <button  class="submit" layout-align="center"  (click)="deleteTransaction(i)" [disabled]="master.remainingAmount<0||totalAmt.invalid || regType=='INTERNAL'" color="primary" mat-raised-button>Delete current transaction</button>
+                   <td>
+                    <button  class="submit" layout-align="center"  (click)="deleteTransaction(i)" [disabled]="totalAmt.invalid || regType=='INTERNAL'" color="primary" mat-raised-button>Delete Transaction</button>
                   </td>
                  </div>
               </div>
