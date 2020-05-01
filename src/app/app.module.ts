@@ -36,6 +36,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import {MatExpansionModule} from "@angular/material/expansion";
 import { VialConfirmationDialogComponent } from './vial-confirmation-dialog/vial-confirmation-dialog.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { SeparationStationComponent } from './separation-station/separation-station.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
     ListGenerationComponent,
     PageNotFoundComponent,
     VialConfirmationDialogComponent,
+    SeparationStationComponent,
   ],
   imports: [
     BrowserModule,

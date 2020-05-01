@@ -2,15 +2,15 @@
   width: 100%;
 }
 .example-card {
-  max-width: 80%;
+  max-width: 90%;
   margin-left: 10%;
   margin-right: 10%;
 }
 
 .active-serum-bg{
-    background-color: darkgreen;
+    background-color: lightcoral;
 }
 
 .active-csf-bg{
-    background-color: darkturquoise;
+    background-color: mediumaquamarine;
 }

@@ -1,0 +1,13 @@
+mat-card-content{
+  margin-left: 20%;
+  width: 60%;
+}
+.single{
+  width: 100%;
+}
+.tag{
+  font-weight: bold;
+}
+.checkbox{
+  width: 25%;
+}

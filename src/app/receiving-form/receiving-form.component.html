@@ -121,7 +121,7 @@
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Doctor Name</mat-label>
-              <mat-select #drName="ngModel" [(ngModel)]="master.drName" [disabled]="regType=='INTERNAL'" [class.is-invalid]="drName.invalid && drName.touched" matInput placeholder="Enter doctor name" name="drName" type="text">
+              <mat-select #drName="ngModel" required [(ngModel)]="master.drName" [disabled]="regType=='INTERNAL'" [class.is-invalid]="drName.invalid && drName.touched" matInput placeholder="Enter doctor name" name="drName" type="text">
 <!--                <mat-select-search [formControl]="drName"></mat-select-search>-->
                 <mat-option  *ngFor="let doctor of doctors" [value]="doctor.name" (click)="doctorSelected(doctor)">{{doctor.name}}
                 </mat-option>
