@@ -36,7 +36,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import {MatExpansionModule} from "@angular/material/expansion";
 import { VialConfirmationDialogComponent } from './vial-confirmation-dialog/vial-confirmation-dialog.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { TestComponent } from './test/test.component';
 import { SeparationStationComponent } from './separation-station/separation-station.component';
+import { MatTableExporterModule } from 'mat-table-exporter';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,9 @@ import { SeparationStationComponent } from './separation-station/separation-stat
     ListGenerationComponent,
     PageNotFoundComponent,
     VialConfirmationDialogComponent,
+    TestComponent,
     SeparationStationComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +84,7 @@ import { SeparationStationComponent } from './separation-station/separation-stat
     MatButtonToggleModule,
     MatCheckboxModule,
     MatExpansionModule,
+    MatTableExporterModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

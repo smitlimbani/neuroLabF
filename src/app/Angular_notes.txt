@@ -1,0 +1,68 @@
+- selector in component is to add that component into main html file via component name as a tag
+- Pipes are a good way to format strings, currency amounts, dates and other display data. Angular ships with several built-in pipes and you can create your own.
+    https://v6.angular.io/guide/pipes
+Dependency injection :
+    - provides needed services and objects. Provider is one class and if we are defining services and classes in single file then services will be defined first then class.
+    - otherwise forwardRef() method can be used
+    - Injectors are inherited, which means that if a given injector can't resolve a dependency, it asks the parent injector to resolve it.
+    - A component can get services from its own injector, from the injectors of its component ancestors, from the injector of its parent NgModule, or from the root injector.
+    - Provider can be defined at three places @injectable @NgModule @Component
+- When you provide the service at the root level, Angular creates a single, shared instance of HeroService and injects into any class that asks for it. Registering the provider in the @Injectable metadata also allows Angular to optimize an app by removing the service if it turns out not to be used after all.
+- Reserve the constructor for simple initialization such as wiring constructor parameters to properties. The constructor shouldn't do anything. It certainly shouldn't call a function that makes HTTP requests to a remote server as a real data service would.
+- services can take a callback. It could return a Promise. It could return an Observable.
+- Angular only binds to public component properties. Hence messageService property must be public because you're about to bind to it in the template.
+- Notice that the new service imports the Angular Injectable symbol and annotates the class with the @Injectable() decorator. This marks the class as one that participates in the dependency injection system.
+- The @Injectable() decorator accepts a metadata object for the service, the same way the @Component() decorator did for your component classes.
+- The constructor with a parameter that declares a private messageService property. Angular will inject the singleton MessageService into that property when it creates the HeroService.
+
+Bootstraping:
+:declarations — this application's lone component.
+:imports — import BrowserModule to have browser specific services such as DOM rendering, sanitization, and location.
+:providers — the service providers.
+:bootstrap — the root component that Angular creates and inserts into the index.html host web page.
+- all about app.module file and declaration ways: https://v6.angular.io/guide/bootstrapping
+
+Providers:
+- When you add a service provider to the root application injector, it’s available throughout the app. Additionally, these providers are also available to all the classes in the app as long they have the lookup token.
+- You should always provide your service in the root injector unless there is a case where you want the service to be available only if the consumer imports a particular @NgModule.
+- all about provideIn and providers : https://v6.angular.io/guide/providers
+
+lazy-loading modules:
+-   Lazy loading is when you load modules only when you need them; for example, when routing.
+-   in lazy-loading module, each lazy-loaded module gets an injector which is child of root injector
+-   Any component created within a lazy loaded module’s context, such as by router navigation, gets the local instance of the service, not the instance in the root application injector.
+    Components in external modules continue to receive the instance created for the application root.
+
+-   Register a provider with a component when you must limit a service instance to a component and its component tree, that is, its child components.
+    For example, a user editing component, UserEditorComponent, that needs a private copy of a caching UserService should register the UserService with the UserEditorComponent.
+    Then each new instance of the UserEditorComponent gets its own cached service instance.
+-   When you register a provider at the component level, you get a new instance of the service with each new instance of that component.
+    More details : 
+        - https://v6.angular.io/guide/dependency-injection-in-action
+        - https://angular.io/guide/architecture-services
+
+@NgModule : 
+    export : it will make available these modules's public declarations to all the components of importing module. Generally declarations are private hence only components
+    of that module can use it, exporting them will make it publcally available.
+Routing:
+-   forRoot() and forChild()
+-   <routerOutlet></routerOutlet> directive, It acts as a placeholder that marks the spot in the template where the router should display the components for that outlet.
+-   routerLink="/heroes" ,directive of RouterModule: it tells router and navigates, it will only creates component and append
+    which is different then putting 'href' in anchor tag. 'href' and 'routerLink' are different
+-   default path matching is for prefix unless explicitly mention "full" in 'pathMatch' attribute.
+-   to go back Location from angular/common and location.back
+-   ActivatedRoute used for extracting data from URL
+
+Binding :
+-   If you reference a name that belongs to more than one of these namespaces, the template variable name takes precedence,
+    followed by a name in the directive's context, and, lastly, the component's member names.
+-   When you write a data-binding, you're dealing exclusively with the DOM properties and events of the target object, not HTML attributes.
+    more on binding :- https://angular.io/guide/template-syntax#property-binding
+    -   when template reference is given using '#' then it is only availabe to template but not to component
+-   in one-way binding we write [DOM property,not attribute name] = "component's property" or bind-property = "component property"
+-   <app-item-detail childItem="parentItem"></app-item-detail>: to reneder parentItem as a string
+-   <app-item-detail [childItem]="parentItem"></app-item-detail>: to render parentItem as a property of component
+-   we always have a choice between property binding and interpolation
+
+Template reference variable : it can be used in template only
+    <div #divref></div>

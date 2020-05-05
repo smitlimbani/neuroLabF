@@ -17,7 +17,7 @@ export class VialConfirmationDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data);
+    // console.log(this.data);
 
     this.vialData = this.data.vialData;
     this.indexNo = this.data.vialData["serialNo"];
@@ -25,8 +25,11 @@ export class VialConfirmationDialogComponent implements OnInit {
   }
 
   isIndexNoAvailable(){
-    if(this.indexNo > this.data.indexNo){
-      this.isIndexNoValid = false;
+    if(this.indexNo > this.data.vialData["serialNo"] || this.indexNo <= this.data.lockedCounter){
+        this.isIndexNoValid = false;
+    }
+    else{
+        this.isIndexNoValid = true;
     }
   }
 }

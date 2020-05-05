@@ -16,6 +16,12 @@ check:
   - updated loadData() and combined with appendFeature. which is used in confirmNR and mergeMe() methods! check if all working smooth with backend!
 
 
+bug:
+serial no disappear when discarding extra vials while solidification
+solution:
+    -refresh page
+    - set serial no null in BE
+
 sleep(ms):
 function delay(ms: number) {
   return new Promise( resolve => setTimeout(resolve, ms) );

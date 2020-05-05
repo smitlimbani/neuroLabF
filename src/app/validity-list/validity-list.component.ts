@@ -91,7 +91,7 @@ export class ValidityListComponent implements OnInit {
         dataStr+=this.nestedFilter(data,keys);
       }
       dataStr = dataStr.trim().toLowerCase();
-      return dataStr.indexOf(filter) != -1; ;
+      return dataStr.indexOf(filter) != -1;
     }
 
     this.validityLists.sort = this.sort;

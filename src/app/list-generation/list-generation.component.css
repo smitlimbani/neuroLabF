@@ -11,7 +11,10 @@ mat-card{
 .half{
   width: 50%;
 }
-
-.solidified{
+.group-bg-color{
     background-color: lightsteelblue;
+}
+.solidified{
+
+    border-bottom: 2px solid red;
 }
