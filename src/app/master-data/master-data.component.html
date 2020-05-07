@@ -1,0 +1,89 @@
+<table class="single">
+  <div *ngIf="displaySamples==true">
+    <tr>
+      <td class="tag">Sample Id</td><td>:</td>
+    </tr>
+    <div class="samples" *ngFor="let sample of master.samples">
+      <td colspan="2">{{sample.sampleId}},</td><td>Received on {{sample.recDate}}</td>
+    </div>
+  </div>
+  <tr *ngIf="master.externalSample">
+    <td class="tag">E-Hospital Sample Id.</td><td>: {{master.externalSample}}</td>
+  </tr>
+</table>
+
+<table class="single">
+  <tr>
+    <td class="tag">Sample Type</td><td>: {{master.sampleType}}</td>
+    <td class="tag">Request Date</td><td>: {{master.reqDate}}</td>
+  </tr>
+  <tr>
+    <td class="tag">Raised Tests</td>
+    <td colspan="3">:
+      <a *ngIf="master.anca!='NOT_RAISED'">ANCA </a>
+      <a *ngIf="master.ana!='NOT_RAISED'">ANA </a>
+      <a *ngIf="master.mog!='NOT_RAISED'">MOG </a>
+      <a *ngIf="master.myu!='NOT_RAISED'">MYO </a>
+      <a *ngIf="master.pana!='NOT_RAISED'">PANA </a>
+      <a *ngIf="master.nmda!='NOT_RAISED'">NMDA </a>
+      <a *ngIf="master.gangigg!='NOT_RAISED'">GANGIGG</a>
+      <a *ngIf="master.gangigm!='NOT_RAISED'">GANGIGM </a>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="tag">Dr. Name</td><td>: {{master.drName}}</td>
+    <td class="tag">Hospital Name</td><td>: {{hospitalName}}</td>
+  </tr>
+  <tr *ngIf="isExternal">
+    <td class="tag">Dr. Contact No</td><td>: {{master.drContactNo}}</td>
+    <td class="tag">Dr. Email Id</td><td>: {{master.drEmailId}}</td>
+  </tr>
+  <tr>
+    <td class="tag">Processing Status</td><td>: {{master.status}}</td>
+    <td class="tag">Linked AU. No</td><td>: {{master.linked==null?'-':master.linked}}</td>
+  </tr>
+  <tr>
+    <td class="tag">Validity status</td><td>: {{master.isValid=='Y'?'VALID':master.isValid=='P'?'PARTIALLY VALID':'INVALID'}}</td>
+    <td class="tag">Validity Remark</td><td>: {{master.remark==null?'-':master.remark}}</td>
+  </tr>
+  <tr>
+    <td class="tag">Payment Category</td><td>: {{master.paymentCategory.code}}</td>
+    <td class="tag">Payment Discount</td><td>: {{master.paymentCategory.discountPercentage}}</td>
+  </tr>
+  <tr>
+    <td class="tag">Total Amount</td><td>: {{master.totalAmount}}</td>
+    <td class="tag">Remaining Amount</td><td>: {{master.remainingAmount}}</td>
+  </tr>
+  <tr>
+    <td class="tag">Transactions</td><td *ngIf="master.payments.length!=0;else abc">:</td>
+    <ng-template #abc>
+      <td>: -</td>
+    </ng-template>
+  </tr>
+</table>
+
+<table class="single">
+  <div  class="samples" *ngFor="let transaction of master.payments">
+    <tr>
+      <td class="tag">Date</td><td>: {{transaction.transactionDate}}</td>
+      <td class="tag">Amount</td><td>: {{transaction.amount}}</td>
+      <td class="tag">Remark</td><td>: {{transaction.remark}}</td>
+    </tr>
+  </div>
+
+  <br>
+  <div class="vial" *ngIf="displayVials==true&& master.vials.length!=0">
+    <h1 >Vials:</h1>
+    <mat-accordion *ngFor="let vial of master.vials">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>VLID:  {{vial.vlid}}</mat-panel-title>
+          <mat-panel-description> Test: {{getTest(vial.vlid)}}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-vial-data [vial]="vial" [labTests]="labTests"></app-vial-data>
+      </mat-expansion-panel>
+      <br>
+    </mat-accordion>
+  </div>
+</table>

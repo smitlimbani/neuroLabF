@@ -1,3 +1,4 @@
+<br>
 <mat-card>
   <mat-card-header>
     <mat-card-title>Separation Station</mat-card-title>
@@ -9,10 +10,10 @@
     <div align="center">
       <mat-form-field align="center" class="single" appearance="outline">
         <mat-label>Sample Id</mat-label>
-        <input matInput [(ngModel)]="sampleId" placeholder="Enter Sample Id" type="text" >
+        <input #sId matInput placeholder="Enter Sample Id" type="text" >
       </mat-form-field>
       <tr>
-        <button mat-raised-button color="primary" #separateSampleButton (click)="submitSampleId();">Separate sample</button>
+        <button mat-raised-button color="primary" #separateSampleButton (click)="submitSampleId(sId.value);">Separate sample</button>
       </tr>
       <br>
       <mat-error *ngIf="master?.status=='REPORTED'">All tests raised with this sample have been REPORTED</mat-error>
@@ -21,6 +22,12 @@
     </div>
     <div *ngIf="!isHidden" width="100%">
       <table class="single">
+        <tr>
+          <td class="tag">AU No.</td>
+          <td>: {{master.ulid}}</td>
+          <td class="tag">Sample Id</td>
+          <td>: {{this.sampleId}}</td>
+        </tr>
         <tr>
           <td class="tag">Name</td>
           <td>: {{master.patientDemographicDetail.name}}</td>
@@ -82,7 +89,7 @@
 <!--        </tr>-->
       </table>
 
-      <table mat-table *ngIf="dataSource!=null" [dataSource]="dataSource" class="single">
+      <table mat-table matTableExporter #exporter="matTableExporter" name="exporter" *ngIf="dataSource!=null" [dataSource]="dataSource" class="single" >
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -121,7 +128,7 @@
       <table class="single" *ngIf="dataSource!=null">
         <tr>
           <td align="center">
-            <button mat-raised-button color="primary" type="submit" >Print</button>
+            <button mat-raised-button color="primary" type="submit" (click)="export(exporter)" >Print</button>
           </td>
           <td align="center">
             <button mat-raised-button color="primary" type="submit" (click)="next();separateSampleButton.disabled=false">Next</button>
@@ -134,9 +141,9 @@
     <mat-divider></mat-divider>
     <br>
   </mat-card-content>
-  {{raisedTests|json}}<br>
-  {{noOfInvalidTests}}<br>
-  {{master|json}}
+<!--  {{raisedTests|json}}<br>-->
+<!--  {{noOfInvalidTests}}<br>-->
+<!--  {{master|json}}-->
 </mat-card>
 
 

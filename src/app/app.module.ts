@@ -36,14 +36,18 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import {MatExpansionModule} from "@angular/material/expansion";
 import { VialConfirmationDialogComponent } from './vial-confirmation-dialog/vial-confirmation-dialog.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
-import { TestComponent } from './test/test.component';
 import { SeparationStationComponent } from './separation-station/separation-station.component';
+import { IndividualSearchComponent } from './individual-search/individual-search.component';
+import { PddDataComponent } from './pdd-data/pdd-data.component';
+import { MasterDataComponent } from './master-data/master-data.component';
+import { VialDataComponent } from './vial-data/vial-data.component';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SegregationListComponent } from './segregation-list/segregation-list.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { PendingVialsComponent } from './pending-vials/pending-vials.component';
 import { ExploreDataComponent } from './explore-data/explore-data.component';
+import {TestComponent} from "./test/test.component";
 
 @NgModule({
   declarations: [
@@ -59,12 +63,16 @@ import { ExploreDataComponent } from './explore-data/explore-data.component';
     ListGenerationComponent,
     PageNotFoundComponent,
     VialConfirmationDialogComponent,
-    TestComponent,
     SeparationStationComponent,
+    IndividualSearchComponent,
+    PddDataComponent,
+    MasterDataComponent,
+    VialDataComponent,
     DashboardComponent,
     SegregationListComponent,
     PendingVialsComponent,
     ExploreDataComponent,
+    TestComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,12 +15,13 @@ export interface Test {
   test: string;
   code: string;
 }
-
 @Component({
   selector: 'app-receiving-form',
   templateUrl: './receiving-form.component.html',
   styleUrls: ['./receiving-form.component.css']
 })
+
+
 export class ReceivingFormComponent implements OnInit {
 
   regType = 'INTERNAL';
@@ -45,8 +46,8 @@ export class ReceivingFormComponent implements OnInit {
     };
 
   remarkList = ['Not sufficient volume', 'Quality not good', 'Sample damaged', 'Less volume',
-    'Hemolysis', 'Lipemic', 'Clotted', 'Icteric', 'Leakage', 'Others', 'Sample not labelled correctly',
-    'Wrong investigation request', 'Sample already exists', 'BPL category. Testing will pe pending till payment.',
+    'Hemolysis', 'Lipemic', 'Clotted', 'Icteric', 'Leakage',  'Sample not labelled correctly',
+    'Wrong investigation request', 'Sample already exists', 'BPL category. Testing will pe pending till payment.','Others',
   ];
 
   master;
@@ -72,6 +73,7 @@ export class ReceivingFormComponent implements OnInit {
   transactions: FormArray = new FormArray([]);
   doctors;
   public doctorFilter: FormControl = new FormControl();
+  otherRemark;
 
   @Input() tmaster?: any;
 
@@ -158,7 +160,7 @@ export class ReceivingFormComponent implements OnInit {
           this.isPddReadOnly = true;
           this.isMasterReadOnly = false;
           this.initializeTests();
-          // this.setULIDVariables();
+          this.setULIDVariables();
         }
       )
       // this.pdd = new PatientDemographicDetail(null, 'UHID0001', 'Gauri', 'address', 22, 'FEMALE', 'someEmail@gmail.com', '9999999999', 'NIMHANS');
@@ -190,8 +192,7 @@ export class ReceivingFormComponent implements OnInit {
           this.isLinkEnabled = false;
           this.isPddReadOnly = true;
           this.isMasterReadOnly = true;
-          if (this.master.sampleType == 'C')
-            this.setULIDVariables();
+          this.setULIDVariables();
           this.initializeTests();
           if (this.regType == 'INTERNAL') {
             this.calcTotalAmount();
@@ -368,11 +369,14 @@ export class ReceivingFormComponent implements OnInit {
         },
         error => {
           console.error("Error in verifying Ulid");
-        });
+        },
+      ()=>{
+        if (this.isULIDVerified == true && this.regType == 'EXTERNAL' && this.uSampleId == null)
+          this.sampleId = this.master.ulid.substr(0, 5) + this.centerULID + this.master.ulid.substr(-3) + ":1";
+
+      });
     }
     // this.isULIDVerified = true;
-    if (this.isULIDVerified == true && this.regType == 'EXTERNAL' && this.uSampleId == null)
-      this.sampleId = this.master.ulid.substr(0, 5) + this.centerULID + this.master.ulid.substr(-3) + ":1";
   }
 
   //Enables linking of ulid
@@ -523,6 +527,10 @@ export class ReceivingFormComponent implements OnInit {
 
 
   onSubmit() {
+    if(this.master.remark=='Others'){
+      console.log('change remark');
+      this.master.remark=this.otherRemark;
+    }
     this.master.ulid = this.master.ulid.substr(0, 5) + this.centerULID + this.master.ulid.substr(-3);
     if (this.regType == 'INTERNAL') {
       // this.snackBar.open("Sample received", "", {duration: 3000,});
@@ -564,3 +572,5 @@ export class ReceivingFormComponent implements OnInit {
 // DONE---transaction row is not responsive to screen size
 // DONE---no different color to CSF and SERUM.
 // Wrong date format id being received in BE.
+
+// After we are doing internal receiving and shifting to external form field are turning red because of class.touched property.

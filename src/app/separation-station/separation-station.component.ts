@@ -4,9 +4,10 @@ import {error} from "@angular/compiler/src/util";
 import {ReceivingFormComponent, Test} from "../receiving-form/receiving-form.component";
 import {ReceivingFormService} from "../services/receiving-form.service";
 import {Vial} from "../pojo/Vial";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTableDataSource,MatTable } from "@angular/material/table";
 import {SelectionModel} from "@angular/cdk/collections";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-separation-station',
@@ -40,7 +41,9 @@ export class SeparationStationComponent implements OnInit {
    this.getLabTestDetails();
   }
 
-  submitSampleId(){
+  submitSampleId(number){
+    console.log(number);
+    this.sampleId=number;
     if(this.master!=null) {
      let temp =this.sampleId;
       this.next();
@@ -177,6 +180,12 @@ export class SeparationStationComponent implements OnInit {
     this.selection=null;
     this.isOkEnabled=true;
     this.isListCreated=false;
+  }
+
+  export(exporter){
+    console.log(this.master.ulid);
+
+    exporter.exportTable('xlsx', {fileName:this.master.ulid});
   }
 }
 

@@ -1,0 +1,89 @@
+<br>
+<mat-card>
+  <mat-divider></mat-divider>
+  <br>
+  <mat-card-header>
+    <mat-card-title>Search</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <mat-card-content>
+    <form #Form="ngForm">
+      <table class="single">
+        <tr>
+          <td>
+            <mat-form-field appearance="outline" class="single">
+              <mat-label>Search Type</mat-label>
+              <mat-select #item="ngModel" [(ngModel)]="searchType" (ngModelChange)="reset()" matInput required name="item" type="text" placeholder="Select item to be searched">
+                <mat-option value="UHID">UHID</mat-option>
+                <mat-option value="ULID">AU No.</mat-option>
+                <mat-option value="sampleId">Sample Id</mat-option>
+                <mat-option value="VLID">VLID</mat-option>
+              </mat-select>
+              <mat-error *ngIf="item.errors && (item.invalid || item.touched)">Select item to be searched</mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="outline" class="single">
+              <mat-label>{{searchType=='ULID'?'AU No.':searchType=='sampleId'?'Sample Id.':searchType}}</mat-label>
+              <input #value="ngModel" [disabled]="searchType==null" [(ngModel)]="searchValue" name="searchType" matInput [placeholder]="'Enter '+ searchType" required type="text">
+              <mat-error *ngIf="value.errors && (value.invalid || value.touched)">Enter {{searchType=='ULID'?'AU No.':searchType=='sampleId'?'Sample Id.':searchType}}</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" colspan="2">
+            <button  mat-raised-button color="primary" (click)="onSubmit()">Search</button>
+          </td>
+        </tr>
+        <br>
+        <mat-divider></mat-divider>
+      </table>
+    </form>
+    <br>
+    <div *ngIf="display">
+      <h1 >Patient Details:</h1>
+      <app-pdd-data [pdd]="this.pdd"></app-pdd-data>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+
+      <div [ngSwitch]="searchType">
+
+        <div *ngSwitchCase="'UHID'">
+          <h1 >Patient Sample Details:</h1>
+          <mat-accordion *ngFor="let master of pdd.masters">
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>AU No.:  {{master.ulid}}</mat-panel-title>
+                <mat-panel-description>Sample Type: {{master.sampleType=='S'?'SERUM':'CSF'}}, Request raised on: {{master.reqDate}}</mat-panel-description>
+              </mat-expansion-panel-header>
+              <app-master-data [master]="master" [hospitalName]="pdd.hospitalName" [labTests]="labTests" [displaySamples]="true" [displayVials]="true"></app-master-data>
+            </mat-expansion-panel>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+          </mat-accordion>
+        </div>
+
+        <div *ngSwitchCase="'ULID'">
+          <h1 > AU No. {{data.ulid}}</h1>
+          <app-master-data [master]="data" [hospitalName]="pdd.hospitalName" [labTests]="labTests" [displaySamples]="true" [displayVials]="true"></app-master-data>
+        </div>
+
+        <div *ngSwitchCase="'VLID'">
+          <h1 > AU No. {{data.master.ulid}}</h1>
+          <app-master-data [master]="data.master" [hospitalName]="pdd.hospitalName" [labTests]="labTests" [displaySamples]="true" [displayVials]="false"></app-master-data>
+        </div>
+
+        <div *ngSwitchCase="'sampleId'">
+          <h1 > AU No. {{data.master.ulid}}</h1>
+          <app-master-data [master]="data.master" [hospitalName]="pdd.hospitalName" [labTests]="labTests" [displaySamples]="false" [displayVials]="true"></app-master-data>
+        </div>
+
+      </div>
+      <br>
+      <mat-divider></mat-divider>
+    </div>
+  </mat-card-content>
+</mat-card>

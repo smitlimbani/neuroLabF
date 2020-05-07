@@ -1,0 +1,14 @@
+.single{
+  width: 100%;
+}
+.tag{
+  font-weight: bold;
+}
+.samples{
+  margin-left: 5%;
+  width: 100%;
+}
+.vial{
+  margin-left: 15%;
+  margin-right: 15%;
+}

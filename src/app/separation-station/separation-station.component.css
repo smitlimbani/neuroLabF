@@ -1,4 +1,4 @@
-mat-card-content{
+mat-card{
   margin-left: 20%;
   width: 60%;
 }
@@ -10,4 +10,5 @@ mat-card-content{
 }
 .checkbox{
   width: 25%;
+
 }
