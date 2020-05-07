@@ -88,7 +88,7 @@ export class ExploreDataComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private dialog : MatDialog,  
+    private dialog : MatDialog,
     private snackBar : MatSnackBar,
   ) { }
 
@@ -101,7 +101,7 @@ export class ExploreDataComponent implements OnInit {
     // this.loadData();
     this.loadTestList();
   }
-  
+
   loadTestList(){
     // this.testList = await this.dashboardService.getTestsList();
     this.dashboardService.getTestsList()
@@ -131,7 +131,7 @@ export class ExploreDataComponent implements OnInit {
     },
     error => {
       if(error.status == 500){
-        this.snackBar.open("Server coudn't perform operation!","",{
+        this.snackBar.open("Server couldn't perform operation!","",{
           duration:3000,
         });
       }
@@ -141,7 +141,7 @@ export class ExploreDataComponent implements OnInit {
         });
       }
       else{
-        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
           duration:3000,
         });
       }
@@ -169,9 +169,9 @@ export class ExploreDataComponent implements OnInit {
       let keys;
       let keywords = filter.split(',');
       for (const keyword of keywords) {
-        
+
         for(const column of this.columnsToFilter){
-          keys = column.split('.');        
+          keys = column.split('.');
           dataStr+=this.nestedFilter(data,keys);
         }
         dataStr = dataStr.trim().toLowerCase();
@@ -194,7 +194,7 @@ export class ExploreDataComponent implements OnInit {
       }
     }
     console.log(filterStr.trim().toLowerCase());
-    
+
     this.dataSource.filter = filterStr.trim().toLowerCase();
   }
 

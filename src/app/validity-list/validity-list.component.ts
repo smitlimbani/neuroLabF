@@ -60,7 +60,7 @@ export class ValidityListComponent implements OnInit {
     },
     error => {
       if(error.status == 500){
-        this.snackBar.open("Server coudn't perform operation!","",{
+        this.snackBar.open("Server couldn't perform operation!","",{
           duration:3000,
         });
       }
@@ -70,7 +70,7 @@ export class ValidityListComponent implements OnInit {
         });
       }
       else{
-        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
           duration:3000,
         });
       }
@@ -92,9 +92,9 @@ export class ValidityListComponent implements OnInit {
       let keys;
       let keywords = filter.split(',');
       for (const keyword of keywords) {
-        
+
         for(const column of this.columnsToFilter){
-          keys = column.split('.');        
+          keys = column.split('.');
           dataStr+=this.nestedFilter(data,keys);
         }
         dataStr = dataStr.trim().toLowerCase();
@@ -115,7 +115,7 @@ export class ValidityListComponent implements OnInit {
       }
     return data || '';
   }
-  
+
   applyFilter(filterString : string){
     this.validityLists.filter = filterString.trim().toLowerCase();
   }
@@ -133,7 +133,7 @@ export class ValidityListComponent implements OnInit {
       if(result){
         //STATIC
         // alert("VALIDATED!");
-        
+
         //SERVER
         this.validityListService.deleteValidityList(validityList.id).subscribe(data=>{
           this.snackBar.open("Validated successfully!","",{
@@ -144,7 +144,7 @@ export class ValidityListComponent implements OnInit {
         },
         error => {
           if(error.status == 500){
-            this.snackBar.open("Server coudn't perform operation!","",{
+            this.snackBar.open("Server couldn't perform operation!","",{
               duration:3000,
             });
           }
@@ -154,7 +154,7 @@ export class ValidityListComponent implements OnInit {
             });
           }
           else{
-            this.snackBar.open("Unknown Error!Contact Devloper.","",{
+            this.snackBar.open("Unknown Error!Contact Developer.","",{
               duration:3000,
             });
           }

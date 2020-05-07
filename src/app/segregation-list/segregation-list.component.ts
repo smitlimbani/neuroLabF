@@ -119,11 +119,11 @@ export class SegregationListComponent implements OnInit {
 
   loadData(data){
     console.log(data);
-    
+
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
     console.log(this.dataSource);
-    
+
   }
 
   export(exporter){
@@ -134,7 +134,7 @@ export class SegregationListComponent implements OnInit {
 
     exporter.exportTable('xlsx', {fileName:this.selectedTest.testCategory+'_'+this.selectedTest.code+'_'+strDate, sheet: this.selectedTest.code})
   }
-  
+
   onGenerateList(picker){
     if(!this.selectedTest || !this.selectedDate)
     {
@@ -155,7 +155,7 @@ export class SegregationListComponent implements OnInit {
             duration:3000,
           });
         }
-        this.loadData(data);      
+        this.loadData(data);
       },
       error=>{
         if(error.status == 500){
@@ -169,7 +169,7 @@ export class SegregationListComponent implements OnInit {
           });
         }
         else{
-          this.snackBar.open("Unknown Error!Contact Devloper.","",{
+          this.snackBar.open("Unknown Error!Contact Developer.","",{
             duration:3000,
           });
         }

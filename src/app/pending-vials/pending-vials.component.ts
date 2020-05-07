@@ -66,7 +66,7 @@ export class PendingVialsComponent implements OnInit {
     //     });
     //   }
     //   else{
-    //     this.snackBar.open("Unknown Error!Contact Devloper.","",{
+    //     this.snackBar.open("Unknown Error!Contact Developer.","",{
     //       duration:3000,
     //     });
     //   }
@@ -78,7 +78,7 @@ export class PendingVialsComponent implements OnInit {
   }
 
   loadData(data){
-    
+
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {
@@ -93,9 +93,9 @@ export class PendingVialsComponent implements OnInit {
       let keys;
       let keywords = filter.split(',');
       for (const keyword of keywords) {
-        
+
         for(const column of this.columnsToFilter){
-          keys = column.split('.');        
+          keys = column.split('.');
           dataStr+=this.nestedFilter(data,keys);
         }
         dataStr = dataStr.trim().toLowerCase();
@@ -108,7 +108,7 @@ export class PendingVialsComponent implements OnInit {
 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    
+
   }
   nestedFilter(data,keys){
     for(let key of keys){

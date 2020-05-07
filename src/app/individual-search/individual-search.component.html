@@ -53,16 +53,18 @@
         <div *ngSwitchCase="'UHID'">
           <h1 >Patient Sample Details:</h1>
           <mat-accordion *ngFor="let master of pdd.masters">
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>AU No.:  {{master.ulid}}</mat-panel-title>
-                <mat-panel-description>Sample Type: {{master.sampleType=='S'?'SERUM':'CSF'}}, Request raised on: {{master.reqDate}}</mat-panel-description>
-              </mat-expansion-panel-header>
-              <app-master-data [master]="master" [hospitalName]="pdd.hospitalName" [labTests]="labTests" [displaySamples]="true" [displayVials]="true"></app-master-data>
-            </mat-expansion-panel>
-            <br>
-            <mat-divider></mat-divider>
-            <br>
+            <div *ngIf="master.active==true">
+              <mat-expansion-panel >
+                <mat-expansion-panel-header>
+                  <mat-panel-title>AU No.   {{master.ulid}}</mat-panel-title>
+                  <mat-panel-description>Sample Type: {{master.sampleType=='S'?'SERUM':'CSF'}}, Request raised on: {{master.reqDate}}</mat-panel-description>
+                </mat-expansion-panel-header>
+                <app-master-data [master]="master" [hospitalName]="pdd.hospitalName" [labTests]="labTests" [displaySamples]="true" [displayVials]="true"></app-master-data>
+              </mat-expansion-panel>
+              <br>
+              <mat-divider></mat-divider>
+              <br>
+            </div>
           </mat-accordion>
         </div>
 
@@ -83,7 +85,7 @@
 
       </div>
       <br>
-      <mat-divider></mat-divider>
+      <mat-divider *ngIf="searchType!='UHID'"></mat-divider>
     </div>
   </mat-card-content>
 </mat-card>

@@ -70,7 +70,7 @@ export class ListGenerationComponent implements OnInit {
         this.generateNav();
       }
     });
-    
+
     //STATIC
     // this.testCategory = "BLOT"
     // this.generateNav();
@@ -100,7 +100,7 @@ export class ListGenerationComponent implements OnInit {
           .then(data=>{
             this.listData = data;
             this.dataSource = new MatTableDataSource(this.listData[this.testList[this.selectedIndex].code]);
-            this.dataSource.paginator = this.paginator;        
+            this.dataSource.paginator = this.paginator;
           })
           .catch(error=>{
             console.error(error.message);
@@ -163,7 +163,7 @@ export class ListGenerationComponent implements OnInit {
 //         });
 //       }
 //       else{
-//         this.snackBar.open("Unknown Error!Contact Devloper.","",{
+//         this.snackBar.open("Unknown Error!Contact Developer.","",{
 //           duration:3000,
 //         });
 //       }
@@ -212,7 +212,7 @@ export class ListGenerationComponent implements OnInit {
         });
       }
       else{
-        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
           duration:3000,
         });
       }
@@ -227,7 +227,7 @@ export class ListGenerationComponent implements OnInit {
     //   });
     // }
     // else{
-    //   this.snackBar.open("Unknown Error!Contact Devloper.","",{
+    //   this.snackBar.open("Unknown Error!Contact Developer.","",{
     //     duration:3000,
     //   });
     // }
@@ -298,7 +298,7 @@ export class ListGenerationComponent implements OnInit {
         });
       }
       else{
-        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
           duration:3000,
         });
       }
@@ -315,7 +315,7 @@ export class ListGenerationComponent implements OnInit {
     //   });
     // }
     // else{
-    //   this.snackBar.open("Unknown Error!Contact Devloper.","",{
+    //   this.snackBar.open("Unknown Error!Contact Developer.","",{
     //       duration:3000,
     //   });
     // }
@@ -341,7 +341,7 @@ export class ListGenerationComponent implements OnInit {
         });
       }
       else{
-        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
           duration:3000,
         });
       }
@@ -473,7 +473,7 @@ export class ListGenerationComponent implements OnInit {
           });
         }
         else{
-          this.snackBar.open("Unknown Error!Contact Devloper.","",{
+          this.snackBar.open("Unknown Error!Contact Developer.","",{
             duration:3000,
           });
         }

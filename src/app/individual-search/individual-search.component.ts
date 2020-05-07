@@ -34,14 +34,14 @@ export class IndividualSearchComponent implements OnInit {
         data=> {
          this.data=data;
         },
-        error=>this.snackBar.open("Error in fetching patient detail using UHID", "", {duration: 3000,}),
+        error=>this.displayError(error, "Error in fetching patient detail using UHID"),
         ()=> {
           if (this.data == undefined)
             this.snackBar.open("Incorrect ULID entered", "", {duration: 3000,});
           else {
             this.pdd = this.data;
             console.log(this.data);
-            console.log("pdd"+ this.pdd.name);
+            // console.log("pdd"+ this.pdd.name);
             this.display = true;
           }
         },
@@ -51,14 +51,14 @@ export class IndividualSearchComponent implements OnInit {
         data=> {
           this.data=data;
         },
-      error=>this.snackBar.open("Error in fetching patient detail using ULID", "", {duration: 3000,}),
+      error=>this.displayError(error, "Error in fetching patient detail using ULID"),
       ()=>{
           if(this.data==undefined)
             this.snackBar.open("Incorrect ULID entered", "", {duration: 3000,});
           else{
             this.pdd=this.data['patientDemographicDetail'];
             console.log(this.data);
-            console.log("pdd"+ this.pdd.name);
+            // console.log("pdd"+ this.pdd.name);
             this.display=true;
           }
       },
@@ -68,14 +68,14 @@ export class IndividualSearchComponent implements OnInit {
         data=>{
           this.data=data;
         },
-        error=>this.snackBar.open("Error in fetching patient detail using VLID", "", {duration: 3000,}),
+        error=>this.displayError(error, "Error in fetching patient detail using VLID"),
         ()=>{
           if(this.data==undefined)
             this.snackBar.open("Incorrect VLID entered", "", {duration: 3000,});
           else {
             this.pdd = this.data['master']['patientDemographicDetail'];
             console.log(this.data);
-            console.log("pdd" + this.pdd.name);
+            // console.log("pdd" + this.pdd.name);
             this.display = true;
           }
         },
@@ -85,20 +85,19 @@ export class IndividualSearchComponent implements OnInit {
         data=>{
           this.data=data;
         },
-        error=>this.snackBar.open("Error in fetching patient detail using SampleId", "", {duration: 3000,}),
+        error=>this.displayError(error, "Error in fetching patient detail using Sample Id"),
         ()=>{
           if(this.data==undefined)
             this.snackBar.open("Incorrect Sample Id entered", "", {duration: 3000,});
           else {
             this.pdd=this.data['master']['patientDemographicDetail'];
             console.log(this.data);
-            console.log("pdd"+ this.pdd.name);
+            // console.log("pdd"+ this.pdd.name);
             this.display = true;
           }
         },
       );
     }
-  // this.pdd=this.individualSearchService.getDummy(true)[0].patientDemographicDetail;
   }
 
   getLabTestDetails() {
@@ -108,7 +107,7 @@ export class IndividualSearchComponent implements OnInit {
         // console.log(data);
       },
       error => {
-        console.error("Error in getting tests");
+        this.displayError(error, "Error in fetching tests")
       }
     );
   }
@@ -119,4 +118,23 @@ export class IndividualSearchComponent implements OnInit {
     this.data=null;
     this.display= false;
   }
+
+  displayError(error, message){
+    if(error.status == 500){
+      this.snackBar.open(message,"",{
+        duration:3000,
+      });
+    }
+    else if(error.status == 0){
+      this.snackBar.open("Database server not working!","",{
+        duration:3000,
+      });
+    }
+    else{
+      this.snackBar.open("Unknown Error!Contact Developer.","",{
+        duration:3000,
+      });
+    }
+  }
+
 }

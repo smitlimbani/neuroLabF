@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 import {SeparationStationService} from "../services/separation-station.service";
 import {error} from "@angular/compiler/src/util";
 import {ReceivingFormComponent, Test} from "../receiving-form/receiving-form.component";
@@ -8,6 +8,14 @@ import {MatTableDataSource,MatTable } from "@angular/material/table";
 import {SelectionModel} from "@angular/cdk/collections";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
+import * as xlsx from 'xlsx';
+
+export interface Sticker {
+  vlid: string;
+  name: string;
+  'age/sex': string;
+  testName: string;
+}
 
 @Component({
   selector: 'app-separation-station',
@@ -16,6 +24,7 @@ import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-d
 })
 export class SeparationStationComponent implements OnInit {
 
+  stickers:Sticker[]=[];
   sampleId: string="8";
   master;
   isHidden: boolean=true;
@@ -41,6 +50,7 @@ export class SeparationStationComponent implements OnInit {
    this.getLabTestDetails();
   }
 
+
   submitSampleId(number){
     console.log(number);
     this.sampleId=number;
@@ -53,10 +63,9 @@ export class SeparationStationComponent implements OnInit {
       data =>{
         console.log(data);
         this.master = data['master'];
-        // this.currentVials= this.master['vials'];
       },
       error =>{
-        console.error("Error in fetching patient details");
+        this.displayError(error,"Error in fetching patient details");
       },
       ()=>{
         if(this.master.status!='NOT_RECEIVED'&& this.master.status!='REPORTED' && this.master.isValid!='N'){
@@ -64,9 +73,9 @@ export class SeparationStationComponent implements OnInit {
           this.getRaisedTests();
         }
       }
-
     );
   }
+
 
   getRaisedTests(){
     for(let test of this.labTests){
@@ -74,18 +83,17 @@ export class SeparationStationComponent implements OnInit {
       let flag: boolean= true;
       if(testStatus!='NOT_RAISED') {
         this.raisedTests.push( {name:test.name, checked: testStatus!='INVALID', code: test.code, status: testStatus, print: testStatus=='RAISED'|| testStatus=='SEPARATED'});
-        // this.raisedTests.push(test.name, testStatus!='INVALID'});
         if(testStatus == 'INVALID'){
-          console.log("invalid");
           this.noOfInvalidTests++;
         }
       }
     }
-    console.log(this.noOfInvalidTests);
+    // console.log(this.noOfInvalidTests);
     if(this.noOfInvalidTests== 0)
       this.master.remark="Ok";
-    console.log(this.raisedTests);
+    // console.log(this.raisedTests);
   }
+
 
   getLabTestDetails() {
     this.receivingFormService.getLabTestDetails().subscribe(
@@ -94,10 +102,11 @@ export class SeparationStationComponent implements OnInit {
         // console.log(data);
       },
       error => {
-        console.error("Error in getting tests");
+        this.displayError(error,"Error in fetching test details");
       }
     );
   }
+
 
   changeTestStatus(test){
     console.log("change");
@@ -118,6 +127,7 @@ export class SeparationStationComponent implements OnInit {
     }
   }
 
+
  checkboxLabel(row?): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
@@ -125,11 +135,13 @@ export class SeparationStationComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.test}`;
   }
 
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
+
 
   toggle(row){
     if(row.status!='REPORTED'){
@@ -137,6 +149,7 @@ export class SeparationStationComponent implements OnInit {
       this.selection.toggle(row);
     }
   }
+
 
   createVials(){
     this.isListCreated=true;
@@ -163,9 +176,9 @@ export class SeparationStationComponent implements OnInit {
     console.log(this.master);
 
     this.separationStationService.separateSample(this.master).subscribe(
-      data=>
-        this.snackBar.open("Data successfully submitted", "", {duration: 3000,})
-    );
+      data=>  this.snackBar.open("Data successfully submitted", "", {duration: 3000,}),
+      error=> this.displayError(error,"Error in creating vials"),
+     );
     }
 
 
@@ -180,12 +193,42 @@ export class SeparationStationComponent implements OnInit {
     this.selection=null;
     this.isOkEnabled=true;
     this.isListCreated=false;
+    this.stickers=[];
   }
 
-  export(exporter){
-    console.log(this.master.ulid);
 
-    exporter.exportTable('xlsx', {fileName:this.master.ulid});
+  export(){
+    console.log(this.master);
+    for(let test of this.raisedTests){
+      if(test.print==true){
+        let sticker:Sticker={vlid: (this.master.ulid+':'+test.code), name:this.master.patientDemographicDetail.name, 'age/sex':this.master.patientDemographicDetail.age+"/"+this.master.patientDemographicDetail.sex.charAt(0), testName:test.name}
+        this.stickers.push(sticker);
+      }
+    }
+    console.log(this.stickers);
+    const ws: xlsx.WorkSheet =xlsx.utils.json_to_sheet(this.stickers);
+    const wb: xlsx.WorkBook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, 'Sheet1');
+    xlsx.writeFile(wb, this.master.ulid+'.xlsx');
+  }
+
+
+  displayError(error, message){
+    if(error.status == 500){
+      this.snackBar.open(message,"",{
+        duration:3000,
+      });
+    }
+    else if(error.status == 0){
+      this.snackBar.open("Database server not working!","",{
+        duration:3000,
+      });
+    }
+    else{
+      this.snackBar.open("Unknown Error!Contact Developer.","",{
+        duration:3000,
+      });
+    }
   }
 }
 

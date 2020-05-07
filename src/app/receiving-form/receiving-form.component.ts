@@ -52,7 +52,6 @@ export class ReceivingFormComponent implements OnInit {
 
   master;
   pdd;
-  pdd1;
   uSampleId;
   uUHID;
   sampleId;
@@ -86,15 +85,12 @@ export class ReceivingFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.transactions= new FormArray([]);
     this.paymentForm = this.fb.group({
       transactions: this.fb.array([
         this.addTransactionGroup(null, null, null),
       ])
     });
-    // console.log("after adding first");
 
-    // this.tmaster='11251';
     if (!(this.tmaster == undefined)) {
       console.log('linking and autofill');
       this.autofillAndSetupLinking();
@@ -106,15 +102,13 @@ export class ReceivingFormComponent implements OnInit {
     this.getLabTestDetails();
   }
 
+
   //To initialize the form when getting redirected for linking from association page
   autofillAndSetupLinking() {
+    console.log('setup linking');
     this.master = this.tmaster;
     this.pdd = this.tmaster.patientDemographicDetail;
     this.sampleId = this.tmaster.samples[0].sampleId;
-    console.log(this.master);
-    console.log(this.pdd);
-    console.log(this.sampleId);
-
     // this.master = new Master(null, 'SAU20/00020', 'N012345', 'RAISED', 'NOT_RAISED', 'NOT_RAISED', 'RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', null, null, null, '', '', 'S', null, 'Dr.Anita', null);
     // this.pdd = new PatientDemographicDetail(null, 'UHID0001', 'Gauri', 'address', 22, 'FEMALE', 'someEmail@gmail.com', '9999999999', 'NIMHANS');
     this.isPddReadOnly = true;
@@ -126,13 +120,13 @@ export class ReceivingFormComponent implements OnInit {
     this.enableLinking(true);
   }
 
+
   //to initialize form in general(not in the case of linking)
   initializeNewForm() {
     // this.master= new Master(null,'SAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S','','',);
     this.master = new Master(null, null, null, 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', null, null,  'Y', 'RECEIVED', 'S', null, null, null, null, null);
     // this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
     this.pdd = new PatientDemographicDetail(null, null, null, null, null, null, null, null, null);
-    // this.getULID();
     this.isLinkEnabled = false;
     this.isPddReadOnly = false;
     this.isMasterReadOnly = false;
@@ -154,7 +148,7 @@ export class ReceivingFormComponent implements OnInit {
           this.isLinkEnabled = false;
         },
         error => {
-          console.error("Error in fetching Patient Demographic Details through UHID");
+          this.displayError(error,"Error in fetching Patient Demographic Details through UHID")
         },
         () => {
           this.isPddReadOnly = true;
@@ -163,11 +157,8 @@ export class ReceivingFormComponent implements OnInit {
           this.setULIDVariables();
         }
       )
-      // this.pdd = new PatientDemographicDetail(null, 'UHID0001', 'Gauri', 'address', 22, 'FEMALE', 'someEmail@gmail.com', '9999999999', 'NIMHANS');
-      // this.isPddReadOnly = true;
-      // this.isMasterReadOnly = false;
-      // this.initializeTests();
-    } else {
+    }
+    else {
       this.sampleId = this.uSampleId;
       let oldPayment;
       this.receivingFormService.getPDDDetailBySampleId(this.uSampleId).subscribe(
@@ -178,7 +169,6 @@ export class ReceivingFormComponent implements OnInit {
           if (this.regType == 'EXTERNAL') {
             oldPayment = data['master']['payments'];
             // console.log(oldPayment);
-            // console.log(oldPayment.length);
             if (this.regType == 'EXTERNAL' && oldPayment.length != 0) {
               this.Transactions.removeAt(0);
               this.convertPaymentsToTransactionArray(oldPayment);
@@ -186,7 +176,7 @@ export class ReceivingFormComponent implements OnInit {
           }
         },
         error => {
-          console.error("Error in fetching Patient Demographic Details through sampleId");
+          this.displayError(error,"Error in fetching Patient Demographic Details through Sample Id");
         },
         () => {
           this.isLinkEnabled = false;
@@ -197,16 +187,13 @@ export class ReceivingFormComponent implements OnInit {
           if (this.regType == 'INTERNAL') {
             this.calcTotalAmount();
             this.Transactions.removeAt(0);
-            this.addTransaction({value: this.master.totalAmount, disabled: true}, {
-              value: "E-Hospital transaction",
-              disabled: true
-            }, {value: null, disabled: true});
-
-            // this.Transactions.setControl(0, this.fb.group({
-            //   amount: [{value: this.master.totalAmount, disabled: true}, Validators.required,],
-            //   details: [{value: "E-Hospital transaction", disabled: true}, Validators.required],
-            //   date: [{value: '', disabled: true}, Validators.required]
-            // }));
+            this.addTransaction(
+              {value: this.master.totalAmount, disabled: true},
+              {
+                  value: "E-Hospital transaction",
+                  disabled: true
+              },
+              {value: null, disabled: true});
           }
         }
       );
@@ -230,6 +217,7 @@ export class ReceivingFormComponent implements OnInit {
     }
   }
 
+
   //Func gets ulid from BE and resets all the associated variables. It is called every time regType changes or sampleType changes
   getULID() {
     if (this.regType == 'INTERNAL') {//I/E flag)
@@ -239,8 +227,7 @@ export class ReceivingFormComponent implements OnInit {
           console.log("getting ulid:" + this.master.ulid);
         },
         error => {
-          console.log(error);
-          console.error("Error in fetching IULID");
+          this.displayError(error,"Error in fetching IULID");
         },
         () => {
           this.ULIDCounter = parseInt(this.master.ulid.substr(5, 5), 10);
@@ -263,7 +250,7 @@ export class ReceivingFormComponent implements OnInit {
           console.log("getting ulid:" + this.master.ulid);
         },
         error => {
-          console.error("Error in fetching XULID counters");
+          this.displayError(error,"Error in fetching external AU No. ULID")
         },
         () => {
           this.ULIDCounter = parseInt(this.master.ulid.substr(5, 5), 10);
@@ -283,6 +270,7 @@ export class ReceivingFormComponent implements OnInit {
     }
   }
 
+
   //A simple wrapper to synchronise ulid request from BE and the associated variable assignments
   async setULIDVariables() {
     await this.getULID();
@@ -301,6 +289,7 @@ export class ReceivingFormComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.dataSource);
   }
 
+
   //Fetches lab test details to enable amount calculations.
   getLabTestDetails() {
     this.receivingFormService.getLabTestDetails().subscribe(
@@ -309,7 +298,7 @@ export class ReceivingFormComponent implements OnInit {
         // console.log(data);
       },
       error => {
-        console.error("Error in getting tests");
+        this.displayError(error,"Error in fetching tests");
       }
     );
     // this.tests = [{name: "ANA", code: "ANA", rate: 500},
@@ -331,7 +320,7 @@ export class ReceivingFormComponent implements OnInit {
         // console.log(data);
       },
       error => {
-        console.error("Error in getting doctors");
+        this.displayError(error,"Error in fetching list of external doctors");
       }
     )
     // this.doctors = [{name: "Dr Anita", contactNo: "9999999999", emailId: "drAnita@gmail.com", hospitalName:"NIMHANS" },
@@ -341,6 +330,7 @@ export class ReceivingFormComponent implements OnInit {
     // ];
   }
 
+
   //Autofills the associated doctor fields when a doctor is selected
   doctorSelected(doctor) {
     // console.log("doctor selected");
@@ -348,6 +338,7 @@ export class ReceivingFormComponent implements OnInit {
     this.master.drEmailId = doctor.emailId;
     this.master.drContactNo = doctor.contactNo;
   }
+
 
   //Func is called when the sample type is changed. Resets the dataSource of the available tests according to the sample type(different sets for
   // SERUM and CSF). Clears the current test selection. Resets the ulid. PanelExpanded is put to false since amount calculation happens at the time of
@@ -368,16 +359,16 @@ export class ReceivingFormComponent implements OnInit {
           this.isULIDVerified = !(<boolean>data);
         },
         error => {
-          console.error("Error in verifying Ulid");
+          this.displayError(error,"Error in verifying Ulid");
         },
       ()=>{
         if (this.isULIDVerified == true && this.regType == 'EXTERNAL' && this.uSampleId == null)
           this.sampleId = this.master.ulid.substr(0, 5) + this.centerULID + this.master.ulid.substr(-3) + ":1";
-
       });
     }
     // this.isULIDVerified = true;
   }
+
 
   //Enables linking of ulid
   enableLinking(e) {
@@ -390,20 +381,20 @@ export class ReceivingFormComponent implements OnInit {
     }
   }
 
+
   //hits the BE to get the list of ulid that can be linked to the sample
   getLinkingULIDList() {
-    // console.log(this.pdd.uhid);
-    // console.log(this.master.sampleType)
     this.receivingFormService.getLinkingULIDList(this.pdd.uhid, this.master.sampleType).subscribe(
       data => {
         // console.log(data);
         this.linkingULIDList = data['ulids'];
       },
       error => {
-        console.error("Error in fetching linked ULIDs counters");
+        this.displayError(error,"Error in fetching ULID for linking the sample");
       });
     // this.linkingULIDList = ['S:AU-00001/20', 'S:AU-00002/20', 'S:AU-00003/20'];
   }
+
 
   //resets test selection
   clearTestSelection() {
@@ -415,6 +406,7 @@ export class ReceivingFormComponent implements OnInit {
     });
   }
 
+
   //for test checkbox functioning
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -422,11 +414,13 @@ export class ReceivingFormComponent implements OnInit {
     return numSelected === numRows;
   }
 
+
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
+
 
   checkboxLabel(row?: Test): string {
     if (!row) {
@@ -434,6 +428,7 @@ export class ReceivingFormComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.test}`;
   }
+
 
   //Calculates total. Func is called only at the time of panel expansion.
   calcTotalAmount() {
@@ -447,6 +442,7 @@ export class ReceivingFormComponent implements OnInit {
     this.calcRemainingAmount();
   }
 
+
   //Calculates remaining amount. Func is called every time when panel is expanded and also when transactions are added or deleted.
   calcRemainingAmount() {
     let paid: number = 0;
@@ -457,10 +453,12 @@ export class ReceivingFormComponent implements OnInit {
     this.master.remainingAmount = this.master.totalAmount - paid;
   }
 
+
   //reactive form's internal functioning
   get Transactions(): FormArray {
     return this.paymentForm.get('transactions') as FormArray;
   }
+
 
   //FormArray 'transactions' internal functioning.
   addTransactionGroup(_amount, _details, _date): FormGroup {
@@ -471,14 +469,17 @@ export class ReceivingFormComponent implements OnInit {
     });
   }
 
+
   addTransaction(_amount, _details, _date) {
     (<FormArray>this.paymentForm.get('transactions')).push(this.addTransactionGroup(_amount, _details, _date));
   }
+
 
   clearAllTransactions() {
     (<FormArray>this.paymentForm.get('transactions')).clear();
     this.addTransaction(null, null, null);
   }
+
 
   deleteTransaction(i) {
     let array = this.paymentForm.get('transactions') as FormArray;
@@ -490,6 +491,7 @@ export class ReceivingFormComponent implements OnInit {
     this.calcRemainingAmount();
   }
 
+
   convertPaymentsToTransactionArray(oldPayment) {
     console.log("Old transactions added");
     (<FormArray>this.paymentForm.get('transactions')).removeAt(0);
@@ -498,6 +500,7 @@ export class ReceivingFormComponent implements OnInit {
       this.addTransaction(payment.amount, payment.details, payment.transactionDate);
     }
   }
+
 
   //creating paymentList to send to BE at the time of submit
   convertTransactionArrayToPayments() {
@@ -513,6 +516,7 @@ export class ReceivingFormComponent implements OnInit {
       }
     }
   }
+
 
   invalidateSample(e) {
     // here e is a boolean, true if checked, otherwise false
@@ -533,16 +537,15 @@ export class ReceivingFormComponent implements OnInit {
     }
     this.master.ulid = this.master.ulid.substr(0, 5) + this.centerULID + this.master.ulid.substr(-3);
     if (this.regType == 'INTERNAL') {
-      // this.snackBar.open("Sample received", "", {duration: 3000,});
       this.receivingFormService.receiving(this.sampleId, this.master.ulid, this.isSampleInvalid ? this.master.remark : null, this.isLinkEnabled ? this.master.linked : null, []).subscribe(
         data => {
           console.log(data);
           this.snackBar.open("Sample received", "", {duration: 3000,})
         },
-        error => this.snackBar.open("Error in sample adding", "", {duration: 3000,}),
+        error => this.displayError(error,"Error in adding sample"),
       )
-    } else {
-      // this.snackBar.open("Sample received", "", {duration: 3000,});
+    }
+    else {
       this.convertTransactionArrayToPayments();
       console.log(this.paymentList);
       if (this.uSampleId == null) {
@@ -551,16 +554,36 @@ export class ReceivingFormComponent implements OnInit {
         this.master.status = 'RECEIVED';
         this.receivingFormService.storeXPatientDetail(this.master, this.pdd, this.sampleId, this.paymentList).subscribe(
           data => this.snackBar.open("Sample received", "", {duration: 3000,}),
-          error => this.snackBar.open("Error in sample adding", "", {duration: 3000,}),
+          error => this.displayError(error,"Error in adding sample"),
         )//when its a new entry or using uhid. Sample id is generated
       } else
         this.receivingFormService.receiving(this.sampleId, this.master.ulid, this.isSampleInvalid ? this.master.remark : null, this.isLinkEnabled ? this.master.linked : null, this.paymentList).subscribe(
           data => this.snackBar.open("Sample received", "", {duration: 3000,}),
-          error => this.snackBar.open("Error in sample adding", "", {duration: 3000,}),
+          error => this.displayError(error,"Error in adding sample"),
         )
       //when it is redirected for linking or using sId.
     }
   }
+
+
+  displayError(error, message){
+    if(error.status == 500){
+      this.snackBar.open(message,"",{
+        duration:3000,
+      });
+    }
+    else if(error.status == 0){
+      this.snackBar.open("Database server not working!","",{
+        duration:3000,
+      });
+    }
+    else{
+      this.snackBar.open("Unknown Error!Contact Developer.","",{
+        duration:3000,
+      });
+    }
+  }
+
 }
 
 //unresolved issues-
@@ -571,6 +594,6 @@ export class ReceivingFormComponent implements OnInit {
 // DONE---form is getting submitted with no external transactions. Do we allow that?
 // DONE---transaction row is not responsive to screen size
 // DONE---no different color to CSF and SERUM.
-// Wrong date format id being received in BE.
+// DONE---Wrong date format id being received in BE.
 
 // After we are doing internal receiving and shifting to external form field are turning red because of class.touched property.

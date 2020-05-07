@@ -66,12 +66,12 @@ export class MapSampleComponent implements OnInit {
   populateTable(){
     this.mapSampleService.getMasters().subscribe(data=>{
       console.log(data);
-      
+
       this.loadData(data);
     },
     error => {
       if(error.status == 500){
-        this.snackBar.open("Server coudn't perform LOAD operation!","",{
+        this.snackBar.open("Server couldn't perform LOAD operation!","",{
           duration:3000,
         });
       }
@@ -81,7 +81,7 @@ export class MapSampleComponent implements OnInit {
         });
       }
       else{
-        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
           duration:3000,
         });
       }
@@ -91,7 +91,7 @@ export class MapSampleComponent implements OnInit {
   loadData(data){
     this.masters = new MatTableDataSource(data);
     console.log(this.masters);
-    
+
     this.masters.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {
       const propPath = sortHeaderId.split('.');
@@ -105,9 +105,9 @@ export class MapSampleComponent implements OnInit {
       let keys;
       let keywords = filter.split(',');
       for (const keyword of keywords) {
-        
+
         for(const column of this.columnsToFilter){
-          keys = column.split('.');        
+          keys = column.split('.');
           dataStr+=this.nestedFilter(data,keys);
         }
         dataStr = dataStr.trim().toLowerCase();
@@ -204,7 +204,7 @@ export class MapSampleComponent implements OnInit {
     },
     error => {
       if(error.status == 500){
-        this.snackBar.open("Server coudn't perform merge operation!","",{
+        this.snackBar.open("Server couldn't perform merge operation!","",{
           duration:3000,
         });
       }
@@ -214,7 +214,7 @@ export class MapSampleComponent implements OnInit {
         });
       }
       else{
-        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
           duration:3000,
         });
       }
@@ -233,7 +233,7 @@ export class MapSampleComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
-        this.mapSampleService.confirmSampleNotReceived(master.id).subscribe(data => 
+        this.mapSampleService.confirmSampleNotReceived(master.id).subscribe(data =>
         {
           this.snackBar.open("Deleted Successfully!","",{
             duration : 1000,
@@ -242,7 +242,7 @@ export class MapSampleComponent implements OnInit {
         },
         error => {
           if(error.status == 500){
-            this.snackBar.open("Server coudn't perform ConfirmNR operation!","",{
+            this.snackBar.open("Server couldn't perform ConfirmNR operation!","",{
               duration:3000,
             });
           }
@@ -252,7 +252,7 @@ export class MapSampleComponent implements OnInit {
             });
           }
           else{
-            this.snackBar.open("Unknown Error!Contact Devloper.","",{
+            this.snackBar.open("Unknown Error!Contact Developer.","",{
               duration:3000,
             });
           }

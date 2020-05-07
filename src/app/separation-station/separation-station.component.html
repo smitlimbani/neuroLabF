@@ -89,7 +89,7 @@
 <!--        </tr>-->
       </table>
 
-      <table mat-table matTableExporter #exporter="matTableExporter" name="exporter" *ngIf="dataSource!=null" [dataSource]="dataSource" class="single" >
+      <table mat-table *ngIf="dataSource!=null" [dataSource]="dataSource" class="single" >
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -128,7 +128,7 @@
       <table class="single" *ngIf="dataSource!=null">
         <tr>
           <td align="center">
-            <button mat-raised-button color="primary" type="submit" (click)="export(exporter)" >Print</button>
+            <button mat-raised-button color="primary" type="submit" (click)="export()" >Print</button>
           </td>
           <td align="center">
             <button mat-raised-button color="primary" type="submit" (click)="next();separateSampleButton.disabled=false">Next</button>
