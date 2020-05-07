@@ -52,52 +52,95 @@ export class ListGenerationComponent implements OnInit {
 
   constructor(
     private activatedRoute : ActivatedRoute,
-    private router :Router,
     private dialog : MatDialog,
     private snackBar : MatSnackBar,
+    private router : Router,
     private segregationService: SegregationService,
   ) { }
 
   ngOnInit(): void {
+    //SERVER
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.testCategory = params['testCategory'];
+      console.log(this.testCategory);
+      if(!this.testCategory){
+        this.router.navigateByUrl("/pagenotfound");
+      }
+      else{
+        this.generateNav();
+      }
+    });
+    
+    //STATIC
+    // this.testCategory = "BLOT"
+    // this.generateNav();
+  }
 
-    // if (typeof history.state.data == "undefined" || !history.state.data) {
-    //   this.router.navigateByUrl("/pagenotfound");
-    // }
-    // this.testCategory = history.state.data.category
+  async generateNav(){
+    //STATIC
+    // this.testList = [
+    //   {"id":1,"vials":null,"code":"ANC","name":"ANCA","rate":1000.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true},
+    //   {"id":2,"vials":null,"code":"ANA","name":"ANA","rate":100.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true},
+    //   {"id":3,"vials":null,"code":"MOG","name":"MOG","rate":150.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true},
+    //   {"id":6,"vials":null,"code":"MYU","name":"MYU","rate":1550.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true}];
 
-    // this.activatedRoute.queryParams.subscribe(params => {
-    //     this.testCategory = params['testCategory'];
-    //     console.log(this.testCategory);
-    //   });
-    this.testCategory = "BLOT"
-
-    this.generateNav();
-
-}
-
-async generateNav(){
-    this.testList = [
-      {"id":1,"vials":null,"code":"ANC","name":"ANCA","rate":1000.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true},
-      {"id":2,"vials":null,"code":"ANA","name":"ANA","rate":100.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true},
-      {"id":3,"vials":null,"code":"MOG","name":"MOG","rate":150.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true},
-      {"id":6,"vials":null,"code":"MYU","name":"MYU","rate":1550.0,"testCategory":"BLOT","groupSize":2,"lockedCounter":0,"active":true}];
-
+    //SERVER
     // this.testList = await this.segregationService.getActiveTests(this.testCategory);
+    this.segregationService.getActiveTests(this.testCategory)
+      .then(data=>{
+        console.log(data);
+        this.testList = data;
+        for (let index = 0; index < this.testList.length; index++) {
+          const test = this.testList[index];
+          this.testTabMap[test.code] = index;
+          //STATIC
+          // this.listData[test.code] = [];
+        }
+        this.segregationService.getTestListByCategoryAndDate(this.testCategory)
+          .then(data=>{
+            this.listData = data;
+            this.dataSource = new MatTableDataSource(this.listData[this.testList[this.selectedIndex].code]);
+            this.dataSource.paginator = this.paginator;        
+          })
+          .catch(error=>{
+            console.error(error.message);
+            this.dialog.open(ConfirmationDialogComponent,{
+              data : {
+                message : "Server is not working at : "+error.url,
+                confirmTitle : "",
+                cancelTitle : "Cancle",
+                title : "Error!",
+              },
+              width:"400px",
+            });
+          });
+      })
+      .catch(error=>{
+        console.error(error.message);
+        this.dialog.open(ConfirmationDialogComponent,{
+          data : {
+            message : "Server is not working at : "+error.url,
+            confirmTitle : "",
+            cancelTitle : "Cancle",
+            title : "Error!",
+          },
+          width:"400px",
+        });
+      });
 
-    for (let index = 0; index < this.testList.length; index++) {
-      const test = this.testList[index];
-      this.testTabMap[test.code] = index;
-      this.listData[test.code] = [];
-      //   for (let i = 0; i < 4*index+1; i++) {
-    //     this.vialData["serialNo"] = i;
-    //     this.listData[test.code].push(this.vialData);
-    //   }
-    }
-    // this.listData = await this.segregationService.getCurrentTestListByCategory(this.testCategory);
-    // console.log(this.listData);
+    // for (let index = 0; index < this.testList.length; index++) {
+    //   const test = this.testList[index];
+    //   this.testTabMap[test.code] = index;
+    //   //STATIC
+    //   // this.listData[test.code] = [];
+    // }
 
-    this.dataSource = new MatTableDataSource(this.listData[this.testList[this.selectedIndex].code]);
-    this.dataSource.paginator = this.paginator;
+    //SERVER
+    // this.listData = await this.segregationService.getTestListByCategoryAndDate(this.testCategory);
+    console.log(this.listData);
+
+    // this.dataSource = new MatTableDataSource(this.listData[this.testList[this.selectedIndex].code]);
+    // this.dataSource.paginator = this.paginator;
     console.log(this.testTabMap);
 
   }
@@ -148,43 +191,46 @@ async generateNav(){
   }
 
   unsolidify(){
-    // this.segregationService.updateLockedCounter(this.testList[this.selectedIndex]["code"],0)
-    // .subscribe(data=>{
-    //   console.log(data);
-    //   this.testList[this.selectedIndex]["lockedCounter"] = data["lockedCounter"];
-    //   this.snackBar.open("Unsolidified successfully","",{
-    //     duration : 1000,
-    //   });
-    // },
-    // error => {
-    //   if(error.status == 500){
-    //     this.snackBar.open("Constrain issue in database!","",{
-    //       duration:3000,
-    //     });
-    //   }
-    //   else if(error.status == 0){
-    //     this.snackBar.open("Database server not working!","",{
-    //       duration:3000,
-    //     });
-    //   }
-    //   else{
-    //     this.snackBar.open("Unknown Error!Contact Devloper.","",{
-    //       duration:3000,
-    //     });
-    //   }
-    // });
-    if (this.segregationService.updateLockedCounter(this.testList[this.selectedIndex]["code"],this.listData[this.testList[this.selectedIndex]["code"]].length)){
-      this.testList[this.selectedIndex]["lockedCounter"] = 0;
+    //SERVER
+    this.segregationService.updateLockedCounter(this.testList[this.selectedIndex]["code"],0)
+    .subscribe(data=>{
+      console.log(data);
+      this.testList[this.selectedIndex]["lockedCounter"] = data["lockedCounter"];
+      this.snackBar.open("Unsolidified successfully","",{
+        duration : 1000,
+      });
+    },
+    error => {
+      if(error.status == 500){
+        this.snackBar.open("Constrain issue in database!","",{
+          duration:3000,
+        });
+      }
+      else if(error.status == 0){
+        this.snackBar.open("Database server not working!","",{
+          duration:3000,
+        });
+      }
+      else{
+        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+          duration:3000,
+        });
+      }
+    });
 
-      this.snackBar.open("List modification successfully","",{
-        duration : 3000,
-      });
-    }
-    else{
-      this.snackBar.open("Unknown Error!Contact Devloper.","",{
-        duration:3000,
-      });
-    }
+    //STATIC
+    // if (this.segregationService.updateLockedCounter(this.testList[this.selectedIndex]["code"],this.listData[this.testList[this.selectedIndex]["code"]].length)){
+    //   this.testList[this.selectedIndex]["lockedCounter"] = 0;
+
+    //   this.snackBar.open("List modification successfully","",{
+    //     duration : 3000,
+    //   });
+    // }
+    // else{
+    //   this.snackBar.open("Unknown Error!Contact Devloper.","",{
+    //     duration:3000,
+    //   });
+    // }
 
   }
 
@@ -227,6 +273,7 @@ async generateNav(){
   }
 
   updateLockedCounterWithVials(code,counter,vials){
+    //DISCARD function won't work STATIC
     this.segregationService.updateLockedCounterWithVials(code,counter,vials)
     .subscribe(data=>{
       console.log(data);
@@ -260,51 +307,51 @@ async generateNav(){
 
   updateLockedCounter(code,counter){
     //STATIC
-    if (this.segregationService.updateLockedCounter(code,counter)){
-      this.testList[this.selectedIndex]["lockedCounter"] = counter;
+    // if (this.segregationService.updateLockedCounter(code,counter)){
+    //   this.testList[this.selectedIndex]["lockedCounter"] = counter;
 
-      this.snackBar.open("List confirmed successfully","",{
-          duration : 3000,
-      });
-    }
-    else{
-      this.snackBar.open("Unknown Error!Contact Devloper.","",{
-          duration:3000,
-      });
-    }
+    //   this.snackBar.open("List confirmed successfully","",{
+    //       duration : 3000,
+    //   });
+    // }
+    // else{
+    //   this.snackBar.open("Unknown Error!Contact Devloper.","",{
+    //       duration:3000,
+    //   });
+    // }
 
     //SERVER
-    // this.segregationService.updateLockedCounter(code,counter)
-    // .subscribe(data=>{
-    //   console.log(data);
-    //   this.testList[this.selectedIndex]["lockedCounter"] = data["lockedCounter"];
-    //   this.snackBar.open("Solidified successfully","",{
-    //     duration : 1000,
-    //   });
-    // },
-    // error => {
-    //   if(error.status == 500){
-    //     this.snackBar.open("Vial doesn't exist!","",{
-    //       duration:3000,
-    //     });
-    //   }
-    //   else if(error.status == 0){
-    //     this.snackBar.open("Database server not working!","",{
-    //       duration:3000,
-    //     });
-    //   }
-    //   else{
-    //     this.snackBar.open("Unknown Error!Contact Devloper.","",{
-    //       duration:3000,
-    //     });
-    //   }
-    // });
+    this.segregationService.updateLockedCounter(code,counter)
+    .subscribe(data=>{
+      console.log(data);
+      this.testList[this.selectedIndex]["lockedCounter"] = data["lockedCounter"];
+      this.snackBar.open("Solidified successfully","",{
+        duration : 1000,
+      });
+    },
+    error => {
+      if(error.status == 500){
+        this.snackBar.open("Vial doesn't exist!","",{
+          duration:3000,
+        });
+      }
+      else if(error.status == 0){
+        this.snackBar.open("Database server not working!","",{
+          duration:3000,
+        });
+      }
+      else{
+        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+          duration:3000,
+        });
+      }
+    });
   }
 
   export(exporter){
     // console.log(this.testList[this.selectedIndex]["lockedCounter"],this.listData[this.testList[this.selectedIndex]["code"]].length);
     if(this.testList[this.selectedIndex]["lockedCounter"] != this.listData[this.testList[this.selectedIndex]["code"]].length){
-      let dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+      this.dialog.open(ConfirmationDialogComponent,{
         data : {
           message : "FIRST CONFIRM LIST!",
           confirmTitle : "",
@@ -319,7 +366,7 @@ async generateNav(){
   }
 
   //SERVER
-  taddVial(){
+  addVial(){
     this.inputVLID = this.inputVLID.toUpperCase();
 
     if(!this.inputVLID || this.inputVLID.length == 0 || !this.listData.hasOwnProperty(this.inputVLID.split(":")[1])) {
@@ -435,71 +482,71 @@ async generateNav(){
   }
 
   //STATIC
-  vialI = 0;
-  addVial(){
-    console.log(this.listData);
+  // vialI = 0;
+  // addVial(){
+  //   console.log(this.listData);
 
-    //checck for synchronus behaviour with backend
-    let vialData = wholeData[this.vialI];
+  //   //checck for synchronus behaviour with backend
+  //   let vialData = wholeData[this.vialI];
 
-    if(vialData["serialNo"] != null || vialData["testingDate"] != null)
-    {
-        this.snackBar.open("already tested on "+vialData.testingDate,"",{
-            duration : 3000,
-        });
-        return;
-    }
+  //   if(vialData["serialNo"] != null || vialData["testingDate"] != null)
+  //   {
+  //       this.snackBar.open("already tested on "+vialData.testingDate,"",{
+  //           duration : 3000,
+  //       });
+  //       return;
+  //   }
 
-    vialData["serialNo"] = this.listData[vialData["test"]["code"]].length+1;
-    console.log(vialData);
-    const dialogRef = this.dialog.open(VialConfirmationDialogComponent,{
-      data : {
-        vialData : vialData,
-        indexNo : this.listData[vialData["test"]["code"]].length+1,
-        lockedCounter : this.testList[this.testTabMap[vialData["test"]["code"]]]["lockedCounter"],
-      },
-      width : "50%",
-    });
-    dialogRef.afterClosed().subscribe(newSerialNo=>{
-      if(newSerialNo){
-        console.log("newSerialNo : "+newSerialNo);
-        this.selectedIndex = this.testTabMap[wholeData[this.vialI]["test"]["code"]];
+  //   vialData["serialNo"] = this.listData[vialData["test"]["code"]].length+1;
+  //   console.log(vialData);
+  //   const dialogRef = this.dialog.open(VialConfirmationDialogComponent,{
+  //     data : {
+  //       vialData : vialData,
+  //       indexNo : this.listData[vialData["test"]["code"]].length+1,
+  //       lockedCounter : this.testList[this.testTabMap[vialData["test"]["code"]]]["lockedCounter"],
+  //     },
+  //     width : "50%",
+  //   });
+  //   dialogRef.afterClosed().subscribe(newSerialNo=>{
+  //     if(newSerialNo){
+  //       console.log("newSerialNo : "+newSerialNo);
+  //       this.selectedIndex = this.testTabMap[wholeData[this.vialI]["test"]["code"]];
 
-        if(vialData["serialNo"] != newSerialNo){
+  //       if(vialData["serialNo"] != newSerialNo){
 
-          let oldSerialNo = vialData["serialNo"];
+  //         let oldSerialNo = vialData["serialNo"];
 
-          this.listData[vialData["test"]["code"]].push(vialData);
+  //         this.listData[vialData["test"]["code"]].push(vialData);
 
-          console.log(this.listData[vialData["test"]["code"]][0]);
+  //         console.log(this.listData[vialData["test"]["code"]][0]);
 
-          let tVialData = this.listData[vialData["test"]["code"]][newSerialNo-1];
-          this.listData[vialData["test"]["code"]][newSerialNo-1] = this.listData[vialData["test"]["code"]][oldSerialNo-1];
-          this.listData[vialData["test"]["code"]][oldSerialNo-1] = tVialData;
+  //         let tVialData = this.listData[vialData["test"]["code"]][newSerialNo-1];
+  //         this.listData[vialData["test"]["code"]][newSerialNo-1] = this.listData[vialData["test"]["code"]][oldSerialNo-1];
+  //         this.listData[vialData["test"]["code"]][oldSerialNo-1] = tVialData;
 
-          this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = newSerialNo;
-          this.listData[vialData["test"]["code"]][oldSerialNo-1]["serialNo"] = oldSerialNo;
+  //         this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = newSerialNo;
+  //         this.listData[vialData["test"]["code"]][oldSerialNo-1]["serialNo"] = oldSerialNo;
 
-          console.log("after change!");
-          console.log(this.listData[vialData["test"]["code"]]);
-          this.tabChanged();
-          // console.log("oldSerialNo : "+oldSerialNo);
-          // vialData["serialNo"] = newSerialNo;
-          // this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = oldSerialNo;
-        }
-        else{
-          this.listData[vialData["test"]["code"]].push(vialData);
-          this.tabChanged();
-        }
-      }
-      else{
-        this.snackBar.open("Operation aborted!","",{
-          duration : 1000,
-        });
-      }
-      this.vialI+=1;
+  //         console.log("after change!");
+  //         console.log(this.listData[vialData["test"]["code"]]);
+  //         this.tabChanged();
+  //         // console.log("oldSerialNo : "+oldSerialNo);
+  //         // vialData["serialNo"] = newSerialNo;
+  //         // this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = oldSerialNo;
+  //       }
+  //       else{
+  //         this.listData[vialData["test"]["code"]].push(vialData);
+  //         this.tabChanged();
+  //       }
+  //     }
+  //     else{
+  //       this.snackBar.open("Operation aborted!","",{
+  //         duration : 1000,
+  //       });
+  //     }
+  //     this.vialI+=1;
 
-    });
+  //   });
 
-  }
+  // }
 }

@@ -1,0 +1,228 @@
+<br>
+<mat-card >
+  <mat-card-header>
+    <mat-card-title>{{startDateStr}}:{{endDateStr}}</mat-card-title>
+    <mat-card-subtitle>I really don't know</mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <mat-card-content >
+
+    <mat-grid-list cols="3" rowHeight="80">
+      <mat-grid-tile>
+        <!-- <mat-form-field class="single" appearance="outline">
+          <mat-label>Select an option</mat-label>
+          <mat-select [(value)]="selectedTest">
+            <mat-option *ngFor="let test of testList" [value]="test.code">{{test.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>     -->
+        <mat-form-field class="single" appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="startDatePicker" [(formControl)]="startDate"  readonly>
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field class="single" appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="endDatePicker" [(formControl)]="endDate" readonly>
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+      </mat-grid-tile>
+    <!-- </mat-grid-list> -->
+    <!-- <br>
+    <br>
+    <mat-grid-list cols="4" rowHeight="80"> -->
+      <mat-grid-tile>
+        <mat-form-field class="single" appearance="outline">
+          <mat-label>Patient Category</mat-label>
+          <mat-select [(value)]="FilterArry.selectedTest">
+            <mat-option value="">NONE</mat-option>
+            <mat-option value=":au">INTERNAL</mat-option>
+            <mat-option value=":xu">EXTERNAL</mat-option>
+          </mat-select>
+        </mat-form-field>    
+      </mat-grid-tile>
+      <!-- <mat-grid-tile>
+        <mat-form-field class="single" appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(value)]="FilterArry.masterStatus">
+            <mat-option value="">NONE</mat-option>
+            <mat-option value="NOT_RECEIVED">NOT RECEIVED</mat-option>
+            <mat-option value="RECEIVED">RECEIVED</mat-option>
+            <mat-option value="PROCESSING">PROCESSING</mat-option>
+            <mat-option value="REPORTED">REPORTED</mat-option>
+          </mat-select>
+        </mat-form-field>    
+      </mat-grid-tile>
+      
+      <mat-grid-tile>
+        <mat-form-field class="single" appearance="outline">
+          <mat-label>Sample Type</mat-label>
+          <mat-select [(value)]="FilterArry.sampleType">
+            <mat-option value="">NONE</mat-option>
+            <mat-option value="s:">SERUM</mat-option>
+            <mat-option value="c:">CSF</mat-option>
+          </mat-select>
+        </mat-form-field>    
+      </mat-grid-tile>
+       -->
+       <mat-grid-tile colspan="2">
+        <!-- <div align="center"> -->
+          <button mat-raised-button color="primary" (click)="populateTable()" [disabled]="!testList">Load Data</button>
+        <!-- </div> -->        
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <!-- <div align="center"> -->
+          <button mat-raised-button color="primary" (click)="filterData()">Apply Filter</button>
+        <!-- </div> -->        
+      </mat-grid-tile>
+    </mat-grid-list>
+    <div align="right">
+      <button mat-raised-button color="primary"  style="margin-left: 10px;"
+      (click)="exporter.exportTable('xlsx', {fileName:startDateStr+'_'+endDateStr})" >Print</button>
+    </div>
+    <mat-form-field class="single">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. S:,APL-100,:AU,:XU">
+    </mat-form-field>
+    <div class="mat-elevation-z8">
+      <table mat-table #table matSort matTableExporter #exporter="matTableExporter" [dataSource]="dataSource" width="100%">
+
+        <ng-container  matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>No</th>
+          <td mat-cell *matCellDef="let master;let i=index">{{1+(this.paginator.pageIndex == 0 ?  i : i + this.paginator.pageIndex * this.paginator.pageSize)}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="ulid">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>AU NO.</th>
+            <td mat-cell *matCellDef="let master">{{master.ulid}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="patientDemographicDetail.uhid">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>UHID</th>
+            <td mat-cell *matCellDef="let master">{{master.patientDemographicDetail.uhid}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="patientDemographicDetail.name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >NAME</th>
+            <td mat-cell *matCellDef="let master">{{master.patientDemographicDetail.name}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="patientDemographicDetail.age">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >AGE</th>
+            <td mat-cell *matCellDef="let master">{{master.patientDemographicDetail.age}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="patientDemographicDetail.sex">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >SEX</th>
+          <td mat-cell *matCellDef="let master">{{master.patientDemographicDetail.sex == "MALE"?'M':master.patientDemographicDetail.sex == "FEMALE"?'F':'OTHER'}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="nNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Neuro No.</th>
+          <td mat-cell *matCellDef="let master">{{master.nNo}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >STATUS</th>
+          <td mat-cell *matCellDef="let master">{{master.status}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="drName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Dr.Name/Hospital</th>
+          <td mat-cell *matCellDef="let master">
+            <div>{{master.drName}}/</div>
+            <div>{{master.patientDemographicDetail.hospitalName}}</div>  
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="reqDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Request Date</th>
+          <td mat-cell *matCellDef="let master">{{master.reqDate}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="sampleType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >SampleType</th>
+          <td mat-cell *matCellDef="let master">{{master.sampleType == "S"?'SERUM':'CSF'}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="ana">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ANA</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.ana != 'NOT_RAISED'">
+              <div>{{master.ana}}/</div>
+              <div>{{(testList.ANA.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="anca">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ANCA</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.anca != 'NOT_RAISED'">
+              <div>{{master.anca}}/</div>
+              <div>{{(testList.ANCA.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="mog">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>MOG</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.mog != 'NOT_RAISED'">
+              <div>{{master.mog}}/</div>
+              <div>{{(testList.MOG.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="nmda">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>NMDA</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.nmda != 'NOT_RAISED'">
+              <div>{{master.nmda}}/</div>
+              <div>{{(testList.NMDA.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="pana">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>PANA</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.pana != 'NOT_RAISED'">
+              <div>{{master.pana}}/</div>
+              <div>{{(testList.PANA.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="myu">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>MYU</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.myu != 'NOT_RAISED'">
+              <div>{{master.myu}}/</div>
+              <div>{{(testList.MYU.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="gangigg">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>GANGIGG</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.gangigg != 'NOT_RAISED'">
+              <div>{{master.gangigg}}/</div>
+              <div>{{(testList.GANGIGG.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="gangigm">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>GANGIGM</th>
+          <td mat-cell *matCellDef="let master">
+            <div *ngIf="master.gangigm != 'NOT_RAISED'">
+              <div>{{master.gangigm}}/</div>
+              <div>{{(testList.GANGIGM.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container  matColumnDef="paymentCategory.code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Payement Category</th>
+          <td mat-cell *matCellDef="let master">{{master.paymentCategory.code}}</td>
+        </ng-container>
+        <ng-container  matColumnDef="totalAmount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Amount Paid</th>
+          <td mat-cell *matCellDef="let master">{{master.totalAmount}}</td>
+        </ng-container>
+          
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky:true"></tr>
+        <tr mat-row *matRowDef="let master; columns: columnsToDisplay;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

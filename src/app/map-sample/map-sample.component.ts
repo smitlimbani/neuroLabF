@@ -51,6 +51,7 @@ export class MapSampleComponent implements OnInit {
   @Output() alertLink:EventEmitter<any> = new EventEmitter();
 
   mergeActive=false;
+  firstSelection = null;
 
   constructor(
     private mapSampleService : MapSampleService,
@@ -59,29 +60,38 @@ export class MapSampleComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    // console.log("started onInit()");
     this.populateTable();
-    // console.log("exit onInit()");
   }
 
-  async populateTable(){
-    await this.loadData();
-    // this.appendFeatures();
+  populateTable(){
+    this.mapSampleService.getMasters().subscribe(data=>{
+      console.log(data);
+      
+      this.loadData(data);
+    },
+    error => {
+      if(error.status == 500){
+        this.snackBar.open("Server coudn't perform LOAD operation!","",{
+          duration:3000,
+        });
+      }
+      else if(error.status == 0){
+        this.snackBar.open("Database server not working!","",{
+          duration:3000,
+        });
+      }
+      else{
+        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+          duration:3000,
+        });
+      }
+    });
   }
 
-  async loadData(){
-    // this.masters = new MatTableDataSource(this.mapSampleService.getMasters());
-    // console.log("started loadData()");
-    let data =await this.mapSampleService.getMasters();
-    // console.log("after call");
+  loadData(data){
     this.masters = new MatTableDataSource(data);
     console.log(this.masters);
-    // console.log("exit loadData()");
-  // }
-
-  // // ngAfterViewInit (){
-  // appendFeatures(){
-    // console.log("ngAfterViewInit started!");
+    
     this.masters.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {
       const propPath = sortHeaderId.split('.');
@@ -93,18 +103,23 @@ export class MapSampleComponent implements OnInit {
     this.masters.filterPredicate = (data, filter) => {
       let dataStr='';
       let keys;
-      for(const column of this.columnsToFilter){
-        keys = column.split('.');
-        dataStr+=this.nestedFilter(data,keys);
+      let keywords = filter.split(',');
+      for (const keyword of keywords) {
+        
+        for(const column of this.columnsToFilter){
+          keys = column.split('.');        
+          dataStr+=this.nestedFilter(data,keys);
+        }
+        dataStr = dataStr.trim().toLowerCase();
+        if(dataStr.indexOf(keyword) == -1){
+          return false;
+        }
       }
-      dataStr = dataStr.trim().toLowerCase();
-
-      return dataStr.indexOf(filter) != -1; ;
+      return true
     }
 
     this.masters.sort = this.sort;
     this.masters.paginator = this.paginator;
-    // console.log("exit ngAfterViewInit!");
   }
 
   nestedFilter(data,keys){
@@ -113,13 +128,13 @@ export class MapSampleComponent implements OnInit {
         data = data[key]
     }
     dataStr = data;
-    // console.log(dataStr);
+    //specificaly to filter multiple sampleIds of single ULID
     if(typeof data == "object"){
+      dataStr="";
       for(let sample of data){
         dataStr += sample["sampleId"];
       }
     }
-    // console.log(dataStr);
     return dataStr || '';
   }
 
@@ -156,10 +171,6 @@ export class MapSampleComponent implements OnInit {
     this.masters.filter = filterString.trim().toLowerCase();
   }
 
-
-
-  firstSelection = null;
-
   alertMerge(master){
     this.firstSelection = master;
     console.log("alertMerge");
@@ -175,29 +186,39 @@ export class MapSampleComponent implements OnInit {
 
   mergeMe(master){
     if(this.selection.selected.length != 1){
-      this.snackBar.open("Select something you moron!","",{
+      this.snackBar.open("Select something, you moron!","",{
         duration:1000,
       });
       return;
     }
     console.log("Merged : ");
     console.log(master);
-    console.log(this.selection.selected[0]['id']);
-    this.mapSampleService.mergeSamples(master.id,this.selection.selected[0]['id']).subscribe(
-      data=>{
-        this.snackBar.open("Merged SuccessFullly","",{
-          duration:1000,
-        });
-        this.abortMerge();
-        this.loadData();
-      },
-      error=>{
-        console.error(error.error);
-        this.snackBar.open("Error! Contact developer.","",{
-          duration:1000,
+    console.log(this.selection.selected[0]);
+    this.mapSampleService.mergeSamples(master.id,this.selection.selected[0]['id']).subscribe(data=>
+    {
+      this.snackBar.open("Merged SuccessFullly","",{
+        duration:1000,
+      });
+      this.abortMerge();  //reset checkbox variables
+      this.populateTable(); //to refresh data after operation
+    },
+    error => {
+      if(error.status == 500){
+        this.snackBar.open("Server coudn't perform merge operation!","",{
+          duration:3000,
         });
       }
-    );
+      else if(error.status == 0){
+        this.snackBar.open("Database server not working!","",{
+          duration:3000,
+        });
+      }
+      else{
+        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+          duration:3000,
+        });
+      }
+    });
   }
 
   alertConfNR(master){
@@ -212,21 +233,30 @@ export class MapSampleComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
-        alert("yes!");
-        this.mapSampleService.confirmSampleNotReceived(master.id).subscribe(
-          data => {
-            this.snackBar.open("Deleted Successfully!","",{
-              duration : 1000,
+        this.mapSampleService.confirmSampleNotReceived(master.id).subscribe(data => 
+        {
+          this.snackBar.open("Deleted Successfully!","",{
+            duration : 1000,
+          });
+          this.populateTable();
+        },
+        error => {
+          if(error.status == 500){
+            this.snackBar.open("Server coudn't perform ConfirmNR operation!","",{
+              duration:3000,
             });
-            this.loadData();
-          },
-          error => {
-            this.snackBar.open("Error, Contact Devloper!","",{
-              duration : 3000,
+          }
+          else if(error.status == 0){
+            this.snackBar.open("Database server not working!","",{
+              duration:3000,
             });
-            console.log(error.error)
-          },
-        );
+          }
+          else{
+            this.snackBar.open("Unknown Error!Contact Devloper.","",{
+              duration:3000,
+            });
+          }
+        });
       }
       else if(!result){
         this.snackBar.open("Operation aborted!","",{

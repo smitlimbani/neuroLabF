@@ -87,11 +87,9 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky:true"></tr>
-          <tr mat-row *matRowDef="let validityList; columns: columnsToDisplay;"
-
-                 ></tr>
+          <tr mat-row *matRowDef="let validityList; columns: columnsToDisplay;let i =index;"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>

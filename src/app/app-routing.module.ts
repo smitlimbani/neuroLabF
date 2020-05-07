@@ -10,12 +10,11 @@ import {SeparationStationComponent} from "./separation-station/separation-statio
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
-  {path:"",redirectTo:"/dashboard",pathMatch:"full"},
+  {path:"",redirectTo:"/segregation",pathMatch:"full"},
   {path:"receive",component : ReceivingStationComponent},
   {path:"segregation",component : SegregationStationComponent},
   {path:"listgeneration",component : ListGenerationComponent},
   {path:"pagenotfound",component: PageNotFoundComponent},
-  {path:"welcome" , component: WelcomePageComponent},
   {path:"test" , component: TestComponent},
   {path:"welcome" , component: WelcomePageComponent},
   {path:"separation", component: SeparationStationComponent},

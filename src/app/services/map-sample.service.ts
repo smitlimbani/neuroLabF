@@ -458,21 +458,21 @@ export class MapSampleService {
     private httpClient : HttpClient,
   ) { }
 
-//   //SERVER
-//   getMasters():Promise<any>{
-//     return this.httpClient.get(this.serverUrl+"rec/getUnprocessedSampleList").toPromise();
-//   }
-
-  //STATIC
+  //SERVER
   getMasters(){
-    return ELEMENTS;
+    return this.httpClient.get(this.serverUrl+"rec/getUnprocessedSampleList");
   }
+
+  // //STATIC
+  // getMasters(){
+  //   return ELEMENTS;
+  // }
 
   confirmSampleNotReceived(id:number){
     return this.httpClient.post(this.serverUrl+"rec/confirmSampleNotReceived",{mId:id});
   }
 
   mergeSamples(id1:number,id2:number){
-    return this.httpClient.post(this.serverUrl+"test/test",{mId1 : id1,mId2 : id2});
+    return this.httpClient.post(this.serverUrl+"rec/mergeSamples",{mId1 : id1,mId2 : id2});
   }
 }

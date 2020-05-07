@@ -24,8 +24,7 @@
 
       <button mat-raised-button color="primary" style="margin-left: 10px;" (click)="solidify()">Confirm</button>
       <button mat-raised-button color="primary" style="margin-left: 10px;" (click)="unsolidify()">Modify</button>
-      <button mat-raised-button color="primary"  style="margin-left: 10px;" 
-      (click)="export(exporter)" >Print</button>
+      <button mat-raised-button color="primary" style="margin-left: 10px;" (click)="export(exporter)" >Print</button>
     </div>
     <br>
     <mat-tab-group mat-stretch-tabs backgroundColor="primary" [(selectedIndex)]="selectedIndex" (selectedTabChange)="tabChanged($event)" dynamicHeight color="primary" class="mat-elevation-z4">
@@ -97,7 +96,7 @@
         <tr mat-row *matRowDef="let vial; columns: columnsToDisplay;let i =index;"
             [class.group-bg-color]="generateChipNo((1+(this.paginator.pageIndex == 0 ?  i : i + this.paginator.pageIndex * this.paginator.pageSize)),testList[selectedIndex]['groupSize'])%2 == 0" ></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
     </div>
   </mat-card-content>
 </mat-card>

@@ -52,29 +52,33 @@ export class ValidityListComponent implements OnInit {
     this.populateTable();
   }
 
-  async populateTable(){
-    await this.loadData();
-    this.appendFeatures();
+  populateTable(){
+    // await this.loadData();
+    this.validityListService.getValidityLists().subscribe(data=>{
+      console.log(data);
+      this.loadData(data);
+    },
+    error => {
+      if(error.status == 500){
+        this.snackBar.open("Server coudn't perform operation!","",{
+          duration:3000,
+        });
+      }
+      else if(error.status == 0){
+        this.snackBar.open("Database server not working!","",{
+          duration:3000,
+        });
+      }
+      else{
+        this.snackBar.open("Unknown Error!Contact Devloper.","",{
+          duration:3000,
+        });
+      }
+    });
   }
 
-  async loadData(){
-    // SERVER
-    // // console.log("started loadData()");
-    // let data = await this.validityListService.getValidityLists();
-    // // console.log("after call");
-    // console.log("validityList");
-    // console.log(data);
-    // this.validityLists = new MatTableDataSource(data);
-    // // console.log(this.validityLists);
-    // // console.log("exit loadData()");
-
-    //STATIC
-    this.validityLists = new MatTableDataSource(this.validityListService.getValidityLists());
-    console.log(this.validityLists);
-
-  }
-
-  appendFeatures (){
+  loadData(data){
+    this.validityLists = new MatTableDataSource(data);
     this.validityLists.sortingDataAccessor =
     (data: object, sortHeaderId: string): string | number => {
       const propPath = sortHeaderId.split('.');
@@ -86,23 +90,32 @@ export class ValidityListComponent implements OnInit {
     this.validityLists.filterPredicate = (data, filter) => {
       let dataStr='';
       let keys;
-      for(const column of this.columnsToFilter){
-        keys = column.split('.');
-        dataStr+=this.nestedFilter(data,keys);
+      let keywords = filter.split(',');
+      for (const keyword of keywords) {
+        
+        for(const column of this.columnsToFilter){
+          keys = column.split('.');        
+          dataStr+=this.nestedFilter(data,keys);
+        }
+        dataStr = dataStr.trim().toLowerCase();
+        if(dataStr.indexOf(keyword) == -1){
+          return false;
+        }
       }
-      dataStr = dataStr.trim().toLowerCase();
-      return dataStr.indexOf(filter) != -1;
+      return true
     }
 
     this.validityLists.sort = this.sort;
     this.validityLists.paginator = this.paginator;
   }
+
   nestedFilter(data,keys){
     for(let key of keys){
         data = data[key]
       }
     return data || '';
   }
+  
   applyFilter(filterString : string){
     this.validityLists.filter = filterString.trim().toLowerCase();
   }
@@ -118,24 +131,34 @@ export class ValidityListComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result=>{
       if(result){
-        alert("yes!");
-        // this.validityListService.deleteValidityList(validityList.id).subscribe(retVal=>{
-        //   if(retVal){
-        //     this.snackBar.open("Validated successfully!","",{
-        //       duration:3000,
-        //     });
-        //     this.loadData();
-        //   }
-        //   else{
-        //     this.snackBar.open("Error occured!");
-        //   }
-        // },
-        // error=>{
-        //   this.snackBar.open("Contact Developer","",{
-        //     duration:3000,
-        //   });
-        //   console.log(error.error);
-        // });
+        //STATIC
+        // alert("VALIDATED!");
+        
+        //SERVER
+        this.validityListService.deleteValidityList(validityList.id).subscribe(data=>{
+          this.snackBar.open("Validated successfully!","",{
+            duration:3000,
+          });
+          this.populateTable();
+          // this.loadData(data);
+        },
+        error => {
+          if(error.status == 500){
+            this.snackBar.open("Server coudn't perform operation!","",{
+              duration:3000,
+            });
+          }
+          else if(error.status == 0){
+            this.snackBar.open("Database server not working!","",{
+              duration:3000,
+            });
+          }
+          else{
+            this.snackBar.open("Unknown Error!Contact Devloper.","",{
+              duration:3000,
+            });
+          }
+        });
       }
       else if(!result){
         console.log("Operation terminated!");

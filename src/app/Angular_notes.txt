@@ -6,7 +6,12 @@ Dependency injection :
     - otherwise forwardRef() method can be used
     - Injectors are inherited, which means that if a given injector can't resolve a dependency, it asks the parent injector to resolve it.
     - A component can get services from its own injector, from the injectors of its component ancestors, from the injector of its parent NgModule, or from the root injector.
-    - Provider can be defined at three places @injectable @NgModule @Component
+    - Provider can be defined at three places 
+        [Object class is also injectable like service ]
+        :In service itself - under @injectable
+        :module's Provider array - @NgModule(to make service availabe/injectable throughout module) 
+        :component's Provider array - @Component (to make service availabe/injectable in that particular component)
+        
 - When you provide the service at the root level, Angular creates a single, shared instance of HeroService and injects into any class that asks for it. Registering the provider in the @Injectable metadata also allows Angular to optimize an app by removing the service if it turns out not to be used after all.
 - Reserve the constructor for simple initialization such as wiring constructor parameters to properties. The constructor shouldn't do anything. It certainly shouldn't call a function that makes HTTP requests to a remote server as a real data service would.
 - services can take a callback. It could return a Promise. It could return an Observable.
@@ -18,14 +23,20 @@ Dependency injection :
 Bootstraping:
 :declarations — this application's lone component.
 :imports — import BrowserModule to have browser specific services such as DOM rendering, sanitization, and location.
-:providers — the service providers.
+:providers — the service providers.(either you can mention service here or in @injectable of service itself)
 :bootstrap — the root component that Angular creates and inserts into the index.html host web page.
 - all about app.module file and declaration ways: https://v6.angular.io/guide/bootstrapping
 
 Providers:
 - When you add a service provider to the root application injector, it’s available throughout the app. Additionally, these providers are also available to all the classes in the app as long they have the lookup token.
 - You should always provide your service in the root injector unless there is a case where you want the service to be available only if the consumer imports a particular @NgModule.
-- all about provideIn and providers : https://v6.angular.io/guide/providers
+  Provider array:
+    - it is used to define dependency component/module need,
+    for syntax and more go : : https://angular.io/guide/dependency-injection-providers
+  @Injectable:
+  - it say that this service have some other service requirment(ex. in our own service we use httpClient). so to tell angular this requirment decorator is needed.
+  - 'provideIn' option : it is optional if we are mentioning them in provider array of Module or Component.
+  - link: https://blog.strongbrew.io/the-injectable-decorator-and-di/
 
 lazy-loading modules:
 -   Lazy loading is when you load modules only when you need them; for example, when routing.

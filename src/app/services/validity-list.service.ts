@@ -13,13 +13,16 @@ export class ValidityListService {
 
   //SERVER
   // getValidityLists():Promise<any>{
-  //   // return this.httpClient.get(this.serverUrl+"validityList/getAllOrderByULID").toPromise();
+  //   return this.httpClient.get(this.serverUrl+"validityList/getAllOrderByULID").toPromise();
   // }
+  getValidityLists(){
+    return this.httpClient.get(this.serverUrl+"validityList/getAllOrderByULID");
+  }
 
   // STATIC
-  getValidityLists(){
-    return ELEMENTS;
-  }
+  // getValidityLists(){
+  //   return ELEMENTS;
+  // }
 
   deleteValidityList(id){
     return this.httpClient.get(this.serverUrl+"validityList/delete?id="+id);

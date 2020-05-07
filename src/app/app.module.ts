@@ -22,7 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ReceivingFormComponent } from './receiving-form/receiving-form.component';
 import { MapSampleComponent } from './map-sample/map-sample.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from "@angular/material/select";
 import {MatIconModule} from "@angular/material/icon";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -40,6 +40,10 @@ import { TestComponent } from './test/test.component';
 import { SeparationStationComponent } from './separation-station/separation-station.component';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { SegregationListComponent } from './segregation-list/segregation-list.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { PendingVialsComponent } from './pending-vials/pending-vials.component';
+import { ExploreDataComponent } from './explore-data/explore-data.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +62,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     TestComponent,
     SeparationStationComponent,
     DashboardComponent,
+    SegregationListComponent,
+    PendingVialsComponent,
+    ExploreDataComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +92,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatCheckboxModule,
     MatExpansionModule,
     MatTableExporterModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

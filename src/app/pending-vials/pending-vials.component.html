@@ -1,0 +1,68 @@
+<br>
+<mat-card >
+  <mat-card-header>
+    <mat-card-title>Pending Vials</mat-card-title>
+    <mat-card-subtitle>Vials not processed</mat-card-subtitle>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <br>
+  <mat-card-content >
+    <mat-form-field class="single">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. abc">
+    </mat-form-field>
+    <div class="mat-elevation-z8">
+      <table mat-table #table matSort [dataSource]="dataSource" width="100%">
+
+          <ng-container  matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>No</th>
+            <td mat-cell *matCellDef="let vial;let i=index">{{1+(this.paginator.pageIndex == 0 ?  i : i + this.paginator.pageIndex * this.paginator.pageSize)}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="master.ulid">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>AU NO.</th>
+              <td mat-cell *matCellDef="let vial">{{vial.master.ulid}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="vlid">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>VLID</th>
+              <td mat-cell *matCellDef="let vial">{{vial.vlid}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="master.patientDemographicDetail.name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header >NAME</th>
+              <td mat-cell *matCellDef="let vial">{{vial.master.patientDemographicDetail.name}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="master.patientDemographicDetail.age">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header >AGE</th>
+              <td mat-cell *matCellDef="let vial">{{vial.master.patientDemographicDetail.age}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="master.patientDemographicDetail.sex">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header >SEX</th>
+              <td mat-cell *matCellDef="let vial">{{vial.master.patientDemographicDetail.sex}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="drName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header >Dr.Name/Hospital</th>
+              <td mat-cell *matCellDef="let vial">
+                <div>{{vial.master.drName}}/</div>
+                <div>{{vial.master.patientDemographicDetail.hospitalName}}</div>  
+              </td>
+          </ng-container>
+          <ng-container  matColumnDef="creationDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >CREATION DATE</th>
+            <td mat-cell *matCellDef="let vial">{{vial.creationDate}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="test.testName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >TESTNAME</th>
+            <td mat-cell *matCellDef="let vial">{{vial.test.name}}</td>
+          </ng-container>
+          <ng-container  matColumnDef="test.testCategory">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >TEST CATEGORY</th>
+            <td mat-cell *matCellDef="let vial">{{vial.test.testCategory}}</td>
+          </ng-container>
+
+          
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky:true"></tr>
+          <tr mat-row *matRowDef="let vial; columns: columnsToDisplay;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

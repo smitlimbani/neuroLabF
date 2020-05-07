@@ -1,26 +1,22 @@
 Remaining:
 - Stepper to show current location on top;
 - If possible, generate common component for listing with method calling from parent
-- SampleId condition in validityList table for external and internal(or remove)
 - Make available test table dynamic from TEST table!
 - test merge operation with enough data
 - update in addVial() based on vlid format
 
 condition:
 Merging :
-    uhid needs to be same;
-    sampleType needs to be same;
+    //uhid needs to be same;
+    //sampleType needs to be same;
 
 check:
+  //- SampleId condition in validityList table for external and internal(or remove)
   - while auto-populating form, check test type with test because there are cases where one case is allowed in both CSF and SERUM
-  - updated loadData() and combined with appendFeature. which is used in confirmNR and mergeMe() methods! check if all working smooth with backend!
+  //- updated loadData() and combined with appendFeature. which is used in confirmNR and mergeMe() methods! check if all working smooth with backend!
+        //-in map-sample and validity-list
+  - list-generation : when new while added to the 2nd page of paginator, what will happen?, it should change the page or else remove paginator
 
-
-bug:
-serial no disappear when discarding extra vials while solidification
-solution:
-    -refresh page
-    - set serial no null in BE
 
 sleep(ms):
 function delay(ms: number) {
@@ -53,9 +49,3 @@ ULID2:ANA = {"id":4,"master":{"id":3,"patientDemographicDetail":{"id":8,"name":"
 ULID2:MOG = {"id":6,"master":{"id":3,"patientDemographicDetail":{"id":8,"name":"Gauri Rawat","age":50,"sex":"MALE","emailId":null,"contactNo":null,"address":null,"hospitalName":"Kiran","uhid":"XHID2"},"paymentCategory":null,"samples":null,"externalSample":null,"payments":null,"nNo":"n123789","totalAmount":null,"remainingAmount":null,"isValid":"P","remark":null,"status":"RECEIVED","sampleType":"S","linked":"0","drName":"Dr. Dodiya","reqDate":"2020-04-02","ulid":"ULID2","active":true,"ana":"SEPARATED","anca":"INVALID","mog":"NOT_RAISED","nmda":"NOT_RAISED","pana":"NOT_RAISED","myu":"NOT_RAISED","gangigg":"NOT_RAISED","gangigm":"NOT_RAISED"},"test":{"id":3,"code":"MOG","name":"MOG","rate":150.0,"testCategory":"BLOT","groupSize":5,"lockedCounter":0,"active":true},"serialNo":null,"fileName":null,"reportingDate":null,"creationDate":"2020-04-20","testingDate":null,"remark":null,"result":null,"vlid":"ULID2:MOG"};
 ULID3:ANA = {"id":7,"master":{"id":4,"patientDemographicDetail":{"id":6,"name":"Vaibhav Dodiya","age":23,"sex":"MALE","emailId":null,"contactNo":null,"address":null,"hospitalName":"Nimhans","uhid":"UHID1"},"paymentCategory":null,"samples":null,"externalSample":null,"payments":null,"nNo":"n123456","totalAmount":null,"remainingAmount":null,"isValid":"N","remark":"Not Received","status":"NOT_RECEIVED","sampleType":"S","linked":"0","drName":"Dr. Gauri","reqDate":"2020-04-13","ulid":"ULID3","active":true,"ana":"RAISED","anca":"RAISED","mog":"NOT_RAISED","nmda":"NOT_RAISED","pana":"NOT_RAISED","myu":"NOT_RAISED","gangigg":"NOT_RAISED","gangigm":"NOT_RAISED"},"test":{"id":2,"code":"ANA","name":"ANA","rate":100.0,"testCategory":"BLOT","groupSize":5,"lockedCounter":0,"active":true},"serialNo":null,"fileName":null,"reportingDate":null,"creationDate":"2020-04-20","testingDate":null,"remark":null,"result":null,"vlid":"ULID3:ANA"};
 ULID3:MOG = {"id":8,"master":{"id":4,"patientDemographicDetail":{"id":6,"name":"Vaibhav Dodiya","age":23,"sex":"MALE","emailId":null,"contactNo":null,"address":null,"hospitalName":"Nimhans","uhid":"UHID1"},"paymentCategory":null,"samples":null,"externalSample":null,"payments":null,"nNo":"n123456","totalAmount":null,"remainingAmount":null,"isValid":"N","remark":"Not Received","status":"NOT_RECEIVED","sampleType":"S","linked":"0","drName":"Dr. Gauri","reqDate":"2020-04-13","ulid":"ULID3","active":true,"ana":"RAISED","anca":"RAISED","mog":"NOT_RAISED","nmda":"NOT_RAISED","pana":"NOT_RAISED","myu":"NOT_RAISED","gangigg":"NOT_RAISED","gangigm":"NOT_RAISED"},"test":{"id":3,"code":"MOG","name":"MOG","rate":150.0,"testCategory":"BLOT","groupSize":5,"lockedCounter":0,"active":true},"serialNo":null,"fileName":null,"reportingDate":null,"creationDate":"2020-04-20","testingDate":null,"remark":null,"result":null,"vlid":"ULID3:MOG"};
-
-
-
-Make ULID -> AUno;
-color ccode CSF/SERUM;
-patient's no and email;

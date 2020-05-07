@@ -38,13 +38,16 @@ export class SegregationService {
     return this.httpClient.get(this.serverUrl+"test/getActiveTests?testCategoryEnum="+testCategory).toPromise();
   }
 
-  getCurrentTestListByCategory(testCategory):Promise<any>{
-      let today :Date = new Date();
-      let strDate = today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()).padStart(2, '0');
-      console.log(this.serverUrl+"segregation/getCurrentTestListByCategory?testCategory="+testCategory+"&date="+strDate);
-      return this.httpClient.get(this.serverUrl+"segregation/getCurrentTestListByCategory?testCategory="+testCategory+"&date="+strDate).toPromise();
+  getTestListByCategoryAndDate(testCategory):Promise<any>{
+    let today :Date = new Date();
+    let strDate = today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()).padStart(2, '0');
+    console.log(this.serverUrl+"segregation/getTestListByCategoryAndDate?testCategory="+testCategory+"&date="+strDate);
+    return this.httpClient.get(this.serverUrl+"segregation/getTestListByCategoryAndDate?testCategory="+testCategory+"&date="+strDate).toPromise();
   }
 
+  getTestListByCodeAndDate(testCode,testDate){
+    return this.httpClient.get(this.serverUrl+"segregation/getTestListByCodeAndDate?testCode="+testCode+"&date="+testDate);
+  }
 }
 
 let VIALDATA =
