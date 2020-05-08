@@ -41,7 +41,7 @@
   </tr>
   <tr>
     <td class="tag">Processing Status</td><td>: {{master.status}}</td>
-    <td class="tag">Linked AU. No</td><td>: {{master.linked==null?'-':master.linked}}</td>
+    <td class="tag">Linked AU. No</td><td>: {{master.linked=='0'||master.linked==null?'-':master.linked}}</td>
   </tr>
   <tr>
     <td class="tag">Validity status</td><td>: {{master.isValid=='Y'?'VALID':master.isValid=='P'?'PARTIALLY VALID':'INVALID'}}</td>

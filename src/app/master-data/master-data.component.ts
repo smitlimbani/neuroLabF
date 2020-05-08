@@ -17,7 +17,7 @@ export class MasterDataComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    if(this.master.ulid.charAt(2)=='X')
+    if(this.master.ulid?.charAt(2)=='X')
       this.isExternal=true;
   }
 

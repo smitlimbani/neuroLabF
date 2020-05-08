@@ -1,21 +1,30 @@
 <mat-tab-group mat-stretch-tabs backgroundColor="primary" dynamicHeight color="primary" class="mat-elevation-z4" [(selectedIndex)]="selectedIndex">
-    
-    <mat-tab label="Segregation List">
-        <ng-template matTabContent>
-            <app-segregation-list></app-segregation-list>
-        </ng-template>
-      </mat-tab>
 
-      <mat-tab label="Pending vials">
-        <ng-template matTabContent>
-            <app-pending-vials></app-pending-vials>
-        </ng-template>
-      </mat-tab>
-    
-      <mat-tab label="Explore Data">
-        <ng-template matTabContent>
-            <app-explore-data></app-explore-data>
-        </ng-template>
-      </mat-tab>
+  <mat-tab label="Segregation List">
+      <ng-template matTabContent>
+          <app-segregation-list></app-segregation-list>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Pending vials">
+      <ng-template matTabContent>
+          <app-pending-vials></app-pending-vials>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Explore Data">
+      <ng-template matTabContent>
+          <app-explore-data></app-explore-data>
+      </ng-template>
+    </mat-tab>
+
+    <mat-tab label="Individual Search">
+      <ng-template matTabContent>
+        <app-individual-search></app-individual-search>
+      </ng-template>
+    </mat-tab>
+
+
+
 
     </mat-tab-group>
