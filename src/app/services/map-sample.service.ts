@@ -122,8 +122,8 @@ let ELEMENTS =
       "anca": "SEPARATED",
       "mog": "NOT_RAISED",
       "nmda": "NOT_RAISED",
-      "pana": "NOT_RAISED",
-      "myu": "NOT_RAISED",
+      "para": "NOT_RAISED",
+      "myo": "NOT_RAISED",
       "gangigg": "NOT_RAISED",
       "gangigm": "NOT_RAISED"
   },
@@ -229,8 +229,8 @@ let ELEMENTS =
     "anca": "NOT_RAISED",
     "mog": "NOT_RAISED",
     "nmda": "SEPARATED",
-    "pana": "SEPARATED",
-    "myu": "NOT_RAISED",
+    "para": "SEPARATED",
+    "myo": "NOT_RAISED",
     "gangigg": "NOT_RAISED",
     "gangigm": "NOT_RAISED"
   },
@@ -336,8 +336,8 @@ let ELEMENTS =
     "anca": "SEPARATED",
     "mog": "NOT_RAISED",
     "nmda": "NOT_RAISED",
-    "pana": "NOT_RAISED",
-    "myu": "NOT_RAISED",
+    "para": "NOT_RAISED",
+    "myo": "NOT_RAISED",
     "gangigg": "RAISED",
     "gangigm": "NOT_RAISED"
     },
@@ -443,8 +443,8 @@ let ELEMENTS =
     "anca": "SEPARATED",
     "mog": "NOT_RAISED",
     "nmda": "NOT_RAISED",
-    "pana": "NOT_RAISED",
-    "myu": "NOT_RAISED",
+    "para": "NOT_RAISED",
+    "myo": "NOT_RAISED",
     "gangigg": "RAISED",
     "gangigm": "NOT_RAISED"
     }

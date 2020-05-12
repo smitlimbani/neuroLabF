@@ -43,7 +43,7 @@
             <mat-option value=":au">INTERNAL</mat-option>
             <mat-option value=":xu">EXTERNAL</mat-option>
           </mat-select>
-        </mat-form-field>    
+        </mat-form-field>
       </mat-grid-tile>
       <!-- <mat-grid-tile>
         <mat-form-field class="single" appearance="outline">
@@ -55,9 +55,9 @@
             <mat-option value="PROCESSING">PROCESSING</mat-option>
             <mat-option value="REPORTED">REPORTED</mat-option>
           </mat-select>
-        </mat-form-field>    
+        </mat-form-field>
       </mat-grid-tile>
-      
+
       <mat-grid-tile>
         <mat-form-field class="single" appearance="outline">
           <mat-label>Sample Type</mat-label>
@@ -66,18 +66,18 @@
             <mat-option value="s:">SERUM</mat-option>
             <mat-option value="c:">CSF</mat-option>
           </mat-select>
-        </mat-form-field>    
+        </mat-form-field>
       </mat-grid-tile>
        -->
        <mat-grid-tile colspan="2">
         <!-- <div align="center"> -->
           <button mat-raised-button color="primary" (click)="populateTable()" [disabled]="!testList">Load Data</button>
-        <!-- </div> -->        
+        <!-- </div> -->
       </mat-grid-tile>
       <mat-grid-tile>
         <!-- <div align="center"> -->
           <button mat-raised-button color="primary" (click)="filterData()">Apply Filter</button>
-        <!-- </div> -->        
+        <!-- </div> -->
       </mat-grid-tile>
     </mat-grid-list>
     <div align="right">
@@ -127,7 +127,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header >Dr.Name/Hospital</th>
           <td mat-cell *matCellDef="let master">
             <div>{{master.drName}}/</div>
-            <div>{{master.patientDemographicDetail.hospitalName}}</div>  
+            <div>{{master.patientDemographicDetail.hospitalName}}</div>
           </td>
         </ng-container>
         <ng-container  matColumnDef="reqDate">
@@ -174,21 +174,21 @@
             </div>
           </td>
         </ng-container>
-        <ng-container  matColumnDef="pana">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>PANA</th>
+        <ng-container  matColumnDef="para">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>PARA</th>
           <td mat-cell *matCellDef="let master">
-            <div *ngIf="master.pana != 'NOT_RAISED'">
-              <div>{{master.pana}}/</div>
-              <div>{{(testList.PANA.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            <div *ngIf="master.para != 'NOT_RAISED'">
+              <div>{{master.para}}/</div>
+              <div>{{(testList.para.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
             </div>
           </td>
         </ng-container>
-        <ng-container  matColumnDef="myu">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>MYU</th>
+        <ng-container  matColumnDef="myo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>MYO</th>
           <td mat-cell *matCellDef="let master">
-            <div *ngIf="master.myu != 'NOT_RAISED'">
-              <div>{{master.myu}}/</div>
-              <div>{{(testList.MYU.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+            <div *ngIf="master.myo != 'NOT_RAISED'">
+              <div>{{master.myo}}/</div>
+              <div>{{(testList.myo.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
             </div>
           </td>
         </ng-container>
@@ -218,7 +218,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header >Amount Paid</th>
           <td mat-cell *matCellDef="let master">{{master.totalAmount}}</td>
         </ng-container>
-          
+
         <tr mat-header-row *matHeaderRowDef="columnsToDisplay;sticky:true"></tr>
         <tr mat-row *matRowDef="let master; columns: columnsToDisplay;"></tr>
       </table>

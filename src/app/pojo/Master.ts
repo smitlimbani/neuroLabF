@@ -10,8 +10,8 @@ export class Master {
     public mog: string ,
     public nmda: string ,
     public ana: string ,
-    public pana: string ,
-    public myu: string ,
+    public para: string ,
+    public myo: string ,
     public gangigg: string ,
     public gangigm: string ,
 

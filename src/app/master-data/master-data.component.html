@@ -23,8 +23,8 @@
       <a *ngIf="master.anca!='NOT_RAISED'">ANCA </a>
       <a *ngIf="master.ana!='NOT_RAISED'">ANA </a>
       <a *ngIf="master.mog!='NOT_RAISED'">MOG </a>
-      <a *ngIf="master.myu!='NOT_RAISED'">MYO </a>
-      <a *ngIf="master.pana!='NOT_RAISED'">PANA </a>
+      <a *ngIf="master.myo!='NOT_RAISED'">MYO </a>
+      <a *ngIf="master.para!='NOT_RAISED'">PARA </a>
       <a *ngIf="master.nmda!='NOT_RAISED'">NMDA </a>
       <a *ngIf="master.gangigg!='NOT_RAISED'">GANGIGG</a>
       <a *ngIf="master.gangigm!='NOT_RAISED'">GANGIGM </a>
@@ -64,11 +64,11 @@
 </table>
 
 <table class="single">
-  <div  class="samples" *ngFor="let transaction of master.payments">
+  <div  class="samples" width="100%" *ngFor="let transaction of master.payments">
     <tr>
-      <td class="tag">Date</td><td>: {{transaction.transactionDate}}</td>
-      <td class="tag">Amount</td><td>: {{transaction.amount}}</td>
-      <td class="tag">Remark</td><td>: {{transaction.remark}}</td>
+      <td class="tag2">Date</td><td class="tag2">: {{transaction.transactionDate}}</td>
+      <td class="tag2">Amount</td><td class="tag2">: {{transaction.amount}}</td>
+      <td class="tag2">Remark</td><td class="tag2">: {{transaction.remark}}</td>
     </tr>
   </div>
 
