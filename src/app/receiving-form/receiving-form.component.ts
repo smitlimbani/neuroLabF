@@ -9,6 +9,9 @@ import {isNotNullOrUndefined} from "codelyzer/util/isNotNullOrUndefined";
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Payment} from "../pojo/Payment";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Doctor} from "../pojo/Doctor";
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 
 export interface Test {
@@ -73,13 +76,15 @@ export class ReceivingFormComponent implements OnInit {
   doctors;
   public doctorFilter: FormControl = new FormControl();
   otherRemark;
-
+  doctorBind:Doctor;
+  newForm=true;
   @Input() tmaster?: any;
 
   constructor(
     private receivingFormService: ReceivingFormService,
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
+    private dialog : MatDialog,
   ) {
   }
 
@@ -124,7 +129,7 @@ export class ReceivingFormComponent implements OnInit {
   //to initialize form in general(not in the case of linking)
   initializeNewForm() {
     // this.master= new Master(null,'SAU20/00020','','RAISED','NOT_RAISED','NOT_RAISED','RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED','NOT_RAISED',null, null, null,'','','S','','',);
-    this.master = new Master(null, null, null, 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', null, null,  'Y', 'RECEIVED', 'S', null, null, null, null, null);
+    this.master = new Master(null, null, null, 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', 'NOT_RAISED', null, null,  'Y', null, 'S', null, null, null, null, null);
     // this.pdd =  new PatientDemographicDetail(null,'UHID0001','Gauri','address',22,'FEMALE','someEmail@gmail.com','9999999999','NIMHANS', 'Dr. Anita');
     this.pdd = new PatientDemographicDetail(null, null, null, null, null, null, null, null, null);
     this.isLinkEnabled = false;
@@ -140,7 +145,12 @@ export class ReceivingFormComponent implements OnInit {
 
   //fills up necessary fields when SampleId or UHID is scanned
   autofill() {
+    this.newForm=false;
     if (this.uSampleId == null) {
+      if(this.pdd.name!=null){
+        console.log("resetting");
+        this.initializeNewForm();
+      }
       this.receivingFormService.getPDDDetailByUHID(this.uUHID).subscribe(
         data => {
           console.log(data);
@@ -195,6 +205,11 @@ export class ReceivingFormComponent implements OnInit {
               },
               {value: null, disabled: true});
           }
+          else{
+            this.doctorBind= new Doctor(this.master.drName, this.master.drContactNo, this.master.drEmailId, this.pdd.hospitalName);
+          }
+          this.isLinkEnabled= !(this.master.linked == 0 || this.master.linked == null);
+          this.isSampleInvalid= this.master.isValid == 'N';
         }
       );
       // this.pdd = new PatientDemographicDetail(null, 'UHID0001', 'Gauri', 'address', 22, 'FEMALE', 'someEmail@gmail.com', '9999999999', 'NIMHANS');
@@ -220,6 +235,13 @@ export class ReceivingFormComponent implements OnInit {
 
   //Func gets ulid from BE and resets all the associated variables. It is called every time regType changes or sampleType changes
   getULID() {
+    if(this.master.status!=null && this.master.status!='NOT_RECEIVED'){
+      this.ULIDCounter = parseInt(this.master.ulid.substr(5, 5), 10);
+      this.centerULID = this.master.ulid.substr(5, 5);
+      this.isULIDVerified = true;
+      return;
+    }
+
     if (this.regType == 'INTERNAL') {//I/E flag)
       this.receivingFormService.getNextIULID(this.master.sampleType).subscribe(
         data => {
@@ -333,7 +355,8 @@ export class ReceivingFormComponent implements OnInit {
 
   //Autofills the associated doctor fields when a doctor is selected
   doctorSelected(doctor) {
-    // console.log("doctor selected");
+    console.log("doctor selected");
+    this.master.drName=doctor.name;
     this.pdd.hospitalName = doctor.hospitalName;
     this.master.drEmailId = doctor.emailId;
     this.master.drContactNo = doctor.contactNo;
@@ -483,7 +506,7 @@ export class ReceivingFormComponent implements OnInit {
 
   deleteTransaction(i) {
     let array = this.paymentForm.get('transactions') as FormArray;
-    (<FormArray>this.paymentForm.get('transactions')).removeAt(i);
+    (<FormArray>this.paymentForm.get('transactions')).clear();
     if (array.length == 0) {
       this.snackBar.open("You have cleared all transactions now", "", {duration: 3000,});
       this.addTransaction(null, null, null);
@@ -530,14 +553,14 @@ export class ReceivingFormComponent implements OnInit {
   }
 
 
-  onSubmit() {
+  submit() {
     if(this.master.remark=='Others'){
       console.log('change remark');
       this.master.remark=this.otherRemark;
     }
     this.master.ulid = this.master.ulid.substr(0, 5) + this.centerULID + this.master.ulid.substr(-3);
     if (this.regType == 'INTERNAL') {
-      this.receivingFormService.receiving(this.sampleId, this.master.ulid, this.isSampleInvalid ? this.master.remark : null, this.isLinkEnabled ? this.master.linked : null, []).subscribe(
+      this.receivingFormService.receiving(this.sampleId, this.master.ulid, this.isSampleInvalid ? this.master.remark : null, this.isLinkEnabled ? this.master.linked : null, this.master.remainingAmount, []).subscribe(
         data => {
           console.log(data);
           this.snackBar.open("Sample received", "", {duration: 3000,})
@@ -550,19 +573,20 @@ export class ReceivingFormComponent implements OnInit {
       console.log(this.paymentList);
       if (this.uSampleId == null) {
         // this.master.isActive = true;
-        this.master.isValid = 'Y';
+        this.master.isValid = this.isSampleInvalid==true?'N':'Y';
         this.master.status = 'RECEIVED';
         this.receivingFormService.storeXPatientDetail(this.master, this.pdd, this.sampleId, this.paymentList).subscribe(
           data => this.snackBar.open("Sample received", "", {duration: 3000,}),
           error => this.displayError(error,"Error in adding sample"),
         )//when its a new entry or using uhid. Sample id is generated
       } else
-        this.receivingFormService.receiving(this.sampleId, this.master.ulid, this.isSampleInvalid ? this.master.remark : null, this.isLinkEnabled ? this.master.linked : null, this.paymentList).subscribe(
+        this.receivingFormService.receiving(this.sampleId, this.master.ulid, this.isSampleInvalid ? this.master.remark : null, this.isLinkEnabled ? this.master.linked : null, this.master.remainingAmount, this.paymentList).subscribe(
           data => this.snackBar.open("Sample received", "", {duration: 3000,}),
           error => this.displayError(error,"Error in adding sample"),
         )
       //when it is redirected for linking or using sId.
     }
+    this.reset();
   }
 
 
@@ -584,6 +608,54 @@ export class ReceivingFormComponent implements OnInit {
     }
   }
 
+  reset(){
+    this.master=null;
+    this.pdd=null;
+    this.uSampleId=null;
+    this.uUHID=null;
+    this.sampleId=null;
+    this.dataSource=null;
+    this.selection=null;
+    this.centerULID=null;
+    this.isULIDVerified=null;
+    this.ULIDCounter=null;
+    this.linkingULIDList=null;
+    this.paymentList=null;
+    this.transactions= new FormArray([]);
+    this.doctorFilter= new FormControl();
+    this.otherRemark=null;
+    this.doctorBind=null;
+    this.tmaster=null;
+
+    this.paymentForm = this.fb.group({
+      transactions: this.fb.array([
+        this.addTransactionGroup(null, null, null),
+      ])
+    });
+
+    this.initializeNewForm();
+  }
+
+  confirmSubmit(){
+    let a=false;
+    let dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+      data : {
+        message : "Do you want to submit the form?",
+        confirmTitle : "Submit",
+        title : "Alert!",
+        },
+      width:"300px",
+    });
+    dialogRef.afterClosed().subscribe(result=>{
+      if(result){
+        this.newForm=true;
+        this.submit();
+      }
+      else if(!result){
+        ;
+      }
+    });
+  }
 }
 
 //unresolved issues-

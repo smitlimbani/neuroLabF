@@ -24,19 +24,19 @@
           <td>
             <mat-form-field appearance="outline" class="single">
               <mat-label>Sample Id.</mat-label>
-              <input #upperSampleId="ngModel" [disabled]="isPddReadOnly" [(ngModel)]="uSampleId" matInput (input)="uUHID=null" name="upperSampleId" placeholder="Enter Sample Id" type="text" >
+              <input #upperSampleId="ngModel" [(ngModel)]="uSampleId" matInput (input)="uUHID=null" name="upperSampleId" placeholder="Enter Sample Id" type="text" >
             </mat-form-field>
           </td>
           <td [hidden]="regType=='INTERNAL'">
             <mat-form-field appearance="outline" class="single">
               <mat-label>UHID</mat-label>
-              <input #upperUHID="ngModel"  [disabled]="isPddReadOnly||regType=='INTERNAL'"  [(ngModel)]="uUHID" matInput (input)="uSampleId=null" name="upperUHID" placeholder="Enter UHID" type="text">
+              <input #upperUHID="ngModel" [(ngModel)]="uUHID" matInput (input)="uSampleId=null" name="upperUHID" placeholder="Enter UHID" type="text">
             </mat-form-field>
           </td>
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <button  class="submit" color="primary" [disabled]="isPddReadOnly" (click)="autofill(); hiddenForm.hidden=false" mat-raised-button>Go
+            <button  class="submit" color="primary" (click)="autofill(); hiddenForm.hidden=false" mat-raised-button>Go
             </button>
           </td>
         </tr>
@@ -48,7 +48,7 @@
       <br>
 
 
-      <div #hiddenForm [hidden]="regType=='INTERNAL'">
+      <div #hiddenForm class="viewForm" [hidden]="newForm && regType=='INTERNAL'">
         <table class="single">
           <tr>
             <td colspan="2">
@@ -206,7 +206,7 @@
                 <mat-label>AU No.</mat-label>
                 <span matPrefix>{{master.ulid!=null?master.ulid.substr(0, 5):""}} </span>
                 <span matSuffix>{{master.ulid!=null?master.ulid.substr(-3):""}} </span>
-                <input #ulid="ngModel"   maxlength="5" [(ngModel)]="centerULID" [class.is-invalid]="ulid.invalid && ulid.touched" (input)="isULIDVerified=false" matInput name="Ulid" placeholder="AU No." required type="text">
+                <input #ulid="ngModel"  [disabled]="this.master.status!=null && this.master.status!='NOT_RECEIVED'" maxlength="5" [(ngModel)]="centerULID" [class.is-invalid]="ulid.invalid && ulid.touched" (input)="isULIDVerified=false" matInput name="Ulid" placeholder="AU No." required type="text">
                 <!-- <mat-error >Enter hospital name</mat-error> verifyULID()-->
                 <mat-icon matSuffix color="primary" *ngIf="isULIDVerified;else abc;" >check</mat-icon>
                 <ng-template #abc>
@@ -370,14 +370,15 @@
         <mat-divider></mat-divider>
         <br>
         <div align="center">
-          <button  class="submit" layout-align="center" [disabled]="Form.invalid|| master.remainingAmount<0||!isULIDVerified || this.selection.isEmpty()" (click)="onSubmit()" color="primary" mat-raised-button>Submit
+          <button class="submit" layout-align="center" [disabled]="Form.invalid|| master.remainingAmount<0||!isULIDVerified || this.selection.isEmpty()" (click)="confirmSubmit()" color="primary" mat-raised-button>Submit
           </button>
         </div>
-<!--        <br>form<br>{{Form.value | json}}-->
-<!--        <br>pdd<br>{{pdd| json}}<br>-->
-<!--        <br>master<br>{{master| json}}<br>-->
-<!--        <br>Usample<br>{{uSampleId| json}}<br>-->
-<!--        <br>sampleId<br>{{sampleId| json}}<br>-->
+        <br>form<br>{{Form.value | json}}
+        <br>pdd<br>{{pdd| json}}<br>
+        <br>master<br>{{master| json}}<br>
+        <br>doctor<br>{{doctorBind| json}}<br>
+        <br>sampleId<br>{{sampleId| json}}<br>
+        <br>Usample<br>{{uSampleId| json}}<br>
       </div>
     </form>
   </mat-card-content>

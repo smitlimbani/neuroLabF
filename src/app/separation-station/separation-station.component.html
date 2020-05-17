@@ -50,12 +50,12 @@
         </tr>
         <tr>
             <td  class="checkbox" *ngFor=" let rTest of raisedTests.slice(0,4)">
-              <mat-checkbox class="checkbox" [disabled]="rTest.status=='REPORTED'|| isListCreated" [(ngModel)]="rTest.checked" (change)="changeTestStatus(rTest)">{{rTest.name}}</mat-checkbox>
+              <mat-checkbox class="checkbox" [disabled]="rTest.disabled|| isListCreated" [(ngModel)]="rTest.checked" (change)="changeTestStatus(rTest)">{{rTest.name}}</mat-checkbox>
             </td>
         </tr>
         <tr>
           <td  class="checkbox" *ngFor=" let rTest of raisedTests.slice(4,8)">
-            <mat-checkbox class="checkbox" [disabled]="rTest.status=='REPORTED'|| isListCreated" [(ngModel)]="rTest.checked" (change)="changeTestStatus(rTest)">{{rTest.name}}</mat-checkbox>
+            <mat-checkbox class="checkbox" [disabled]="rTest.disabled|| isListCreated" [(ngModel)]="rTest.checked" (change)="changeTestStatus(rTest)">{{rTest.name}}</mat-checkbox>
           </td>
         </tr>
       </table>
@@ -95,10 +95,10 @@
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)= "row.print= row.print!=true; $event ? selection.toggle(row) : null"
-                          (change)="row.print= row.print!=true;$event ? selection.toggle(row) : null"
+            <mat-checkbox (click)= "row.print= row.print!=true&&row.disabled==false; $event ? selection.toggle(row) : null"
+                          (change)="row.print= row.print!=true&&row.disabled==false;$event ? selection.toggle(row) : null"
                           [checked]="row.print"
-                          [disabled]="row.status=='REPORTED'"
+                          [disabled]="row.disabled"
                           [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
           </td>
@@ -116,11 +116,11 @@
 
         <ng-container matColumnDef=" ">
           <th mat-header-cell *matHeaderCellDef >  </th>
-          <td mat-cell *matCellDef="let element" class="status"> {{ element.status=='SEPARATED'?'REPRINT':(element.status=='REPORTED'?'REPORTED': ' ')}} </td>
+          <td mat-cell *matCellDef="let element" class="status"> {{ element.status=='SEPARATED'?(element.disabled?'UNDER TESTING':'REPRINT'):(element.status=='REPORTED'?'REPORTED': ' ')}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row [hidden]="row.checked==false" *matRowDef="let row; columns: displayedColumns;" (click)=toggle(row)>
+        <tr mat-row [hidden]="row.checked==false" *matRowDef="let row; columns: displayedColumns;" (click)="row.disabled? true :toggle(row)">
 
         </tr>
       </table>
@@ -131,7 +131,7 @@
             <button mat-raised-button color="primary" type="submit" (click)="export()" >Print</button>
           </td>
           <td align="center">
-            <button mat-raised-button color="primary" type="submit" (click)="next();separateSampleButton.disabled=false">Next</button>
+            <button mat-raised-button color="primary" type="submit" (click)="next();separateSampleButton.disabled=false; sId.value=null">Next</button>
           </td>
         </tr>
       </table>

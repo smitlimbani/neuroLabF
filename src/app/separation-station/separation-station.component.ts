@@ -82,11 +82,25 @@ export class SeparationStationComponent implements OnInit {
       let testStatus= this.master[test.name.toLowerCase()];
       let flag: boolean= true;
       if(testStatus!='NOT_RAISED') {
-        this.raisedTests.push( {name:test.name, checked: testStatus!='INVALID', code: test.code, status: testStatus, print: testStatus=='RAISED'|| testStatus=='SEPARATED'});
+        let object= {name:test.name, checked: testStatus!='INVALID', code: test.code, status: testStatus, print: testStatus=='RAISED'|| testStatus=='SEPARATED', disabled: testStatus=='REPORTED'};
+
+        if(testStatus=='SEPARATED' && this.master.vials!=null)
+          for(let vial of this.master.vials) {
+            // console.log(vial.vlid.substr(-3).toLowerCase() === test.code.toLowerCase() );
+            // console.log(vial.vlid.substr(-3).toLowerCase() === test.code.toLowerCase() && vial.serialNo != null);
+            if (vial.vlid.substr(-3).toLowerCase() === test.code.toLowerCase() && vial.serialNo != null) {
+              object.print = false;
+              object.disabled = true;
+              break;
+            }
+          }
+
+        this.raisedTests.push(object);
         if(testStatus == 'INVALID'){
           this.noOfInvalidTests++;
         }
       }
+
     }
     // console.log(this.noOfInvalidTests);
     if(this.noOfInvalidTests== 0)

@@ -63,9 +63,9 @@ export class ReceivingFormService {
   }
 
   //working
-  receiving(sampleId, ulid, remark, linked, payments){
-    console.log(this.serverUrl+ 'rec/receiving', {sampleId:sampleId, payments:payments, ulid:ulid, remark:remark, linked:linked});
-    return this.httpClient.post(this.serverUrl+ 'rec/receiving', {sampleId:sampleId, payments:payments, ulid:ulid, remark:remark, linked:linked}, {responseType:'text'});
+  receiving(sampleId, ulid, remark, linked, remainingAmount, payments){
+    console.log(this.serverUrl+ 'rec/receiving', {sampleId:sampleId, payments:payments, ulid:ulid, remark:remark, linked:linked, remainingAmount:remainingAmount});
+    return this.httpClient.post(this.serverUrl+ 'rec/receiving', {sampleId:sampleId, payments:payments, ulid:ulid, remark:remark, linked:linked, remainingAmount:remainingAmount}, {responseType:'text'});
   }
 
 }
