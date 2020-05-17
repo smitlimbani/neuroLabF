@@ -69,7 +69,7 @@
         </mat-form-field>
       </mat-grid-tile>
        -->
-       <mat-grid-tile colspan="2">
+      <mat-grid-tile colspan="2">
         <!-- <div align="center"> -->
           <button mat-raised-button color="primary" (click)="populateTable()" [disabled]="!testList">Load Data</button>
         <!-- </div> -->
@@ -79,15 +79,23 @@
           <button mat-raised-button color="primary" (click)="filterData()">Apply Filter</button>
         <!-- </div> -->
       </mat-grid-tile>
-    </mat-grid-list>
-    <div align="right">
-      <button mat-raised-button color="primary"  style="margin-left: 10px;"
-      (click)="exporter.exportTable('xlsx', {fileName:startDateStr+'_'+endDateStr})" >Print</button>
-    </div>
-    <mat-form-field class="single">
+  </mat-grid-list>
+  <mat-divider></mat-divider>
+  <mat-grid-list cols="4" rowHeight="80">  
+    <mat-grid-tile colspan="3">
+      <mat-form-field class="single">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. S:,APL-100,:AU,:XU">
-    </mat-form-field>
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <button mat-raised-button color="primary"  style="margin-left: 10px;"
+        (click)="exporter.exportTable('xlsx', {fileName:startDateStr+'_'+endDateStr})" >Print</button>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+    
+    
     <div class="mat-elevation-z8">
       <table mat-table #table matSort matTableExporter #exporter="matTableExporter" [dataSource]="dataSource" width="100%">
 
@@ -179,7 +187,7 @@
           <td mat-cell *matCellDef="let master">
             <div *ngIf="master.para != 'NOT_RAISED'">
               <div>{{master.para}}/</div>
-              <div>{{(testList.para.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+              <div>{{(testList.PARA.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
             </div>
           </td>
         </ng-container>
@@ -188,7 +196,7 @@
           <td mat-cell *matCellDef="let master">
             <div *ngIf="master.myo != 'NOT_RAISED'">
               <div>{{master.myo}}/</div>
-              <div>{{(testList.myo.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
+              <div>{{(testList.MYO.rate)*(master.paymentCategory.discountPercentage/100)}}</div>
             </div>
           </td>
         </ng-container>

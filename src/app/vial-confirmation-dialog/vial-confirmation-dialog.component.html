@@ -7,7 +7,7 @@
         <span style="font-size: 30px;margin-right: 20px;">Serial No</span>
         <mat-form-field appearance="outline" class="half" >
           <mat-label>Serial No</mat-label>
-          <input matInput [(ngModel)]="indexNo"  (input)="isIndexNoAvailable()" [min]="1+data.lockedCounter" [max]="data.indexNo" type="number">
+          <input matInput [(ngModel)]="indexNo"  (input)="isIndexNoAvailable()" [min]="1+data.lockedCounter" [max]="vialData['serialNo']" type="number">
         </mat-form-field>
       </div>
       <table width="100%">

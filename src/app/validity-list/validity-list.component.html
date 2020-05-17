@@ -29,7 +29,7 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header >SAMPLE ID</th>
               <td mat-cell *matCellDef="let validityList">
                 {{validityList.sample.sampleId}}
-                <div *ngIf="validityList.sample.master.ulid.substring(2,4).toLowerCase() == 'xu'">
+                <div *ngIf="validityList.sample.master.externalSample && validityList.sample.master.ulid.substring(2,4).toLowerCase() == 'xu'">
                   <!-- here! -->
                   {{validityList.sample.master.externalSample.externalSampleId}}
                 </div>
@@ -67,9 +67,9 @@
                   <div *ngIf="validityList.sample.master.nmda == 'REPORTED' || validityList.sample.master.nmda == 'SEPARATED' ">NMDA : Y</div>
                   <div *ngIf="validityList.sample.master.nmda == 'INVALID' ">NMDA : N</div>
                   <div *ngIf="validityList.sample.master.para == 'REPORTED' || validityList.sample.master.para == 'SEPARATED' ">PARA : Y</div>
-                  <div *ngIf="validityList.sample.master.para == 'INVALID' ">para : N</div>
+                  <div *ngIf="validityList.sample.master.para == 'INVALID' ">PARA : N</div>
                   <div *ngIf="validityList.sample.master.myo == 'REPORTED' || validityList.sample.master.myo == 'SEPARATED' ">MYO : Y</div>
-                  <div *ngIf="validityList.sample.master.myo == 'INVALID' ">myo : N</div>
+                  <div *ngIf="validityList.sample.master.myo == 'INVALID' ">MYO : N</div>
                   <div *ngIf="validityList.sample.master.gangigg == 'REPORTED' || validityList.sample.master.gangigg == 'SEPARATED' ">GANGIGG : Y</div>
                   <div *ngIf="validityList.sample.master.gangigg == 'INVALID' ">GANGIGG : N</div>
                   <div *ngIf="validityList.sample.master.gangigm == 'REPORTED' || validityList.sample.master.gangigm == 'SEPARATED' ">GANGIGM : Y</div>

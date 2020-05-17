@@ -368,15 +368,15 @@ export class ListGenerationComponent implements OnInit {
   //SERVER
   addVial(){
     this.inputVLID = this.inputVLID.toUpperCase();
-
-    if(!this.inputVLID || this.inputVLID.length == 0 || !this.listData.hasOwnProperty(this.inputVLID.split(":")[1])) {
+    //:ast one is to invalidate vlid here only
+    if(!this.inputVLID || this.inputVLID.length == 0 || !this.listData.hasOwnProperty(this.inputVLID.split(":")[2])) {
       this.snackBar.open("Enter Valid VLID!","",{
         duration:1000,
       });
       return;
     }
 
-    if(this.doesVialExist(this.listData[this.inputVLID.split(":")[1]],this.inputVLID)){
+    if(this.doesVialExist(this.listData[this.inputVLID.split(":")[2]],this.inputVLID)){
       //because vlid = ulid:testcode & ulid = CAU20/00001
       this.snackBar.open("Vial already in list!","",{
         duration:1000,
@@ -410,48 +410,104 @@ export class ListGenerationComponent implements OnInit {
             console.log("newSerialNo : "+newSerialNo);
             let today = new Date();
             vialData.testingDate = today.getFullYear()+"-"+String(today.getMonth() + 1).padStart(2, '0')+"-"+String(today.getDate()).padStart(2, '0');
-
-            this.segregationService.updateVial(vialData).subscribe(data=>{
-              console.log(data);
-              console.log("vial Updated in DB");
-
-              this.selectedIndex = this.testTabMap[vialData["test"]["code"]];
-
-              if(vialData["serialNo"] != newSerialNo){
-
-                let oldSerialNo = vialData["serialNo"];
-
+            //If serial Number is changed, which will be valid for sure!
+            if(vialData["serialNo"] != newSerialNo){
+                let oldVialData = this.listData[vialData["test"]["code"]][newSerialNo-1];
+                this.segregationService.swapVialSerial(oldVialData,vialData,vialData["test"]["code"]).subscribe(data=>{
+                  console.log(data);
+                  this.listData[vialData["test"]["code"]] = data;
+                  this.selectedIndex = this.testTabMap[vialData["test"]["code"]];
+                  this.tabChanged();
+                },
+                error=>{
+                  console.error(error);
+                  if(error.status == 500){
+                    this.snackBar.open("Swap Vial not possible!","",{
+                      duration:3000,
+                    });
+                  }
+                  else if(error.status == 0){
+                    this.snackBar.open("Database server not working!","",{
+                      duration:3000,
+                    });
+                  }
+                  else{
+                    this.snackBar.open("Unknown Error!Contact Developer.","",{
+                      duration:3000,
+                    });
+                  }
+                });
+            }
+            else{
+              this.segregationService.updateVial(vialData).subscribe(data=>{
+                console.log(data);
+                console.log("vial Updated in DB");
+  
+                this.selectedIndex = this.testTabMap[vialData["test"]["code"]];
+  
                 this.listData[vialData["test"]["code"]].push(vialData);
-
-                console.log(this.listData[vialData["test"]["code"]][0]);
-
-                let tVialData = this.listData[vialData["test"]["code"]][newSerialNo-1];
-                this.listData[vialData["test"]["code"]][newSerialNo-1] = this.listData[vialData["test"]["code"]][oldSerialNo-1];
-                this.listData[vialData["test"]["code"]][oldSerialNo-1] = tVialData;
-
-                this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = newSerialNo;
-                this.listData[vialData["test"]["code"]][oldSerialNo-1]["serialNo"] = oldSerialNo;
-
-                console.log("after change!");
-                console.log(this.listData[vialData["test"]["code"]]);
                 this.tabChanged();
-                // console.log("oldSerialNo : "+oldSerialNo);
-                // vialData["serialNo"] = newSerialNo;
-                // this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = oldSerialNo;
-              }
-              else{
-                this.listData[vialData["test"]["code"]].push(vialData);
-                this.tabChanged();
-              }
+              },
+              error=>{
+                console.error(error);
+                if(error.status == 500){
+                  this.snackBar.open("Vial doesn't exist!","",{
+                    duration:3000,
+                  });
+                }
+                else if(error.status == 0){
+                  this.snackBar.open("Database server not working!","",{
+                    duration:3000,
+                  });
+                }
+                else{
+                  this.snackBar.open("Unknown Error!Contact Developer.","",{
+                    duration:3000,
+                  });
+                }
+              });
+            }
+            // this.segregationService.updateVial(vialData).subscribe(data=>{
+            //   console.log(data);
+            //   console.log("vial Updated in DB");
 
-            },
-            error=>{
-              console.error("Error vial updating DB for serialNo or Testing Date!");
-              //handle error here!
-              // if (error.status == 500) {
+            //   this.selectedIndex = this.testTabMap[vialData["test"]["code"]];
 
+              // if(vialData["serialNo"] != newSerialNo){
+
+              //   let oldSerialNo = vialData["serialNo"];
+
+              //   this.listData[vialData["test"]["code"]].push(vialData);
+
+              //   console.log(this.listData[vialData["test"]["code"]][0]);
+
+              //   let tVialData = this.listData[vialData["test"]["code"]][newSerialNo-1];
+              //   this.listData[vialData["test"]["code"]][newSerialNo-1] = this.listData[vialData["test"]["code"]][oldSerialNo-1];
+              //   this.listData[vialData["test"]["code"]][oldSerialNo-1] = tVialData;
+
+              //   this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = newSerialNo;
+              //   this.listData[vialData["test"]["code"]][oldSerialNo-1]["serialNo"] = oldSerialNo;
+
+              //   console.log("after change!");
+              //   console.log(this.listData[vialData["test"]["code"]]);
+              //   this.tabChanged();
+              //   // console.log("oldSerialNo : "+oldSerialNo);
+              //   // vialData["serialNo"] = newSerialNo;
+              //   // this.listData[vialData["test"]["code"]][newSerialNo-1]["serialNo"] = oldSerialNo;
               // }
-            });
+              // else{
+              //   this.listData[vialData["test"]["code"]].push(vialData);
+              //   this.tabChanged();
+              // }
+              
+            // },
+            // error=>{
+            //   console.error("Error vial updating DB for serialNo or Testing Date!");
+            //   //handle error here!
+            //   // if (error.status == 500) {
+
+            //   // }
+            // });
           }
           else{
             this.snackBar.open("Operation aborted!","",{

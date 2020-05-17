@@ -6,12 +6,12 @@ Dependency injection :
     - otherwise forwardRef() method can be used
     - Injectors are inherited, which means that if a given injector can't resolve a dependency, it asks the parent injector to resolve it.
     - A component can get services from its own injector, from the injectors of its component ancestors, from the injector of its parent NgModule, or from the root injector.
-    - Provider can be defined at three places 
+    - Provider can be defined at three places
         [Object class is also injectable like service ]
         :In service itself - under @injectable
-        :module's Provider array - @NgModule(to make service availabe/injectable throughout module) 
+        :module's Provider array - @NgModule(to make service availabe/injectable throughout module)
         :component's Provider array - @Component (to make service availabe/injectable in that particular component)
-        
+
 - When you provide the service at the root level, Angular creates a single, shared instance of HeroService and injects into any class that asks for it. Registering the provider in the @Injectable metadata also allows Angular to optimize an app by removing the service if it turns out not to be used after all.
 - Reserve the constructor for simple initialization such as wiring constructor parameters to properties. The constructor shouldn't do anything. It certainly shouldn't call a function that makes HTTP requests to a remote server as a real data service would.
 - services can take a callback. It could return a Promise. It could return an Observable.
@@ -48,11 +48,11 @@ lazy-loading modules:
     For example, a user editing component, UserEditorComponent, that needs a private copy of a caching UserService should register the UserService with the UserEditorComponent.
     Then each new instance of the UserEditorComponent gets its own cached service instance.
 -   When you register a provider at the component level, you get a new instance of the service with each new instance of that component.
-    More details : 
+    More details :
         - https://v6.angular.io/guide/dependency-injection-in-action
         - https://angular.io/guide/architecture-services
 
-@NgModule : 
+@NgModule :
     export : it will make available these modules's public declarations to all the components of importing module. Generally declarations are private hence only components
     of that module can use it, exporting them will make it publcally available.
 Routing:
@@ -77,3 +77,6 @@ Binding :
 
 Template reference variable : it can be used in template only
     <div #divref></div>
+
+*ngIf :
+- variable defined under ngIf will be availabe under ngIf block only!

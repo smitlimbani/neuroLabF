@@ -21,6 +21,10 @@ export class SegregationService {
     return this.httpClient.post(this.serverUrl+"/vial/updateVial",vial);
   }
 
+  swapVialSerial(oldVial,newVial,testCode){
+    return this.httpClient.post(this.serverUrl+"/segregation/swapVialSerial",{oldVial :oldVial, newVial:newVial, testCode:testCode});
+  }
+
   updateLockedCounter(testCode,counter){
     console.log(testCode,counter);
     return this.httpClient.get(this.serverUrl+"segregation/updateLockedCounter?code="+testCode+"&lockedCounter="+counter);

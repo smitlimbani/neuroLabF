@@ -50,31 +50,31 @@ export class PendingVialsComponent implements OnInit {
 
   ngOnInit(): void {
     //SERVER
-    // this.dashboardService.getPendingVials().subscribe(data=>{
-    //   console.log(data);
-    //  // this.dataSource = data;
-    //   this.loadData(data);
-    // },error=>{
-    //   if(error.status == 500){
-    //     this.snackBar.open("Name mismatch with database!","",{
-    //       duration:3000,
-    //     });
-    //   }
-    //   else if(error.status == 0){
-    //     this.snackBar.open("Database server not working!","",{
-    //       duration:3000,
-    //     });
-    //   }
-    //   else{
-    //     this.snackBar.open("Unknown Error!Contact Developer.","",{
-    //       duration:3000,
-    //     });
-    //   }
-    // });
+    this.dashboardService.getPendingVials().subscribe(data=>{
+      console.log(data);
+     // this.dataSource = data;
+      this.loadData(data);
+    },error=>{
+      if(error.status == 500){
+        this.snackBar.open("Name mismatch with database!","",{
+          duration:3000,
+        });
+      }
+      else if(error.status == 0){
+        this.snackBar.open("Database server not working!","",{
+          duration:3000,
+        });
+      }
+      else{
+        this.snackBar.open("Unknown Error!Contact Developer.","",{
+          duration:3000,
+        });
+      }
+    });
 
     //STATIC
     // this.dataSource = wholeData;
-    this.loadData(wholeData);
+    // this.loadData(wholeData);
   }
 
   loadData(data){

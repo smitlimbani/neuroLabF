@@ -24,6 +24,8 @@ export class VialConfirmationDialogComponent implements OnInit {
 
   }
 
+  //To disable "ADD" button from dialoge box, because it is not allowed to take number less than locked counter and
+  // more than current list length. Current list length is default number which is already assigned to vial data!
   isIndexNoAvailable(){
     if(this.indexNo > this.data.vialData["serialNo"] || this.indexNo <= this.data.lockedCounter){
         this.isIndexNoValid = false;
