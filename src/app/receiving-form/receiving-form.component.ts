@@ -79,6 +79,7 @@ export class ReceivingFormComponent implements OnInit {
   doctorBind:Doctor;
   newForm=true;
   @Input() tmaster?: any;
+  incorrectRegType:boolean=false;
 
   constructor(
     private receivingFormService: ReceivingFormService,
@@ -123,6 +124,7 @@ export class ReceivingFormComponent implements OnInit {
     this.initializeTests();
     this.setULIDVariables();
     this.enableLinking(true);
+    this.incorrectRegType=false;
   }
 
 
@@ -140,11 +142,11 @@ export class ReceivingFormComponent implements OnInit {
     this.setULIDVariables();
     this.isPanelExpanded = false;
     this.clearAllTransactions();
-
   }
 
   //fills up necessary fields when SampleId or UHID is scanned
   autofill() {
+    this.incorrectRegType=false;
     this.newForm=false;
     if (this.uSampleId == null) {
       if(this.pdd.name!=null){
@@ -161,6 +163,21 @@ export class ReceivingFormComponent implements OnInit {
           this.displayError(error,"Error in fetching Patient Demographic Details through UHID")
         },
         () => {
+          //here we check if the sample id belongs to the correct reg type or not
+          // console.log(this.pdd.uhid.charCodeAt(0));
+          // console.log("is digit"+ (this.pdd.uhid.charCodeAt(0)>=48 && this.pdd.uhid.charCodeAt(0)<=57));
+          if( this.pdd.uhid.charCodeAt(0)>=48 && this.pdd.uhid.charCodeAt(0)<=57) {
+            if (this.regType == 'EXTERNAL') {
+              this.incorrectRegType = true;
+              return;
+            }
+          }
+          else {
+            if (this.regType == 'INTERNAL') {
+              this.incorrectRegType = true;
+              return;
+            }
+          }
           this.isPddReadOnly = true;
           this.isMasterReadOnly = false;
           this.initializeTests();
@@ -169,6 +186,7 @@ export class ReceivingFormComponent implements OnInit {
       )
     }
     else {
+      this.otherRemark=null;
       this.sampleId = this.uSampleId;
       let oldPayment;
       this.receivingFormService.getPDDDetailBySampleId(this.uSampleId).subscribe(
@@ -189,7 +207,20 @@ export class ReceivingFormComponent implements OnInit {
           this.displayError(error,"Error in fetching Patient Demographic Details through Sample Id");
         },
         () => {
-          this.isLinkEnabled = false;
+          // console.log(this.pdd.uhid.charCodeAt(0));
+          // console.log("is digit"+ (this.pdd.uhid.charCodeAt(0)>=48 && this.pdd.uhid.charCodeAt(0)<=57));
+            if(this.pdd.uhid && this.pdd.uhid.charCodeAt(0)>=48 && this.pdd.uhid.charCodeAt(0)<=57) {
+              if (this.regType == 'EXTERNAL') {
+                this.incorrectRegType = true;
+                return;
+              }
+            }
+            else {
+              if (this.regType == 'INTERNAL') {
+                this.incorrectRegType = true;
+                return;
+              }
+            }
           this.isPddReadOnly = true;
           this.isMasterReadOnly = true;
           this.setULIDVariables();
@@ -209,7 +240,15 @@ export class ReceivingFormComponent implements OnInit {
             this.doctorBind= new Doctor(this.master.drName, this.master.drContactNo, this.master.drEmailId, this.pdd.hospitalName);
           }
           this.isLinkEnabled= !(this.master.linked == 0 || this.master.linked == null);
-          this.isSampleInvalid= this.master.isValid == 'N';
+          this.isSampleInvalid = this.master.isValid == 'N';
+
+          if(this.isLinkEnabled) {
+            this.linkingULIDList = [this.master.linked];
+          }
+          if(this.isSampleInvalid && !this.remarkList.includes(this.master.remark,0)){
+            this.otherRemark=this.master.remark;
+            this.master.remark='Others';
+          }
         }
       );
       // this.pdd = new PatientDemographicDetail(null, 'UHID0001', 'Gauri', 'address', 22, 'FEMALE', 'someEmail@gmail.com', '9999999999', 'NIMHANS');
@@ -371,6 +410,7 @@ export class ReceivingFormComponent implements OnInit {
     this.clearTestSelection();
     this.setULIDVariables();
     this.isPanelExpanded = false;
+    this.isLinkEnabled=false;
   }
 
   verifyULID() {
@@ -411,6 +451,19 @@ export class ReceivingFormComponent implements OnInit {
       data => {
         // console.log(data);
         this.linkingULIDList = data['ulids'];
+        let ctr=0;
+        //we delete the current ulid for the case where the user scans the item for the second time.
+        for(let ulid of this.linkingULIDList) {
+          console.log(ulid)
+          console.log(this.master.ulid)
+          if (ulid == this.master.ulid)
+            break;
+          ctr++;
+        }
+        console.log(ctr);
+        this.linkingULIDList.splice(ctr,1);
+        console.log(this.linkingULIDList);
+
       },
       error => {
         this.displayError(error,"Error in fetching ULID for linking the sample");
@@ -506,7 +559,7 @@ export class ReceivingFormComponent implements OnInit {
 
   deleteTransaction(i) {
     let array = this.paymentForm.get('transactions') as FormArray;
-    (<FormArray>this.paymentForm.get('transactions')).clear();
+    (<FormArray>this.paymentForm.get('transactions')).removeAt(i);
     if (array.length == 0) {
       this.snackBar.open("You have cleared all transactions now", "", {duration: 3000,});
       this.addTransaction(null, null, null);
@@ -517,7 +570,7 @@ export class ReceivingFormComponent implements OnInit {
 
   convertPaymentsToTransactionArray(oldPayment) {
     console.log("Old transactions added");
-    (<FormArray>this.paymentForm.get('transactions')).removeAt(0);
+    (<FormArray>this.paymentForm.get('transactions')).clear();
     for (let payment of oldPayment) {
       // console.log(payment);
       this.addTransaction(payment.amount, payment.details, payment.transactionDate);
@@ -626,6 +679,7 @@ export class ReceivingFormComponent implements OnInit {
     this.otherRemark=null;
     this.doctorBind=null;
     this.tmaster=null;
+    this.incorrectRegType=false;
 
     this.paymentForm = this.fb.group({
       transactions: this.fb.array([

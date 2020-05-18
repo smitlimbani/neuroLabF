@@ -40,6 +40,12 @@
             </button>
           </td>
         </tr>
+        <br>
+        <tr>
+          <td colspan="2" align="center">
+            <mat-error *ngIf="incorrectRegType">This is not an {{this.regType}} sample</mat-error>
+          </td>
+        </tr>
       </table>
 
 
@@ -48,7 +54,7 @@
       <br>
 
 
-      <div #hiddenForm class="viewForm" [hidden]="newForm && regType=='INTERNAL'">
+      <div #hiddenForm class="viewForm" [hidden]="(newForm && regType=='INTERNAL')||incorrectRegType">
         <table class="single">
           <tr>
             <td colspan="2">
@@ -126,7 +132,7 @@
 
               <mat-form-field appearance="outline" class="single" *ngIf="regType=='EXTERNAL'">
                 <mat-label>Doctor Name</mat-label>
-                <mat-select #drName="ngModel" required [(ngModel)]="master.drName" [class.is-invalid]="drName.invalid && drName.touched" matInput placeholder="Enter doctor name" name="drName" type="text">
+                <mat-select #drName="ngModel" required [disabled]="isMasterReadOnly" [(ngModel)]="master.drName" [class.is-invalid]="drName.invalid && drName.touched" matInput placeholder="Enter doctor name" name="drName" type="text">
                   <!--                <mat-select-search [formControl]="drName"></mat-select-search>-->
                   <mat-option  *ngFor="let doctor of doctors" [value]="doctor.name" (click)="doctorSelected(doctor)">{{doctor.name}}
                   </mat-option>
@@ -259,9 +265,11 @@
             <td>
               <mat-form-field appearance="outline" class="single">
                 <mat-label>Link AU No.</mat-label>
-                <mat-select [disabled]="!isLinkEnabled" #link="ngModel"  required [(ngModel)]="master.linked" [class.is-invalid]="link.invalid" matInput name="link"type="text">
+                <mat-select [disabled]="!isLinkEnabled" #link="ngModel" required [(ngModel)]="master.linked" [class.is-invalid]="link.invalid" matInput name="link"type="text">
                   <mat-option *ngFor="let ulidListElement of linkingULIDList;" [value]="ulidListElement">{{ulidListElement}}
                   </mat-option>
+                  <!--                    -->
+
                 </mat-select>
                 <mat-error *ngIf="link.errors &&(link.valid || link.untouched)">Select AU No. to enable linking</mat-error>
               </mat-form-field>
@@ -276,7 +284,7 @@
             <td>
               <mat-form-field appearance="outline" class="single">
                 <mat-label>Reason</mat-label>
-                <mat-select [disabled]="!isSampleInvalid" #remark="ngModel" required [(ngModel)]="master.remark" [class.is-invalid]="remark.invalid" matInput name="remark"type="text">
+                <mat-select [disabled]="!isSampleInvalid" #remark="ngModel" required [(ngModel)]="master.remark" (ngModelChange)="otherRemark=null" [class.is-invalid]="remark.invalid" matInput name="remark"type="text">
                   <mat-option *ngFor="let remarkElement of remarkList" [value]="remarkElement">{{remarkElement}}
                   </mat-option>
                 </mat-select>
