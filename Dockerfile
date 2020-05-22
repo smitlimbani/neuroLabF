@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:latest as build
 EXPOSE 8080
 
 WORKDIR /usr/src/app
