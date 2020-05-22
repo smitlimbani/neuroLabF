@@ -12,4 +12,4 @@ COPY . .
 RUN npm build
 
 FROM nginx:1.17.1-alpine
-COPY --from=build /usr/src/app/dist/neuroLab /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/ /usr/share/nginx/html
