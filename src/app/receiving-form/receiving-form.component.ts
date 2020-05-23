@@ -125,6 +125,7 @@ export class ReceivingFormComponent implements OnInit {
     this.setULIDVariables();
     this.enableLinking(true);
     this.incorrectRegType=false;
+    this.newForm=false;
   }
 
 
