@@ -7,7 +7,7 @@ let ELEMENTS = [{"id":8,"sample":{"id":1,"master":{"id":1,"remark":"Remark1","pa
 })
 export class ValidityListService {
 
-  serverUrl= "http://139.59.13.108:8010/";
+  serverUrl= "http://68.183.95.58:8010/";
 
   constructor( private httpClient : HttpClient) { }
 

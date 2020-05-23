@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DashboardService {
 
-  serverUrl = 'http://139.59.13.108:8010/';
+  serverUrl = 'http://68.183.95.58:8010/';
   constructor(
     private httpClient : HttpClient,
   ) { }
