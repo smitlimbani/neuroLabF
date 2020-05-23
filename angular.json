@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "neuroLab"
+  "defaultProject": "neuroLab",
+  "cli": {
+    "analytics": "14e829ba-6640-4d2a-8c6b-89a1243e4fb1"
+  }
 }

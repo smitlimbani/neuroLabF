@@ -453,7 +453,7 @@ let ELEMENTS =
   providedIn: 'root'
 })
 export class MapSampleService {
-  serverUrl = 'http://localhost:8010/';
+  serverUrl = 'http://139.59.13.108:8010/';
   constructor(
     private httpClient : HttpClient,
   ) { }

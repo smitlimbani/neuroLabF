@@ -6,11 +6,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DashboardService {
 
-  serverUrl = 'http://localhost:8010/';
+  serverUrl = 'http://139.59.13.108:8010/';
   constructor(
     private httpClient : HttpClient,
   ) { }
-  
+
   getPendingVials(){
     return this.httpClient.get(this.serverUrl+"vial/getPendingVials");
   }
