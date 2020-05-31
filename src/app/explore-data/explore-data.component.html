@@ -17,7 +17,7 @@
           </mat-select>
         </mat-form-field>     -->
         <mat-form-field class="single" appearance="outline">
-          <mat-label>Choose a date</mat-label>
+          <mat-label>From receiving date</mat-label>
           <input matInput [matDatepicker]="startDatePicker" [(formControl)]="startDate"  readonly>
           <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #startDatePicker></mat-datepicker>
@@ -25,7 +25,7 @@
       </mat-grid-tile>
       <mat-grid-tile>
         <mat-form-field class="single" appearance="outline">
-          <mat-label>Choose a date</mat-label>
+          <mat-label>To receiving date</mat-label>
           <input matInput [matDatepicker]="endDatePicker" [(formControl)]="endDate" readonly>
           <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #endDatePicker></mat-datepicker>

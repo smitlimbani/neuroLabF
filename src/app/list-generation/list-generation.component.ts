@@ -369,10 +369,19 @@ export class ListGenerationComponent implements OnInit {
   addVial(){
     this.inputVLID = this.inputVLID.toUpperCase();
     //:ast one is to invalidate vlid here only
-    if(!this.inputVLID || this.inputVLID.length == 0 || !this.listData.hasOwnProperty(this.inputVLID.split(":")[2])) {
+    if ( !this.listData.hasOwnProperty(this.inputVLID.split(":")[2])){
+        this.snackBar.open("Test not being performed today!","",{
+            duration:3000,
+        });
+        this.inputVLID="";
+        return;
+    }
+
+    if(!this.inputVLID || this.inputVLID.length == 0) {
       this.snackBar.open("Enter Valid VLID!","",{
         duration:1000,
       });
+      this.inputVLID="";
       return;
     }
 
@@ -381,6 +390,7 @@ export class ListGenerationComponent implements OnInit {
       this.snackBar.open("Vial already in list!","",{
         duration:1000,
       });
+      this.inputVLID="";
       return;
     }
 
