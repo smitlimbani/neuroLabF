@@ -11,7 +11,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import {IndividualSearchComponent} from "./individual-search/individual-search.component";
 
 const routes: Routes = [
-  {path:"",redirectTo:"/dashboard",pathMatch:"full"},
+  {path:"",redirectTo:"/welcome",pathMatch:"full"},
   {path:"receive",component : ReceivingStationComponent},
   {path:"segregation",component : SegregationStationComponent},
   {path:"listgeneration",component : ListGenerationComponent},
